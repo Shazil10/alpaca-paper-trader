@@ -1,39 +1,34 @@
-import os
-from dotenv import load_dotenv  # secret keys coming from .env file
-from alpaca.trading.client import TradingClient
-from alpaca.trading.requests import MarketOrderRequest
-from alpaca.trading.enums import OrderSide, TimeInForce
+import config
+import orders
 
 def main():
-    # 1. Load the secret .env file directly
-    load_dotenv() 
-
-    # 2. Get our keys
-    api_key = os.getenv("ALPACA_KEY")
-    api_secret = os.getenv("ALPACA_SECRET")
-
-    # Debug: Check if keys were found (We print "Found" or "Not Found" to stay safe)
-    if not api_key:
-        print("Error: ALPACA_KEY is missing from .env file")
-        return
-    if not api_secret:
-        print("Error: ALPACA_SECRET is missing from .env file")
-        return
-    
-    print("Keys found successfully!")
-
-    # 3. Connect to Alpaca
-    print("Starting Trading Bot")
+    # 1. Connect to the Alpaca API
     try:
-        trading_client = TradingClient(api_key, api_secret, paper=True)
-        account = trading_client.get_account()
-        
-        print(f"Connected to Alpaca!")
-        print(f"Cash Balance: ${account.cash}")
-        print(f"Portfolio Value: ${account.portfolio_value}")
-        
-    except Exception as e:
-        print(f"Connection Error: {e}")
+        client = config.get_client()
+    except ValueError as error:
+        print(f"Connection Error: {error}")
+        return
+
+    # 2. Check current portfolio
+    # We want to avoid buying SPY if we already own it.
+    positions = client.get_all_positions()
+    owns_spy = False
+
+    for position in positions:
+        if position.symbol == 'SPY':
+            owns_spy = True
+            break
+
+    # 3. Execute Trade Logic
+    if owns_spy:
+        print("We already own SPY. No new order placed.")
+    else:
+        print("SPY not found in portfolio. Placing buy order for 1 share...")
+        try:
+            order = orders.buy_market(client, "SPY", 1)
+            print(f"Order submitted successfully. ID: {order.id}")
+        except Exception as error:
+            print(f"Order failed: {error}")
 
 if __name__ == "__main__":
     main()
