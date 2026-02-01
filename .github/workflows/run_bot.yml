@@ -1,0 +1,26 @@
+name: Daily Trading Bot
+
+on:
+  schedule:
+    # Runs at 9:30 AM EST (14:30 UTC) Mon-Fri
+    - cron: '30 14 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - run: pip install -r requirements.txt
+      
+      - name: Run Trading Bot
+        env:
+          ALPACA_KEY: ${{ secrets.ALPACA_KEY }}
+          ALPACA_SECRET: ${{ secrets.ALPACA_SECRET }}
+          PYTHONPATH: src
+        run: python src/trade.py
