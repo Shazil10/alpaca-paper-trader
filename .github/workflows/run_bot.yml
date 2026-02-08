@@ -23,4 +23,6 @@ jobs:
           ALPACA_KEY: ${{ secrets.ALPACA_KEY }}
           ALPACA_SECRET: ${{ secrets.ALPACA_SECRET }}
           PYTHONPATH: src
-        run: python src/trade.py
+        run: |
+          python src/universe.py
+          python src/trade.py
