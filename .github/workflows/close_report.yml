@@ -1,0 +1,34 @@
+name: Close Report
+
+on:
+  schedule:
+    # 4:30pm ET during standard time (21:30 UTC). Adjust for DST when needed.
+    - cron: '30 21 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate orders report
+        env:
+          ALPACA_KEY: ${{ secrets.ALPACA_KEY }}
+          ALPACA_SECRET: ${{ secrets.ALPACA_SECRET }}
+          PYTHONPATH: src
+        run: |
+          python src/report.py
+
+      - name: Upload reports artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trading-reports-close
+          path: reports/

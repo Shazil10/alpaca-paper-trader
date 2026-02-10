@@ -1,9 +1,10 @@
 name: Daily Trading Bot
 
 on:
-  schedule:
-    # Runs at 9:30 AM EST (14:30 UTC) Mon-Fri
-    - cron: '30 14 * * 1-5'
+  # Disabled for now (sleep mode). Re-enable by restoring the schedule block.
+  # schedule:
+  #   # Runs at 9:30 AM EST (14:30 UTC) Mon-Fri
+  #   - cron: '30 14 * * 1-5'
   workflow_dispatch:
 
 jobs:
@@ -26,3 +27,10 @@ jobs:
         run: |
           python src/universe.py
           python src/trade.py
+          python src/report.py
+
+      - name: Upload reports artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trading-reports
+          path: reports/
