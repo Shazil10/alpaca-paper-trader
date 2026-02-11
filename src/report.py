@@ -98,7 +98,11 @@ def fetch_orders(*, limit: int = 200) -> list[object]:
         pass
 
     # Minimal fallback.
-    return list(client.get_orders(limit=int(limit)))
+    try:
+        return list(client.get_orders(limit=int(limit)))
+    except TypeError:
+        # Some SDK versions don't take `limit` either.
+        return list(client.get_orders())
 
 
 def build_rows(orders_list: list[object]) -> list[ReportRow]:
