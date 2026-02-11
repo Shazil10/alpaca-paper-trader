@@ -50,7 +50,8 @@ class ReportRow:
     filled_avg_price: float
     filled_value: float
     client_order_id: str
-    strategy_id: str
+    strategy_type: str
+    strategy_name: str
 
 
 def _safe_float(value: object, default: float = 0.0) -> float:
@@ -60,13 +61,25 @@ def _safe_float(value: object, default: float = 0.0) -> float:
         return default
 
 
-def _parse_strategy_id(client_order_id: str) -> str:
+def _parse_strategy_id(client_order_id: str) -> tuple[str, str]:
+    """Parse strategy_id from client_order_id and split into (type, name).
+    
+    Example: 'strategies.momentum.clenow_trend:...' -> ('Momentum', 'Clenow Trend')
+    """
     if not client_order_id:
-        return ""
+        return ("", "")
     # Our convention: "{strategy_id}:{random}".
-    # Split only on the first colon so strategy ids containing colons would still work.
     left, _, _ = client_order_id.partition(":")
-    return left
+    
+    # Parse strategies.{type}.{name} format
+    parts = left.split(".")
+    if len(parts) >= 3 and parts[0] == "strategies":
+        strategy_type = parts[1].replace("_", " ").title()
+        strategy_name = parts[2].replace("_", " ").title()
+        return (strategy_type, strategy_name)
+    
+    # Fallback: if format doesn't match, return the whole thing as type
+    return (left.replace("_", " ").title(), "")
 
 
 def _iso(value: object) -> str:
@@ -109,8 +122,14 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
     rows: list[ReportRow] = []
     for o in orders_list:
         symbol = str(getattr(o, "symbol", "") or "").strip().upper()
-        side = str(getattr(o, "side", "") or "")
-        status = str(getattr(o, "status", "") or "")
+        
+        # Strip enum prefixes: OrderSide.BUY -> BUY
+        side_raw = str(getattr(o, "side", "") or "")
+        side = side_raw.replace("OrderSide.", "").upper()
+        
+        # Strip enum prefixes: OrderStatus.ACCEPTED -> ACCEPTED  
+        status_raw = str(getattr(o, "status", "") or "")
+        status = status_raw.replace("OrderStatus.", "").upper()
 
         notional = _safe_float(getattr(o, "notional", 0.0))
         filled_qty = _safe_float(getattr(o, "filled_qty", 0.0))
@@ -118,7 +137,7 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
         filled_value = filled_qty * filled_avg_price if filled_qty > 0 and filled_avg_price > 0 else 0.0
 
         client_order_id = str(getattr(o, "client_order_id", "") or "")
-        strategy_id = _parse_strategy_id(client_order_id)
+        strategy_type, strategy_name = _parse_strategy_id(client_order_id)
 
         submitted_at = _iso(getattr(o, "submitted_at", ""))
 
@@ -133,7 +152,8 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
                 filled_avg_price=filled_avg_price,
                 filled_value=filled_value,
                 client_order_id=client_order_id,
-                strategy_id=strategy_id,
+                strategy_type=strategy_type,
+                strategy_name=strategy_name,
             )
         )
 
@@ -146,16 +166,17 @@ def write_csv(rows: list[ReportRow], path: Path) -> None:
         w = csv.writer(f)
         w.writerow(
             [
-                "submitted_at",
-                "symbol",
-                "side",
-                "status",
-                "notional",
-                "filled_qty",
-                "filled_avg_price",
-                "filled_value",
-                "client_order_id",
-                "strategy_id",
+                "Submitted At",
+                "Symbol",
+                "Side",
+                "Status",
+                "Notional",
+                "Filled Qty",
+                "Filled Avg Price",
+                "Filled Value",
+                "Client Order ID",
+                "Strategy Type",
+                "Strategy Name",
             ]
         )
         for r in rows:
@@ -170,7 +191,8 @@ def write_csv(rows: list[ReportRow], path: Path) -> None:
                     f"{r.filled_avg_price:.6f}",
                     f"{r.filled_value:.6f}",
                     r.client_order_id,
-                    r.strategy_id,
+                    r.strategy_type,
+                    r.strategy_name,
                 ]
             )
 
@@ -187,16 +209,17 @@ def write_markdown(rows: list[ReportRow], path: Path) -> None:
     preview = rows[:max_rows]
 
     header = [
-        "submitted_at",
-        "symbol",
-        "side",
-        "status",
-        "notional($)",
-        "filled_qty",
-        "filled_avg_price",
-        "filled_value($)",
-        "strategy_id",
-        "client_order_id",
+        "Submitted At",
+        "Symbol",
+        "Side",
+        "Status",
+        "Notional ($)",
+        "Filled Qty",
+        "Filled Avg Price",
+        "Filled Value ($)",
+        "Strategy Type",
+        "Strategy Name",
+        "Client Order ID",
     ]
 
     lines.append("| " + " | ".join(header) + " |")
@@ -215,7 +238,8 @@ def write_markdown(rows: list[ReportRow], path: Path) -> None:
                     f"{r.filled_qty:.4f}",
                     _format_money(r.filled_avg_price),
                     _format_money(r.filled_value),
-                    r.strategy_id,
+                    r.strategy_type,
+                    r.strategy_name,
                     r.client_order_id,
                 ]
             )
@@ -243,16 +267,17 @@ def write_html(rows: list[ReportRow], path: Path) -> None:
                 )
 
         header = [
-                "submitted_at",
-                "symbol",
-                "side",
-                "status",
-                "notional($)",
-                "filled_qty",
-                "filled_avg_price",
-                "filled_value($)",
-                "strategy_id",
-                "client_order_id",
+                "Submitted At",
+                "Symbol",
+                "Side",
+                "Status",
+                "Notional ($)",
+                "Filled Qty",
+                "Filled Avg Price",
+                "Filled Value ($)",
+                "Strategy Type",
+                "Strategy Name",
+                "Client Order ID",
         ]
 
         rows_html: list[str] = []
@@ -266,7 +291,8 @@ def write_html(rows: list[ReportRow], path: Path) -> None:
                         f"{r.filled_qty:.4f}",
                         _format_money(r.filled_avg_price),
                         _format_money(r.filled_value),
-                        r.strategy_id,
+                        r.strategy_type,
+                        r.strategy_name,
                         r.client_order_id,
                 ]
                 rows_html.append("<tr>" + "".join(f"<td>{esc(c)}</td>" for c in cells) + "</tr>")
@@ -338,7 +364,7 @@ def main() -> int:
         logger.info("Preview (first %d rows):", preview_n)
         for r in rows[:preview_n]:
             logger.info(
-                "%s %s %s %s notional=%.2f filled=%.4f@%.2f strategy=%s cid=%s",
+                "%s %s %s %s notional=%.2f filled=%.4f@%.2f strategy=%s/%s cid=%s",
                 r.submitted_at,
                 r.symbol,
                 r.side,
@@ -346,7 +372,8 @@ def main() -> int:
                 r.notional,
                 r.filled_qty,
                 r.filled_avg_price,
-                r.strategy_id,
+                r.strategy_type,
+                r.strategy_name,
                 r.client_order_id,
             )
 

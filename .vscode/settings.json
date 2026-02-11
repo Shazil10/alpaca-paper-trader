@@ -1,0 +1,27 @@
+{
+  // Shows VS Code tasks as clickable buttons in the status bar.
+  // Requires extension: spencerwmiles.vscode-task-buttons
+  "taskButtons.tasks": [
+    {
+      "name": "Close Report",
+      "task": "Reports: Download latest close report"
+    }
+  ],
+
+  // Fallback/alternative: a status bar button that reliably shows up.
+  // Requires extension: seunlanlege.action-buttons
+  "actionButtons": {
+    "defaultColor": "#ffffff",
+    "loadNpmCommands": false,
+    "reloadButton": "↻",
+    "commands": [
+      {
+        "cwd": "${workspaceFolder}",
+        "name": "📊 Close Report",
+        "color": "white",
+        "singleInstance": true,
+        "command": "bash scripts/download_latest_reports.sh"
+      }
+    ]
+  }
+}

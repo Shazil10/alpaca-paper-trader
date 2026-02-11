@@ -21,25 +21,46 @@ else
   exit 2
 fi
 
-# Find latest successful run of the close report workflow.
-RUN_ID=$($GH_BIN run list \
-  --repo "$REPO" \
-  --workflow "$WORKFLOW" \
-  --json databaseId,conclusion,status \
-  --limit 10 \
-  | python - <<'PY'
-import json,sys
-runs=json.load(sys.stdin)
-for r in runs:
-    if r.get('conclusion')=='success' and r.get('status')=='completed':
-        print(r['databaseId'])
-        break
-PY
+# Prefer GitHub API queries via gh api (more robust than piping JSON into Python).
+# Note: we intentionally don't rely on any external tools beyond gh itself.
+#
+# Extract owner/repo from $REPO (format: owner/name)
+OWNER="${REPO%%/*}"
+NAME="${REPO##*/}"
+
+if [[ -z "$OWNER" || -z "$NAME" || "$OWNER" == "$NAME" ]]; then
+  echo "ERROR: REPO must be in the form owner/name. Got: '$REPO'" >&2
+  exit 2
+fi
+
+# Find the latest successful run for this workflow file.
+RUN_ID=$(
+  $GH_BIN api \
+    -H "Accept: application/vnd.github+json" \
+    "/repos/$OWNER/$NAME/actions/workflows/$WORKFLOW/runs?per_page=20" \
+    --jq '.workflow_runs
+      | map(select(.status=="completed" and .conclusion=="success"))
+      | (.[0].id // empty)'
 )
 
 if [[ -z "${RUN_ID}" ]]; then
-  echo "ERROR: No successful runs found for $WORKFLOW in $REPO" >&2
+  echo "ERROR: No successful runs found for workflow '$WORKFLOW' in '$REPO'." >&2
+  echo "Tip: confirm you're logged in: $GH_BIN auth status" >&2
   exit 3
+fi
+
+# Confirm the artifact exists on that run (helps catch caching / wrong workflow).
+ARTIFACT_ID=$(
+  $GH_BIN api \
+    -H "Accept: application/vnd.github+json" \
+    "/repos/$OWNER/$NAME/actions/runs/$RUN_ID/artifacts" \
+    --jq ".artifacts | map(select(.name==\"$ARTIFACT_NAME\")) | (.[0].id // empty)"
+)
+
+if [[ -z "${ARTIFACT_ID}" ]]; then
+  echo "ERROR: Artifact '$ARTIFACT_NAME' not found on run $RUN_ID." >&2
+  echo "Tip: check the run page for uploaded artifacts." >&2
+  exit 4
 fi
 
 # Clean destination and download.

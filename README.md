@@ -28,6 +28,9 @@ gh auth login
 
 - **Terminal → Run Task… → _Reports: Download latest close report_**
 
+Optional: install the extension `Task Buttons` (`spencerwmiles.vscode-task-buttons`).
+If installed, you’ll see a clickable **Close Report** button in the VS Code status bar that runs the same task.
+
 This downloads the latest successful close report into:
 
 - `reports/downloaded/`
