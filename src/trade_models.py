@@ -1,15 +1,52 @@
-"""budget.py
+"""trade_models.py
 
-Pure helpers for strategy lifetime budgeting.
+Shared data structures and pure helpers for the trade runner.
 
-These functions are intentionally broker-agnostic and easy to unit test.
-`trade.py` can use them alongside Alpaca objects.
+Contains:
+- Signal / Side: broker-agnostic signal objects returned by strategies
+- committed_dollars_from_orders: lifetime budget accounting
+- safe_float: tiny numeric helper
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+from enum import Enum
 from typing import Iterable, Protocol
 
+
+# ---------------------------------------------------------------------------
+# Signal data structures
+# ---------------------------------------------------------------------------
+
+class Side(str, Enum):
+    BUY = "BUY"
+    SELL = "SELL"
+
+
+@dataclass(frozen=True)
+class Signal:
+    """A strategy's intent.
+
+    Notes:
+    - For now we focus on BUY signals only.
+    - Later we can add SELL/SHORT and target weights without changing trade.py.
+    """
+
+    symbol: str
+    side: Side = Side.BUY
+    reason: str | None = None
+    notional: float | None = None
+    client_order_id: str | None = None
+    strategy_id: str | None = None
+
+    def normalized_symbol(self) -> str:
+        return str(self.symbol).strip().upper()
+
+
+# ---------------------------------------------------------------------------
+# Budget accounting
+# ---------------------------------------------------------------------------
 
 class OrderLike(Protocol):
     id: object
@@ -33,7 +70,7 @@ def safe_float(value: object, default: float = 0.0) -> float:
 def committed_dollars_from_orders(orders: Iterable[OrderLike], *, strategy_id: str) -> float:
     """Sum dollars committed by a strategy based on tagged orders.
 
-    Attribution rule: `client_order_id` must start with `f"{strategy_id}:"`.
+    Attribution rule: ``client_order_id`` must start with ``f"{strategy_id}:"``.
     Counting rule ("strict"):
       - include BUY orders that are filled or still open/pending
       - exclude canceled/rejected/expired

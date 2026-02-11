@@ -7,7 +7,7 @@ import pandas as pd
 import yfinance as yf
 from scipy.stats import linregress
 
-from signals import Signal, Side
+from trade_models import Signal, Side
 
 """
 STRATEGY EXPLANATION: CLENOW MOMENTUM

@@ -19,3 +19,6 @@ venv/
 
 # macOS
 .DS_Store
+
+# Reports (generated locally / downloaded from Actions)
+reports/

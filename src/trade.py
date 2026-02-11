@@ -16,8 +16,7 @@ from typing import Optional
 
 import config
 import orders
-from signals import Side, Signal
-from budget import committed_dollars_from_orders
+from trade_models import Side, Signal, committed_dollars_from_orders
 
 
 logger = logging.getLogger(__name__)
