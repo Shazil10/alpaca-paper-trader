@@ -8,13 +8,15 @@ objects everywhere. That keeps order logic in one place.
 
 import logging
 
+from typing import Optional
+
 from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.requests import MarketOrderRequest
 
 
 logger = logging.getLogger(__name__)
 
-def buy_market_notional(client, symbol, dollars, *, client_order_id: str | None = None):
+def buy_market_notional(client, symbol, dollars, *, client_order_id: Optional[str] = None):
     """Buy using a dollar amount (notional), e.g. buy $500 of AAPL."""
     if dollars is None or float(dollars) <= 0:
         raise ValueError("dollars must be > 0")

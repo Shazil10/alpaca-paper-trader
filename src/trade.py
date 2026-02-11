@@ -12,6 +12,8 @@ import importlib
 import logging
 from uuid import uuid4
 
+from typing import Optional
+
 import config
 import orders
 from signals import Side, Signal
@@ -71,7 +73,7 @@ def _strategy_committed_dollars(client, *, strategy_id: str) -> float:
     total = 0.0
 
     # Fetch in pages. Alpaca caps `limit` at 500.
-    before_order_id: str | None = None
+    before_order_id: Optional[str] = None
     while True:
         try:
             kwargs = {"status": "all", "limit": 500, "direction": "desc", "nested": True}

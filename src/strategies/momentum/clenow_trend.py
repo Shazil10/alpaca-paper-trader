@@ -1,5 +1,7 @@
 import os
 
+from typing import Optional
+
 import numpy as np
 import pandas as pd
 import yfinance as yf
@@ -86,7 +88,7 @@ def generate_signals(
     *,
     universe_file: str = "universe.csv",
     top_n: int = DEFAULT_TOP_N,
-    budget: float | None = None,
+    budget: Optional[float] = None,
     strategy_id: str = "strategies.momentum.clenow_trend",
 ) -> list[Signal]:
     """Main entry point used by `trade.py`.
@@ -104,7 +106,7 @@ def generate_signals(
     if not symbols:
         return []
 
-    notional_each: float | None = None
+    notional_each: Optional[float] = None
     try:
         if budget is not None and float(budget) > 0:
             notional_each = float(budget) / len(symbols)
