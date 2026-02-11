@@ -3,16 +3,18 @@
 Runs all enabled strategies and places orders.
 
 Contract:
-- `config.STRATEGY_ALLOCATIONS` maps strategy module path -> max dollars to deploy.
-- Each strategy exposes `generate_signals(budget=..., strategy_id=...)` and returns `Signal`s.
-- Strategies own sizing by setting `Signal.notional`. This runner executes signals safely.
+- ``config.STRATEGY_ALLOCATIONS`` maps strategy module path -> max dollars to deploy.
+- Each strategy exposes ``generate_signals(budget=..., strategy_id=..., held_symbols=...)``
+  and returns a list of ``Signal`` objects (BUY **and** SELL).
+- Strategies own sizing by setting ``Signal.notional``.  This runner executes signals safely.
 """
+
+from __future__ import annotations
 
 import importlib
 import logging
+from typing import Dict, List, Optional, Set
 from uuid import uuid4
-
-from typing import Optional
 
 import config
 import orders
@@ -29,9 +31,83 @@ def _safe_float(value: object, default: float = 0.0) -> float:
         return default
 
 
-def _existing_symbols(client) -> set[str]:
+# ---------------------------------------------------------------------------
+# Portfolio helpers
+# ---------------------------------------------------------------------------
+
+def _positions_by_symbol(client) -> Dict[str, object]:
+    """Return a dict mapping SYMBOL -> Alpaca position object."""
+    positions: Dict[str, object] = {}
+    try:
+        for p in client.get_all_positions():
+            sym = str(getattr(p, "symbol", "")).strip().upper()
+            if sym:
+                positions[sym] = p
+    except Exception:
+        logger.exception("Failed to fetch positions")
+    return positions
+
+
+def _held_symbols_for_strategy(client, strategy_id: str) -> Set[str]:
+    """Return the set of symbols *this* strategy currently holds.
+
+    We attribute ownership via ``client_order_id`` prefix:
+        ``f"{strategy_id}:..."``
+
+    A symbol is considered held if:
+      1. There is at least one *filled* BUY order with this strategy's prefix, AND
+      2. We currently have a position in that symbol.
+
+    This is deliberately conservative – if we cannot determine attribution, we
+    skip the symbol (the strategy will not generate a spurious SELL).
+    """
+    # All symbols we currently hold as positions.
+    all_positions = _positions_by_symbol(client)
+
+    # Scan order history for BUY fills tagged with this strategy.
+    prefix = f"{strategy_id}:"
+    bought_symbols: Set[str] = set()
+
+    before_order_id: Optional[str] = None
+    while True:
+        try:
+            kwargs: Dict[str, object] = {
+                "status": "all",
+                "limit": 500,
+                "direction": "desc",
+                "nested": True,
+            }
+            if before_order_id:
+                kwargs["before_order_id"] = before_order_id
+            batch = client.get_orders(**kwargs)
+        except Exception:
+            logger.exception("Failed to fetch orders for held-symbol scan (%s)", strategy_id)
+            break
+        if not batch:
+            break
+
+        for o in batch:
+            cid = str(getattr(o, "client_order_id", "") or "")
+            if not cid.startswith(prefix):
+                continue
+            side = str(getattr(o, "side", "")).upper()
+            status = str(getattr(o, "status", "")).lower()
+            sym = str(getattr(o, "symbol", "")).strip().upper()
+            if side == "BUY" and status == "filled" and sym:
+                bought_symbols.add(sym)
+
+        last = batch[-1]
+        before_order_id = str(getattr(last, "id", "") or "")
+        if not before_order_id:
+            break
+
+    # Intersection: only include symbols we *still* hold.
+    return bought_symbols & set(all_positions.keys())
+
+
+def _existing_symbols(client) -> Set[str]:
     """Return symbols we already hold or have pending buy orders for."""
-    existing: set[str] = set()
+    existing: Set[str] = set()
 
     # 1) Current positions
     try:
@@ -51,7 +127,6 @@ def _existing_symbols(client) -> set[str]:
             if side == "BUY" and status in {"new", "accepted", "pending_new", "held", "partially_filled"}:
                 existing.add(sym)
     except Exception:
-        # If this fails (API hiccup), we still protect with positions and per-run de-dupe.
         logger.exception("Failed to fetch open orders")
 
     return existing
@@ -61,21 +136,18 @@ def _strategy_committed_dollars(client, *, strategy_id: str) -> float:
     """Return lifetime dollars committed for a strategy.
 
     "Committed" means BUY orders that are either filled or still open/pending.
-    We attribute orders to strategies by `client_order_id` prefix:
-        f"{strategy_id}:..."
-
-    Notes:
-    - We ignore canceled/rejected orders.
-    - Alpaca orders may expose different fields depending on type; we try multiple.
+    We attribute orders to strategies by ``client_order_id`` prefix.
     """
-
     total = 0.0
-
-    # Fetch in pages. Alpaca caps `limit` at 500.
     before_order_id: Optional[str] = None
     while True:
         try:
-            kwargs = {"status": "all", "limit": 500, "direction": "desc", "nested": True}
+            kwargs: Dict[str, object] = {
+                "status": "all",
+                "limit": 500,
+                "direction": "desc",
+                "nested": True,
+            }
             if before_order_id:
                 kwargs["before_order_id"] = before_order_id
             batch = client.get_orders(**kwargs)
@@ -88,7 +160,6 @@ def _strategy_committed_dollars(client, *, strategy_id: str) -> float:
 
         total += committed_dollars_from_orders(batch, strategy_id=strategy_id)
 
-        # Paginate by oldest order in this batch.
         last = batch[-1]
         before_order_id = str(getattr(last, "id", "") or "")
         if not before_order_id:
@@ -96,6 +167,47 @@ def _strategy_committed_dollars(client, *, strategy_id: str) -> float:
 
     return total
 
+
+# ---------------------------------------------------------------------------
+# SELL execution
+# ---------------------------------------------------------------------------
+
+def _execute_sell_signals(
+    client,
+    sell_signals: List[Signal],
+    positions: Dict[str, object],
+    strategy_path: str,
+) -> None:
+    """Close positions for each SELL signal (full liquidation)."""
+    for s in sell_signals:
+        symbol = s.normalized_symbol()
+        pos = positions.get(symbol)
+        if pos is None:
+            logger.info("SELL signal for %s but no position found (skipping)", symbol)
+            continue
+
+        qty = _safe_float(getattr(pos, "qty", 0.0))
+        if qty <= 0:
+            logger.info("SELL signal for %s but qty=%.4f (skipping)", symbol, qty)
+            continue
+
+        try:
+            client_order_id = f"{strategy_path}:{uuid4().hex[:16]}"
+            orders.sell_market_qty(client, symbol, qty)
+            logger.info(
+                "Submitted SELL %s qty=%.4f reason=%s (strategy=%s)",
+                symbol,
+                qty,
+                s.reason or "exit",
+                strategy_path,
+            )
+        except Exception:
+            logger.exception("SELL order failed for %s (strategy=%s)", symbol, strategy_path)
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 
 def execute_daily_trades() -> None:
     """Run all configured strategies and place the resulting trades."""
@@ -109,10 +221,11 @@ def execute_daily_trades() -> None:
         logger.exception("Failed to fetch account")
         return
 
-    cash_reserve = cash * 0.10  # keep 10% as a safety buffer
+    cash_reserve = cash * 0.10  # keep 10 % as a safety buffer
 
     existing = _existing_symbols(client)
-    submitted_this_run: set[str] = set()
+    positions = _positions_by_symbol(client)
+    submitted_this_run: Set[str] = set()
 
     for strategy_path, budget in config.STRATEGY_ALLOCATIONS.items():
         if budget <= 0:
@@ -129,15 +242,9 @@ def execute_daily_trades() -> None:
             committed,
             remaining_budget,
         )
-        if remaining_budget <= 0:
-            logger.info(
-                "Skipping %s (lifetime cap reached: budget=%.2f committed=%.2f)",
-                strategy_path,
-                float(budget),
-                committed,
-            )
-            continue
 
+        # Even if the lifetime cap is reached, we still need to run the strategy
+        # so it can generate EXIT signals for positions it already holds.
         try:
             module = importlib.import_module(strategy_path)
         except ModuleNotFoundError:
@@ -149,18 +256,41 @@ def execute_daily_trades() -> None:
             logger.error("Strategy %s has no callable generate_signals()", strategy_path)
             continue
 
+        # Tell the strategy which symbols it currently owns so it can decide exits.
+        held = _held_symbols_for_strategy(client, strategy_path)
+
         try:
-            # Give the strategy its *remaining lifetime* budget so it can size signals itself.
-            signals = list(generate_signals(budget=remaining_budget, strategy_id=strategy_path))
+            signals = list(
+                generate_signals(
+                    budget=max(remaining_budget, 0),
+                    strategy_id=strategy_path,
+                    held_symbols=held,
+                )
+            )
         except Exception:
             logger.exception("Strategy %s failed while generating signals", strategy_path)
             continue
 
-        # For now we only act on BUY signals.
-        buy_signals: list[Signal] = [
-            s
-            for s in signals
-            if isinstance(s, Signal) and s.side == Side.BUY and s.normalized_symbol()
+        # ── Process SELL signals first ──
+        sell_signals: List[Signal] = [
+            s for s in signals if isinstance(s, Signal) and s.side == Side.SELL and s.normalized_symbol()
+        ]
+        if sell_signals:
+            logger.info("Strategy %s returned %d SELL signals", strategy_path, len(sell_signals))
+            _execute_sell_signals(client, sell_signals, positions, strategy_path)
+
+        # ── Process BUY signals ──
+        if remaining_budget <= 0:
+            logger.info(
+                "Skipping BUY signals for %s (lifetime cap reached: budget=%.2f committed=%.2f)",
+                strategy_path,
+                float(budget),
+                committed,
+            )
+            continue
+
+        buy_signals: List[Signal] = [
+            s for s in signals if isinstance(s, Signal) and s.side == Side.BUY and s.normalized_symbol()
         ]
         if not buy_signals:
             logger.info("Strategy %s returned no BUY signals", strategy_path)
@@ -189,7 +319,6 @@ def execute_daily_trades() -> None:
                     )
                     continue
 
-                # Strategy attribution: use Alpaca's client_order_id.
                 client_order_id = f"{strategy_path}:{uuid4().hex[:16]}"
 
                 orders.buy_market_notional(client, symbol, dollars, client_order_id=client_order_id)
@@ -209,6 +338,7 @@ def execute_daily_trades() -> None:
                     strategy_path,
                     _safe_float(getattr(s, "notional", 0.0)),
                 )
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
