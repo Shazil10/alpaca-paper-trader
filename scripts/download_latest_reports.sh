@@ -11,13 +11,18 @@ DEST_DIR="${DEST_DIR:-reports/downloaded}"
 
 mkdir -p "$DEST_DIR"
 
-if ! command -v gh >/dev/null 2>&1; then
-  echo "ERROR: gh not found. Install GitHub CLI first: https://cli.github.com/" >&2
+if command -v gh >/dev/null 2>&1; then
+  GH_BIN="gh"
+elif [[ -x "/opt/homebrew/bin/gh" ]]; then
+  GH_BIN="/opt/homebrew/bin/gh"
+else
+  echo "ERROR: gh not found on PATH, and /opt/homebrew/bin/gh does not exist." >&2
+  echo "Install GitHub CLI: https://cli.github.com/" >&2
   exit 2
 fi
 
 # Find latest successful run of the close report workflow.
-RUN_ID=$(gh run list \
+RUN_ID=$($GH_BIN run list \
   --repo "$REPO" \
   --workflow "$WORKFLOW" \
   --json databaseId,conclusion,status \
@@ -40,7 +45,7 @@ fi
 # Clean destination and download.
 rm -rf "$DEST_DIR"/*
 
-gh run download "$RUN_ID" \
+$GH_BIN run download "$RUN_ID" \
   --repo "$REPO" \
   --name "$ARTIFACT_NAME" \
   --dir "$DEST_DIR"

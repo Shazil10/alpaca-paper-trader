@@ -83,8 +83,22 @@ def _format_money(x: float) -> str:
 
 def fetch_orders(*, limit: int = 200) -> list[object]:
     client = config.get_client()
-    # Use status=all to cover filled + open + canceled (we filter later).
-    return list(client.get_orders(status="all", limit=int(limit), direction="desc", nested=True))
+    # Alpaca API keyword args have differed across SDK versions.
+    # Try the most complete call first, then fall back to compatible variants.
+    try:
+        # Preferred: include filled + open + canceled.
+        return list(client.get_orders(status="all", limit=int(limit), direction="desc", nested=True))
+    except TypeError:
+        pass
+
+    try:
+        # Older versions may not accept `status`.
+        return list(client.get_orders(limit=int(limit), direction="desc", nested=True))
+    except TypeError:
+        pass
+
+    # Minimal fallback.
+    return list(client.get_orders(limit=int(limit)))
 
 
 def build_rows(orders_list: list[object]) -> list[ReportRow]:
