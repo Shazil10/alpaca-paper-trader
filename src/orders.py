@@ -70,7 +70,7 @@ def sell_market_notional(client, symbol, dollars):
     return client.submit_order(order_data)
 
 
-def sell_market_qty(client, symbol, qty=1):
+def sell_market_qty(client, symbol, qty=1, *, client_order_id: Optional[str] = None):
     """Sell using a share quantity, e.g. sell 10 shares of AAPL."""
     if qty is None or float(qty) <= 0:
         raise ValueError("qty must be > 0")
@@ -80,7 +80,8 @@ def sell_market_qty(client, symbol, qty=1):
         symbol=symbol,
         qty=qty,
         side=OrderSide.SELL,
-        time_in_force=TimeInForce.DAY
+        time_in_force=TimeInForce.DAY,
+        client_order_id=client_order_id,
     )
 
     logger.debug("Submitting SELL qty order: %s qty=%s", symbol, qty)

@@ -194,7 +194,7 @@ def _execute_sell_signals(
 
         try:
             client_order_id = f"{strategy_path}:{uuid4().hex[:16]}"
-            orders.sell_market_qty(client, symbol, qty)
+            orders.sell_market_qty(client, symbol, qty, client_order_id=client_order_id)
             logger.info(
                 "Submitted SELL %s qty=%.4f reason=%s (strategy=%s)",
                 symbol,
