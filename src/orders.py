@@ -22,6 +22,7 @@ def buy_market_notional(client, symbol, dollars, *, client_order_id: Optional[st
         raise ValueError("dollars must be > 0")
 
     symbol = str(symbol).strip().upper()
+    dollars = round(float(dollars), 2)  # Alpaca rejects more than 2 decimal places
     order_data = MarketOrderRequest(
         symbol=symbol,
         notional=dollars,  # 'notional' means dollar amount
@@ -57,6 +58,7 @@ def sell_market_notional(client, symbol, dollars):
         raise ValueError("dollars must be > 0")
 
     symbol = str(symbol).strip().upper()
+    dollars = round(float(dollars), 2)  # Alpaca rejects more than 2 decimal places
     order_data = MarketOrderRequest(
         symbol=symbol,
         notional=dollars,

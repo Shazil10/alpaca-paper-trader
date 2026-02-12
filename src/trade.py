@@ -20,8 +20,46 @@ import config
 import orders
 from trade_models import Side, Signal, committed_dollars_from_orders
 
+try:
+    from alpaca.trading.requests import GetOrdersRequest
+    from alpaca.trading.enums import QueryOrderStatus
+except ImportError:
+    GetOrdersRequest = None  # type: ignore[assignment,misc]
+    QueryOrderStatus = None  # type: ignore[assignment,misc]
+
 
 logger = logging.getLogger(__name__)
+
+
+def _get_orders_page(client, *, status: str = "all", limit: int = 500) -> list:
+    """Fetch a page of orders, handling SDK differences.
+
+    Some alpaca-py versions accept keyword args directly; others require
+    a ``GetOrdersRequest`` object.  We try both so it works everywhere.
+    """
+    # Try the request-object approach first (newer SDK)
+    if GetOrdersRequest is not None:
+        try:
+            req = GetOrdersRequest(
+                status=QueryOrderStatus(status),
+                limit=limit,
+                nested=True,
+            )
+            return list(client.get_orders(req))
+        except Exception:
+            pass
+
+    # Fallback: raw kwargs (older SDK)
+    try:
+        return list(client.get_orders(status=status, limit=limit, direction="desc", nested=True))
+    except TypeError:
+        pass
+
+    # Minimal fallback
+    try:
+        return list(client.get_orders(limit=limit))
+    except TypeError:
+        return list(client.get_orders())
 
 
 def _safe_float(value: object, default: float = 0.0) -> float:
@@ -68,24 +106,13 @@ def _held_symbols_for_strategy(client, strategy_id: str) -> Set[str]:
     prefix = f"{strategy_id}:"
     bought_symbols: Set[str] = set()
 
-    before_order_id: Optional[str] = None
-    while True:
-        try:
-            kwargs: Dict[str, object] = {
-                "status": "all",
-                "limit": 500,
-                "direction": "desc",
-                "nested": True,
-            }
-            if before_order_id:
-                kwargs["before_order_id"] = before_order_id
-            batch = client.get_orders(**kwargs)
-        except Exception:
-            logger.exception("Failed to fetch orders for held-symbol scan (%s)", strategy_id)
-            break
-        if not batch:
-            break
+    try:
+        batch = _get_orders_page(client, status="all", limit=500)
+    except Exception:
+        logger.exception("Failed to fetch orders for held-symbol scan (%s)", strategy_id)
+        batch = []
 
+    if batch:
         for o in batch:
             cid = str(getattr(o, "client_order_id", "") or "")
             if not cid.startswith(prefix):
@@ -95,11 +122,6 @@ def _held_symbols_for_strategy(client, strategy_id: str) -> Set[str]:
             sym = str(getattr(o, "symbol", "")).strip().upper()
             if side == "BUY" and status == "filled" and sym:
                 bought_symbols.add(sym)
-
-        last = batch[-1]
-        before_order_id = str(getattr(last, "id", "") or "")
-        if not before_order_id:
-            break
 
     # Intersection: only include symbols we *still* hold.
     return bought_symbols & set(all_positions.keys())
@@ -138,34 +160,13 @@ def _strategy_committed_dollars(client, *, strategy_id: str) -> float:
     "Committed" means BUY orders that are either filled or still open/pending.
     We attribute orders to strategies by ``client_order_id`` prefix.
     """
-    total = 0.0
-    before_order_id: Optional[str] = None
-    while True:
-        try:
-            kwargs: Dict[str, object] = {
-                "status": "all",
-                "limit": 500,
-                "direction": "desc",
-                "nested": True,
-            }
-            if before_order_id:
-                kwargs["before_order_id"] = before_order_id
-            batch = client.get_orders(**kwargs)
-        except Exception:
-            logger.exception("Failed to fetch orders for strategy accounting (%s)", strategy_id)
-            break
+    try:
+        batch = _get_orders_page(client, status="all", limit=500)
+    except Exception:
+        logger.exception("Failed to fetch orders for strategy accounting (%s)", strategy_id)
+        batch = []
 
-        if not batch:
-            break
-
-        total += committed_dollars_from_orders(batch, strategy_id=strategy_id)
-
-        last = batch[-1]
-        before_order_id = str(getattr(last, "id", "") or "")
-        if not before_order_id:
-            break
-
-    return total
+    return committed_dollars_from_orders(batch, strategy_id=strategy_id)
 
 
 # ---------------------------------------------------------------------------

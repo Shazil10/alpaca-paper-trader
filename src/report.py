@@ -96,25 +96,31 @@ def _format_money(x: float) -> str:
 
 def fetch_orders(*, limit: int = 200) -> list[object]:
     client = config.get_client()
-    # Alpaca API keyword args have differed across SDK versions.
-    # Try the most complete call first, then fall back to compatible variants.
+
+    # Try GetOrdersRequest object first (works reliably across SDK versions)
     try:
-        # Preferred: include filled + open + canceled.
+        from alpaca.trading.requests import GetOrdersRequest
+        from alpaca.trading.enums import QueryOrderStatus
+        req = GetOrdersRequest(status=QueryOrderStatus.ALL, limit=int(limit), nested=True)
+        return list(client.get_orders(req))
+    except Exception:
+        pass
+
+    # Fallback: raw keyword args (older SDK versions)
+    try:
         return list(client.get_orders(status="all", limit=int(limit), direction="desc", nested=True))
     except TypeError:
         pass
 
     try:
-        # Older versions may not accept `status`.
         return list(client.get_orders(limit=int(limit), direction="desc", nested=True))
     except TypeError:
         pass
 
-    # Minimal fallback.
+    # Minimal fallback
     try:
         return list(client.get_orders(limit=int(limit)))
     except TypeError:
-        # Some SDK versions don't take `limit` either.
         return list(client.get_orders())
 
 
