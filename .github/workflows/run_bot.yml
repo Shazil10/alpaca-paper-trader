@@ -1,19 +1,18 @@
 name: Daily Trading Bot
 
 on:
-  #schedule:
-    # Runs at 9:30 AM ET (14:30 UTC during standard time; 13:30 UTC during daylight time)
-    # If you want this to always be 9:30am New York time year-round, consider moving to a timezone-aware scheduler.
-    #- cron: '30 14 * * 1-5'
+  schedule:
+    # 9:30 AM ET = 14:30 UTC (standard time). Adjust for DST when needed.
+    - cron: '30 14 * * 1-5'
   workflow_dispatch:
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.9'
           
