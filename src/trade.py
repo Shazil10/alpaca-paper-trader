@@ -31,6 +31,26 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+def _enum_str(value: object) -> str:
+    """Extract the raw string from an Alpaca SDK enum (or plain string).
+
+    The alpaca-py SDK wraps side/status in Enum subclasses whose ``str()``
+    returns ``'OrderSide.BUY'`` instead of ``'BUY'``.  Using ``.value`` gives
+    ``'buy'``.  This helper normalizes both representations and plain strings
+    so comparisons like ``_enum_str(o.side).upper() == 'BUY'`` always work.
+    """
+    if value is None:
+        return ""
+    # Prefer .value (works for all Enum subclasses)
+    if hasattr(value, "value"):
+        return str(value.value)
+    # Fallback: strip the common "EnumClass." prefix if present
+    s = str(value)
+    if "." in s:
+        return s.rsplit(".", 1)[-1]
+    return s
+
+
 def _get_orders_page(client, *, status: str = "all", limit: int = 500) -> list:
     """Fetch a page of orders, handling SDK differences.
 
@@ -117,14 +137,21 @@ def _held_symbols_for_strategy(client, strategy_id: str) -> Set[str]:
             cid = str(getattr(o, "client_order_id", "") or "")
             if not cid.startswith(prefix):
                 continue
-            side = str(getattr(o, "side", "")).upper()
-            status = str(getattr(o, "status", "")).lower()
+            side = _enum_str(getattr(o, "side", "")).upper()
+            status = _enum_str(getattr(o, "status", "")).lower()
             sym = str(getattr(o, "symbol", "")).strip().upper()
             if side == "BUY" and status == "filled" and sym:
                 bought_symbols.add(sym)
 
-    # Intersection: only include symbols we *still* hold.
-    return bought_symbols & set(all_positions.keys())
+    held = bought_symbols & set(all_positions.keys())
+    logger.info(
+        "Held-symbol scan for %s: bought_via_orders=%s positions=%s → held=%s",
+        strategy_id,
+        sorted(bought_symbols),
+        sorted(all_positions.keys()),
+        sorted(held),
+    )
+    return held
 
 
 def _existing_symbols(client) -> Set[str]:
@@ -141,8 +168,8 @@ def _existing_symbols(client) -> Set[str]:
     # 2) Open orders (prevents double-buys when a previous run already submitted orders)
     try:
         for o in client.get_orders():
-            side = str(getattr(o, "side", "")).upper()
-            status = str(getattr(o, "status", "")).lower()
+            side = _enum_str(getattr(o, "side", "")).upper()
+            status = _enum_str(getattr(o, "status", "")).lower()
             sym = str(getattr(o, "symbol", "")).strip().upper()
             if not sym:
                 continue

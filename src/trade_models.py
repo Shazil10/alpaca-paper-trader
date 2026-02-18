@@ -67,6 +67,22 @@ def safe_float(value: object, default: float = 0.0) -> float:
         return default
 
 
+def _enum_str(value: object) -> str:
+    """Extract the raw string from an Alpaca SDK enum (or plain string).
+
+    The alpaca-py SDK wraps side/status in Enum subclasses whose ``str()``
+    gives ``'OrderSide.BUY'`` instead of ``'BUY'``.  ``.value`` gives ``'buy'``.
+    """
+    if value is None:
+        return ""
+    if hasattr(value, "value"):
+        return str(value.value)
+    s = str(value)
+    if "." in s:
+        return s.rsplit(".", 1)[-1]
+    return s
+
+
 def committed_dollars_from_orders(orders: Iterable[OrderLike], *, strategy_id: str) -> float:
     """Sum dollars committed by a strategy based on tagged orders.
 
@@ -90,11 +106,11 @@ def committed_dollars_from_orders(orders: Iterable[OrderLike], *, strategy_id: s
         if not cid.startswith(prefix):
             continue
 
-        side = str(getattr(o, "side", "") or "").lower()
+        side = _enum_str(getattr(o, "side", "")).lower()
         if side != "buy":
             continue
 
-        status = str(getattr(o, "status", "") or "").lower()
+        status = _enum_str(getattr(o, "status", "")).lower()
         if status in {"canceled", "rejected", "expired"}:
             continue
 
