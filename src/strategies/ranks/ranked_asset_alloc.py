@@ -35,7 +35,7 @@ BENCHMARK   = "SPY"
 CASH_ETF    = "SHY"
 ALL_TICKERS = list(dict.fromkeys(SECTOR_ETFS + HEDGE_ETFS + [BENCHMARK, CASH_ETF]))
 
-BASE_BUDGET = 30_000  # unleveraged dollars to deploy
+BASE_BUDGET = 15_000  # unleveraged dollars to deploy
 
 # ---------------------------------------------------------------------------
 # V4-Best parameters (fixed from back-test optimisation)
