@@ -13,12 +13,12 @@ from __future__ import annotations
 
 import importlib
 import logging
-from typing import Dict, List, Optional, Set
+from typing import Callable, Dict, Iterable, List, Optional, Set
 from uuid import uuid4
 
 import config
 import orders
-from trade_models import Side, Signal, committed_dollars_from_orders
+from trade_models import Side, Signal, committed_dollars_from_orders, _enum_str
 
 try:
     from alpaca.trading.requests import GetOrdersRequest
@@ -31,25 +31,6 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def _enum_str(value: object) -> str:
-    """Extract the raw string from an Alpaca SDK enum (or plain string).
-
-    The alpaca-py SDK wraps side/status in Enum subclasses whose ``str()``
-    returns ``'OrderSide.BUY'`` instead of ``'BUY'``.  Using ``.value`` gives
-    ``'buy'``.  This helper normalizes both representations and plain strings
-    so comparisons like ``_enum_str(o.side).upper() == 'BUY'`` always work.
-    """
-    if value is None:
-        return ""
-    # Prefer .value (works for all Enum subclasses)
-    if hasattr(value, "value"):
-        return str(value.value)
-    # Fallback: strip the common "EnumClass." prefix if present
-    s = str(value)
-    if "." in s:
-        return s.rsplit(".", 1)[-1]
-    return s
-
 
 def _get_orders_page(client, *, status: str = "all", limit: int = 500) -> list:
     """Fetch a page of orders, handling SDK differences.
@@ -58,7 +39,7 @@ def _get_orders_page(client, *, status: str = "all", limit: int = 500) -> list:
     a ``GetOrdersRequest`` object.  We try both so it works everywhere.
     """
     # Try the request-object approach first (newer SDK)
-    if GetOrdersRequest is not None:
+    if GetOrdersRequest is not None and QueryOrderStatus is not None:
         try:
             req = GetOrdersRequest(
                 status=QueryOrderStatus(status),
@@ -287,9 +268,10 @@ def execute_daily_trades() -> None:
         # Tell the strategy which symbols it currently owns so it can decide exits.
         held = _held_symbols_for_strategy(client, strategy_path)
 
+        _generate: Callable[..., Iterable[Signal]] = generate_signals  # type: ignore[assignment]
         try:
             signals = list(
-                generate_signals(
+                _generate(
                     budget=max(remaining_budget, 0),
                     strategy_id=strategy_path,
                     held_symbols=held,

@@ -49,15 +49,24 @@ class Signal:
 # ---------------------------------------------------------------------------
 
 class OrderLike(Protocol):
-    id: object
-    client_order_id: object
-    side: object
-    status: object
-    filled_qty: object
-    filled_avg_price: object
-    notional: object
-    qty: object
-    limit_price: object
+    @property
+    def id(self) -> object: ...
+    @property
+    def client_order_id(self) -> object: ...
+    @property
+    def side(self) -> object: ...
+    @property
+    def status(self) -> object: ...
+    @property
+    def filled_qty(self) -> object: ...
+    @property
+    def filled_avg_price(self) -> object: ...
+    @property
+    def notional(self) -> object: ...
+    @property
+    def qty(self) -> object: ...
+    @property
+    def limit_price(self) -> object: ...
 
 
 def safe_float(value: object, default: float = 0.0) -> float:
@@ -76,7 +85,7 @@ def _enum_str(value: object) -> str:
     if value is None:
         return ""
     if hasattr(value, "value"):
-        return str(value.value)
+        return str(getattr(value, "value"))
     s = str(value)
     if "." in s:
         return s.rsplit(".", 1)[-1]
@@ -84,18 +93,26 @@ def _enum_str(value: object) -> str:
 
 
 def committed_dollars_from_orders(orders: Iterable[OrderLike], *, strategy_id: str) -> float:
-    """Sum dollars committed by a strategy based on tagged orders.
+    """Return net dollars currently deployed by a strategy.
 
     Attribution rule: ``client_order_id`` must start with ``f"{strategy_id}:"``.
-    Counting rule ("strict"):
-      - include BUY orders that are filled or still open/pending
+
+    BUY counting ("strict"):
+      - include filled or still-open/pending BUY orders
       - exclude canceled/rejected/expired
 
-    Dollar estimation:
-      1) if any fills exist, count filled_qty * filled_avg_price
-      2) else if order has notional, count it
-      3) else if order has qty and limit_price, count qty * limit_price
-      4) else count 0
+    SELL counting:
+      - subtract filled SELL proceeds so that capital is recycled.
+      - e.g. if the budget is $10,000, all is deployed, then $2,000 is sold,
+        the net committed becomes $8,000, freeing $2,000 for new buys.
+
+    Dollar estimation for BUYs:
+      1) if any fills exist, use filled_qty * filled_avg_price
+      2) else if order has notional, use it
+      3) else if order has qty and limit_price, use qty * limit_price
+      4) else 0
+
+    Result is clamped to 0 (can never go negative).
     """
 
     prefix = f"{strategy_id}:"
@@ -107,27 +124,33 @@ def committed_dollars_from_orders(orders: Iterable[OrderLike], *, strategy_id: s
             continue
 
         side = _enum_str(getattr(o, "side", "")).lower()
-        if side != "buy":
-            continue
-
         status = _enum_str(getattr(o, "status", "")).lower()
-        if status in {"canceled", "rejected", "expired"}:
-            continue
 
-        filled_qty = safe_float(getattr(o, "filled_qty", 0.0))
-        filled_avg_price = safe_float(getattr(o, "filled_avg_price", 0.0))
-        if filled_qty > 0 and filled_avg_price > 0:
-            committed += filled_qty * filled_avg_price
-            continue
+        if side == "buy":
+            if status in {"canceled", "rejected", "expired"}:
+                continue
 
-        notional = safe_float(getattr(o, "notional", 0.0))
-        if notional > 0:
-            committed += notional
-            continue
+            filled_qty = safe_float(getattr(o, "filled_qty", 0.0))
+            filled_avg_price = safe_float(getattr(o, "filled_avg_price", 0.0))
+            if filled_qty > 0 and filled_avg_price > 0:
+                committed += filled_qty * filled_avg_price
+                continue
 
-        qty = safe_float(getattr(o, "qty", 0.0))
-        limit_price = safe_float(getattr(o, "limit_price", 0.0))
-        if qty > 0 and limit_price > 0:
-            committed += qty * limit_price
+            notional = safe_float(getattr(o, "notional", 0.0))
+            if notional > 0:
+                committed += notional
+                continue
 
-    return committed
+            qty = safe_float(getattr(o, "qty", 0.0))
+            limit_price = safe_float(getattr(o, "limit_price", 0.0))
+            if qty > 0 and limit_price > 0:
+                committed += qty * limit_price
+
+        elif side == "sell":
+            # Subtract filled proceeds — capital is freed up for redeployment.
+            filled_qty = safe_float(getattr(o, "filled_qty", 0.0))
+            filled_avg_price = safe_float(getattr(o, "filled_avg_price", 0.0))
+            if filled_qty > 0 and filled_avg_price > 0:
+                committed -= filled_qty * filled_avg_price
+
+    return max(committed, 0.0)

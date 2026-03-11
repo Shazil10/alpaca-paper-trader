@@ -70,7 +70,7 @@ def sell_market_notional(client, symbol, dollars):
     return client.submit_order(order_data)
 
 
-def sell_market_qty(client, symbol, qty=1, *, client_order_id: Optional[str] = None):
+def sell_market_qty(client, symbol, qty: float = 1.0, *, client_order_id: Optional[str] = None):
     """Sell using a share quantity, e.g. sell 10 shares of AAPL."""
     if qty is None or float(qty) <= 0:
         raise ValueError("qty must be > 0")

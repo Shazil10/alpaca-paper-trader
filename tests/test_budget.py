@@ -45,7 +45,9 @@ class _Order:
 
 
 class StrategyBudgetTests(unittest.TestCase):
-    def test_counts_only_matching_prefix_and_buy(self):
+    def test_counts_only_matching_prefix(self):
+        """Only orders with the strategy prefix are counted; orders from other
+        strategies are ignored.  BUYs add to committed, SELLs subtract."""
         from trade_models import committed_dollars_from_orders
 
         strategy_id = "strategies.momentum.clenow_trend"
@@ -56,8 +58,9 @@ class StrategyBudgetTests(unittest.TestCase):
             _Order(id="2", client_order_id=prefix + "bbb", side="sell", status="filled", filled_qty=1, filled_avg_price=50),
             _Order(id="3", client_order_id="other:ccc", side="buy", status="filled", filled_qty=1, filled_avg_price=999),
         ]
+        # buy #1: +200, sell #2: -50, other prefix #3: ignored
         committed = committed_dollars_from_orders(orders, strategy_id=strategy_id)
-        self.assertEqual(committed, 200.0)
+        self.assertEqual(committed, 150.0)
 
     def test_ignores_canceled_rejected(self):
         from trade_models import committed_dollars_from_orders
@@ -92,6 +95,53 @@ class StrategyBudgetTests(unittest.TestCase):
         ]
         committed = committed_dollars_from_orders(orders, strategy_id=strategy_id)
         self.assertEqual(committed, 100.0)
+
+
+    def test_sell_proceeds_recycle_budget(self):
+        """Full deploy-then-sell cycle: selling frees the exact fill value."""
+        from trade_models import committed_dollars_from_orders
+
+        strategy_id = "s1"
+        prefix = strategy_id + ":"
+
+        orders = [
+            # Deploy the full $10,000 budget across two buys.
+            _Order(id="1", client_order_id=prefix + "a", side="buy", status="filled", filled_qty=10, filled_avg_price=600),   # $6,000
+            _Order(id="2", client_order_id=prefix + "b", side="buy", status="filled", filled_qty=5,  filled_avg_price=800),   # $4,000
+            # Sell one position at market — proceeds recycle into budget.
+            _Order(id="3", client_order_id=prefix + "c", side="sell", status="filled", filled_qty=10, filled_avg_price=550),  # -$5,500
+        ]
+        # committed = 6000 + 4000 - 5500 = 4500
+        committed = committed_dollars_from_orders(orders, strategy_id=strategy_id)
+        self.assertEqual(committed, 4500.0)
+
+    def test_unfilled_sell_does_not_recycle(self):
+        """A SELL that hasn't filled yet must not reduce committed dollars."""
+        from trade_models import committed_dollars_from_orders
+
+        strategy_id = "s1"
+        prefix = strategy_id + ":"
+
+        orders = [
+            _Order(id="1", client_order_id=prefix + "a", side="buy",  status="filled", filled_qty=5, filled_avg_price=200),  # +$1,000
+            _Order(id="2", client_order_id=prefix + "b", side="sell", status="new",    filled_qty=0, filled_avg_price=0),    # pending — no subtraction
+        ]
+        committed = committed_dollars_from_orders(orders, strategy_id=strategy_id)
+        self.assertEqual(committed, 1000.0)
+
+    def test_committed_never_goes_negative(self):
+        """If sell proceeds somehow exceed buy fills, result is clamped to 0."""
+        from trade_models import committed_dollars_from_orders
+
+        strategy_id = "s1"
+        prefix = strategy_id + ":"
+
+        orders = [
+            _Order(id="1", client_order_id=prefix + "a", side="buy",  status="filled", filled_qty=1, filled_avg_price=100),  # +$100
+            _Order(id="2", client_order_id=prefix + "b", side="sell", status="filled", filled_qty=2, filled_avg_price=200),  # -$400
+        ]
+        committed = committed_dollars_from_orders(orders, strategy_id=strategy_id)
+        self.assertEqual(committed, 0.0)
 
 
 if __name__ == "__main__":

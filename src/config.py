@@ -16,8 +16,12 @@ load_dotenv()  # Loads ALPACA_KEY / ALPACA_SECRET from a local .env
 
 
 # Strategy import path -> dollars to allocate for that strategy.
+# NOTE: For rotation strategies (ranked_asset_alloc), the budget is a generous
+# lifetime cap — sell proceeds recycle into it.  The strategy internally sizes
+# positions from its own BASE_BUDGET ($30k) × DAF leverage (1–2×).
 STRATEGY_ALLOCATIONS: dict[str, float] = {
     "strategies.momentum.clenow_trend": 10_000,
+    "strategies.ranks.ranked_asset_alloc": 200_000,
     # "strategies.mean_reversion.rsi_dip": 10_000,
 }
 
