@@ -23,6 +23,7 @@ from __future__ import annotations
 import csv
 import logging
 import os
+from collections import deque
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -52,6 +53,7 @@ class ReportRow:
     client_order_id: str
     strategy_type: str
     strategy_name: str
+    pnl: float | None = None
 
 
 def _safe_float(value: object, default: float = 0.0) -> float:
@@ -94,6 +96,13 @@ def _format_money(x: float) -> str:
     return f"{x:,.2f}"
 
 
+def _format_pnl(pnl: float | None) -> str:
+    if pnl is None:
+        return ""
+    sign = "+" if pnl >= 0 else ""
+    return f"{sign}{pnl:,.2f}"
+
+
 def fetch_orders(*, limit: int = 200) -> list[object]:
     client = config.get_client()
 
@@ -125,15 +134,21 @@ def fetch_orders(*, limit: int = 200) -> list[object]:
 
 
 def build_rows(orders_list: list[object]) -> list[ReportRow]:
+    # Sort chronologically (oldest-first) for FIFO cost-basis matching.
+    chrono = sorted(orders_list, key=lambda o: str(getattr(o, "submitted_at", "") or ""))
+
+    # FIFO cost basis per symbol: symbol → deque of entry avg_price
+    cost_basis: dict[str, deque[float]] = {}
+
     rows: list[ReportRow] = []
-    for o in orders_list:
+    for o in chrono:
         symbol = str(getattr(o, "symbol", "") or "").strip().upper()
-        
+
         # Strip enum prefixes: OrderSide.BUY -> BUY
         side_raw = str(getattr(o, "side", "") or "")
         side = side_raw.replace("OrderSide.", "").upper()
-        
-        # Strip enum prefixes: OrderStatus.ACCEPTED -> ACCEPTED  
+
+        # Strip enum prefixes: OrderStatus.FILLED -> FILLED
         status_raw = str(getattr(o, "status", "") or "")
         status = status_raw.replace("OrderStatus.", "").upper()
 
@@ -146,6 +161,17 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
         strategy_type, strategy_name = _parse_strategy_id(client_order_id)
 
         submitted_at = _iso(getattr(o, "submitted_at", ""))
+
+        # Compute PnL for filled SELL orders using FIFO cost basis.
+        pnl: float | None = None
+        if side == "BUY" and status == "FILLED" and filled_qty > 0 and filled_avg_price > 0:
+            if symbol not in cost_basis:
+                cost_basis[symbol] = deque()
+            cost_basis[symbol].append(filled_avg_price)
+        elif side == "SELL" and status == "FILLED" and filled_qty > 0 and filled_avg_price > 0:
+            if symbol in cost_basis and cost_basis[symbol]:
+                entry_price = cost_basis[symbol].popleft()
+                pnl = round((filled_avg_price - entry_price) * filled_qty, 2)
 
         rows.append(
             ReportRow(
@@ -160,9 +186,12 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
                 client_order_id=client_order_id,
                 strategy_type=strategy_type,
                 strategy_name=strategy_name,
+                pnl=pnl,
             )
         )
 
+    # Restore newest-first ordering for display.
+    rows.sort(key=lambda r: r.submitted_at, reverse=True)
     return rows
 
 
@@ -180,6 +209,7 @@ def write_csv(rows: list[ReportRow], path: Path) -> None:
                 "Filled Qty",
                 "Filled Avg Price",
                 "Filled Value",
+                "PnL ($)",
                 "Client Order ID",
                 "Strategy Type",
                 "Strategy Name",
@@ -196,6 +226,7 @@ def write_csv(rows: list[ReportRow], path: Path) -> None:
                     f"{r.filled_qty:.6f}",
                     f"{r.filled_avg_price:.6f}",
                     f"{r.filled_value:.6f}",
+                    "" if r.pnl is None else f"{r.pnl:.2f}",
                     r.client_order_id,
                     r.strategy_type,
                     r.strategy_name,
@@ -223,6 +254,7 @@ def write_markdown(rows: list[ReportRow], path: Path) -> None:
         "Filled Qty",
         "Filled Avg Price",
         "Filled Value ($)",
+        "PnL ($)",
         "Strategy Type",
         "Strategy Name",
         "Client Order ID",
@@ -244,6 +276,7 @@ def write_markdown(rows: list[ReportRow], path: Path) -> None:
                     f"{r.filled_qty:.4f}",
                     _format_money(r.filled_avg_price),
                     _format_money(r.filled_value),
+                    _format_pnl(r.pnl),
                     r.strategy_type,
                     r.strategy_name,
                     r.client_order_id,
@@ -281,6 +314,7 @@ def write_html(rows: list[ReportRow], path: Path) -> None:
                 "Filled Qty",
                 "Filled Avg Price",
                 "Filled Value ($)",
+                "PnL ($)",
                 "Strategy Type",
                 "Strategy Name",
                 "Client Order ID",
@@ -301,7 +335,21 @@ def write_html(rows: list[ReportRow], path: Path) -> None:
                         r.strategy_name,
                         r.client_order_id,
                 ]
-                rows_html.append("<tr>" + "".join(f"<td>{esc(c)}</td>" for c in cells) + "</tr>")
+                pnl_str = _format_pnl(r.pnl)
+                if pnl_str.startswith("+"):
+                        pnl_style = ' style="color:#16a34a;font-weight:600"'
+                elif pnl_str.startswith("-"):
+                        pnl_style = ' style="color:#dc2626;font-weight:600"'
+                else:
+                        pnl_style = ""
+                pnl_cell = f"<td{pnl_style}>{esc(pnl_str)}</td>"
+                rows_html.append(
+                        "<tr>"
+                        + "".join(f"<td>{esc(c)}</td>" for c in cells[:8])
+                        + pnl_cell
+                        + "".join(f"<td>{esc(c)}</td>" for c in cells[8:])
+                        + "</tr>"
+                )
 
         html = f"""<!doctype html>
 <html lang=\"en\">
@@ -370,7 +418,7 @@ def main() -> int:
         logger.info("Preview (first %d rows):", preview_n)
         for r in rows[:preview_n]:
             logger.info(
-                "%s %s %s %s notional=%.2f filled=%.4f@%.2f strategy=%s/%s cid=%s",
+                "%s %s %s %s notional=%.2f filled=%.4f@%.2f pnl=%s strategy=%s/%s cid=%s",
                 r.submitted_at,
                 r.symbol,
                 r.side,
@@ -378,6 +426,7 @@ def main() -> int:
                 r.notional,
                 r.filled_qty,
                 r.filled_avg_price,
+                _format_pnl(r.pnl) or "—",
                 r.strategy_type,
                 r.strategy_name,
                 r.client_order_id,
