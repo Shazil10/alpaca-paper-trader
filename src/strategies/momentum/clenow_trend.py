@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-DEFAULT_TOP_N = 20
+DEFAULT_TOP_N = 7
 EXIT_RANK_CUTOFF = 30          # sell if rank drops beyond this
 REGIME_ETFS = ("SPY", "IJH", "IJR")
 REGIME_SMA_PERIOD = 200
