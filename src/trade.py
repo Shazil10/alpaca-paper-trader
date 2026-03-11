@@ -331,7 +331,13 @@ def execute_daily_trades() -> None:
 
                 client_order_id = f"{strategy_path}:{uuid4().hex[:16]}"
 
-                orders.buy_market_notional(client, symbol, dollars, client_order_id=client_order_id)
+                result = orders.buy_market_rounded_qty(client, symbol, dollars, client_order_id=client_order_id)
+                if result is None:
+                    logger.info(
+                        "Skipped BUY %s — notional too small for even 1 share (strategy=%s)",
+                        symbol, strategy_path,
+                    )
+                    continue
                 submitted_this_run.add(symbol)
                 cash -= dollars
                 logger.info(
