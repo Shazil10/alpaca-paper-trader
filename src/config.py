@@ -22,7 +22,7 @@ load_dotenv()  # Loads ALPACA_KEY / ALPACA_SECRET from a local .env
 STRATEGY_ALLOCATIONS: dict[str, float] = {
     "strategies.momentum.clenow_trend": 5_000,
     "strategies.ranks.ranked_asset_alloc": 15_000,
-    # "strategies.mean_reversion.rsi_dip": 10_000,
+    "strategies.mean_reversion.high_pullback_reversion": 10_000,
 }
 
 

@@ -1,6 +1,6 @@
 """
-STRATEGY: CLENOW MOMENTUM (Enhanced)
-======================================
+STRATEGY: CLENOW MOMENTUM (Enhanced v2)
+=========================================
 Based on Andreas Clenow's 'Stocks on the Move', enhanced with:
 
 1. **Regime Filter** (Gatekeeper)
@@ -8,23 +8,35 @@ Based on Andreas Clenow's 'Stocks on the Move', enhanced with:
    - If at least 2 of 3 have Price > 200-day SMA → risk-on → proceed.
    - Otherwise → "go to beach" → no new buys (may still exit).
 
-2. **Entry Filter**
-   - Only score stocks where current Price > 200-day SMA.
+2. **Entry Filters** (three gates)
+   a) Price > 200-day SMA (trend intact).
+   b) Momentum deceleration guard: 30-day score ≥ 50% of 60-day score.
+      (Rejects stocks that ran hard months ago but are now stalling.)
+   c) 52-week high proximity: price must be within 25% of its 52-week high.
+      (Avoids buying broken stocks that have merely stopped falling.)
 
 3. **Ranking**
-   - Clenow Score = annualized_slope × R² on 90-day log-prices.
-   - Top 20 by score.
+   - Clenow Score = annualized_slope × R² on 60-day log-prices (was 90).
+   - Fresher signal — avoids buying into already-exhausted trends.
 
 4. **Sizing** (inverse-volatility weighted)
    - Weight ∝ 1 / σ_20d for each pick.
    - Normalize so weights sum to 1, then clamp to [2%, 10%].
    - After clamping, renormalize to sum to 1.
 
-5. **Exit Logic** (SELL signals)
+5. **Exit Logic** (SELL signals) — tightened vs v1
    - Sell any currently-held position where:
-     a) Rank dropped beyond 30, OR
-     b) Price < 100-day SMA.
+     a) Rank dropped beyond 20 (was 30), OR
+     b) Price < 50-day SMA (was 100-day — much faster exit).
    - Requires current portfolio positions to be passed in.
+
+v2 changes vs v1
+-----------------
+  LOOKBACK_DAYS      : 90  → 60   (fresher momentum score)
+  EXIT_SMA_PERIOD    : 100 → 50   (exit sooner when trend breaks)
+  EXIT_RANK_CUTOFF   : 30  → 20   (tighter rank tolerance)
+  Deceleration filter: added      (30d score must be ≥ 50% of 60d score)
+  52-week proximity  : added      (must be within 25% of 52wk high)
 """
 
 from __future__ import annotations
@@ -47,12 +59,15 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 DEFAULT_TOP_N = 7
-EXIT_RANK_CUTOFF = 30          # sell if rank drops beyond this
+EXIT_RANK_CUTOFF = 20          # sell if rank drops beyond this (was 30)
 REGIME_ETFS = ("SPY", "IJH", "IJR")
 REGIME_SMA_PERIOD = 200
 ENTRY_SMA_PERIOD = 200
-EXIT_SMA_PERIOD = 100
-LOOKBACK_DAYS = 90
+EXIT_SMA_PERIOD = 50           # exit sooner when trend breaks (was 100)
+LOOKBACK_DAYS = 60             # fresher momentum signal (was 90)
+DECEL_LOOKBACK = 30            # short window for deceleration check
+DECEL_MIN_RATIO = 0.50         # 30d score must be ≥ 50% of 60d score
+HIGH_PROX_PCT = 0.25           # must be within 25% of 52-week high
 VOL_LOOKBACK = 20              # 20-day realized vol for sizing
 MIN_WEIGHT = 0.02              # 2% floor per position
 MAX_WEIGHT = 0.10              # 10% cap per position
@@ -123,16 +138,31 @@ def check_regime(etfs: Tuple[str, ...] = REGIME_ETFS, sma_period: int = REGIME_S
 # 2 + 3. Score universe (with entry filter) and rank
 # ---------------------------------------------------------------------------
 
+def _high_52w(series: pd.Series) -> float:
+    """Return the 52-week (252-day) rolling high."""
+    if len(series) < 2:
+        return float("nan")
+    n = min(252, len(series))
+    return float(series.iloc[-n:].max())
+
+
 def score_universe(
     universe_file: str = "universe.csv",
     *,
     lookback: int = LOOKBACK_DAYS,
     entry_sma: int = ENTRY_SMA_PERIOD,
+    decel_lookback: int = DECEL_LOOKBACK,
+    decel_min_ratio: float = DECEL_MIN_RATIO,
+    high_prox_pct: float = HIGH_PROX_PCT,
 ) -> pd.DataFrame:
     """Score every stock in the universe and return a DataFrame.
 
-    Only stocks with current price > *entry_sma*-day SMA are scored.
-    Returns columns: Symbol, Score, Close, Vol20 (annualized), SMA200, SMA100.
+    Entry gates applied (all must pass):
+      1. Price > *entry_sma*-day SMA.
+      2. Deceleration guard: 30-day score ≥ *decel_min_ratio* × 60-day score.
+      3. 52-week proximity: price ≥ (1 - *high_prox_pct*) × 52wk high.
+
+    Returns columns: Symbol, Score, Close, Vol20 (annualized), SMA200, SMA50.
     """
     if not os.path.exists(universe_file):
         universe_file = os.path.join(os.path.dirname(__file__), "../../../universe.csv")
@@ -157,14 +187,26 @@ def score_universe(
 
                     current_price = float(close.iloc[-1])
                     sma200 = _sma(close, ENTRY_SMA_PERIOD)
-                    sma100 = _sma(close, EXIT_SMA_PERIOD)
-                    vol20 = _realized_vol(close, VOL_LOOKBACK)
+                    sma50  = _sma(close, EXIT_SMA_PERIOD)
+                    vol20  = _realized_vol(close, VOL_LOOKBACK)
+                    high52 = _high_52w(close)
 
-                    # Entry filter: only score if price > 200-day SMA
+                    # Gate 1: price > 200-day SMA
                     if current_price <= sma200:
                         continue
 
+                    # Gate 3: 52-week high proximity
+                    if not np.isnan(high52) and high52 > 0:
+                        if current_price < (1.0 - high_prox_pct) * high52:
+                            continue
+
                     score = get_momentum_score(close.iloc[-lookback:].values)
+
+                    # Gate 2: deceleration guard (short-term momentum not collapsing)
+                    if len(close) >= decel_lookback and score > 0:
+                        score_short = get_momentum_score(close.iloc[-decel_lookback:].values)
+                        if score_short < decel_min_ratio * score:
+                            continue
 
                     records.append(
                         {
@@ -173,7 +215,7 @@ def score_universe(
                             "Close": current_price,
                             "Vol20": vol20,
                             "SMA200": sma200,
-                            "SMA100": sma100,
+                            "SMA50": sma50,
                         }
                     )
                 except (KeyError, IndexError):
@@ -187,6 +229,14 @@ def score_universe(
     df = df.sort_values("Score", ascending=False).reset_index(drop=True)
     df["Rank"] = df.index + 1  # 1-based rank
     return df
+
+
+def _col_exit_sma(df: pd.DataFrame) -> str:
+    """Return whichever SMA column exists in *df* (SMA50 in v2, SMA100 in v1)."""
+    for col in ("SMA50", "SMA100"):
+        if col in df.columns:
+            return col
+    return "SMA50"
 
 
 def get_top_picks(
@@ -253,33 +303,36 @@ def _generate_exit_signals(
     """Return SELL signals for held positions that violate exit rules.
 
     Exit if:
-      a) Symbol's rank > EXIT_RANK_CUTOFF (30), OR
-      b) Symbol's current price < 100-day SMA.
+      a) Symbol's rank > EXIT_RANK_CUTOFF (20), OR
+      b) Symbol's current price < 50-day SMA.
 
-    Stocks not found in the scored universe at all are also exited (they failed
-    the entry filter, which is even worse).
+    Stocks not found in the scored universe are also exited — they failed
+    one or more of the three entry gates.
     """
     signals: List[Signal] = []
     scored_symbols: Set[str] = set(scores_df["Symbol"].tolist()) if not scores_df.empty else set()
+
+    sma_col = _col_exit_sma(scores_df)
+    sma_label = sma_col.lower()  # e.g. "sma50"
 
     for sym in held_symbols:
         reason: Optional[str] = None
 
         if sym not in scored_symbols:
-            # Symbol didn't pass the 200 SMA entry filter → definitely exit.
-            reason = "exit:below_200sma_filter"
+            # Symbol didn't pass entry filters → definitely exit.
+            reason = "exit:failed_entry_filters"
         else:
-            row = scores_df.loc[scores_df["Symbol"] == sym].iloc[0]
-            rank = int(row["Rank"])
+            row   = scores_df.loc[scores_df["Symbol"] == sym].iloc[0]
+            rank  = int(row["Rank"])
             price = float(row["Close"])
-            sma100 = float(row["SMA100"])
+            sma_x = float(row[sma_col])
 
-            if rank > EXIT_RANK_CUTOFF and price < sma100:
-                reason = f"exit:rank_{rank}_and_below_100sma"
+            if rank > EXIT_RANK_CUTOFF and price < sma_x:
+                reason = f"exit:rank_{rank}_and_below_{sma_label}"
             elif rank > EXIT_RANK_CUTOFF:
                 reason = f"exit:rank_{rank}_gt_{EXIT_RANK_CUTOFF}"
-            elif price < sma100:
-                reason = "exit:below_100sma"
+            elif price < sma_x:
+                reason = f"exit:below_{sma_label}"
 
         if reason:
             signals.append(
@@ -337,12 +390,17 @@ def generate_signals(
     if scores_df.empty:
         return exit_signals
 
-    top = scores_df.head(top_n).copy()
-    if top.empty:
+    slots_available = max(top_n - len(held_symbols), 0)
+    if slots_available == 0:
+        logger.info("Momentum slots full (%d held / %d target) — no new buys.", len(held_symbols), top_n)
+        return exit_signals
+
+    available = scores_df[~scores_df["Symbol"].isin(list(held_symbols))].head(slots_available).copy()
+    if available.empty:
         return exit_signals
 
     # Inverse-vol weights
-    weights = _inverse_vol_weights(top.set_index("Symbol")["Vol20"])
+    weights = _inverse_vol_weights(available.set_index("Symbol")["Vol20"])
     if weights.empty:
         return exit_signals
 
