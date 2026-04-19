@@ -1,12 +1,12 @@
 {
  "argv": [
-  "/Users/shazilfarukh/Desktop/algo_trading/venv/bin/python3",
+  "/Users/shazilfarukh/Desktop/Quant_algo_trading/venv/bin/python3",
   "-m",
   "ipykernel_launcher",
   "-f",
   "{connection_file}"
  ],
- "display_name": "venv (algo_trading)",
+ "display_name": "venv (Quant_algo_trading)",
  "language": "python",
  "metadata": {
   "debugger": true
