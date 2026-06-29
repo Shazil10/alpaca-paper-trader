@@ -15,6 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
+from alpaca.common.exceptions import APIError
+
 import config
 import orders
 
@@ -36,14 +38,21 @@ def cancel_open_orders(client, symbol: str) -> int:
         sym = str(getattr(order, "symbol", "")).upper()
         if sym != symbol:
             continue
-        if _status_str(order) not in OPEN_STATUSES:
+        status = _status_str(order)
+        if status not in OPEN_STATUSES:
+            continue
+        if status == "pending_cancel":
+            logger.info("Order %s already pending cancel (%s)", getattr(order, "id", ""), sym)
             continue
         order_id = getattr(order, "id", None)
         if not order_id:
             continue
-        client.cancel_order_by_id(order_id)
-        logger.info("Cancelled open order %s (%s %s)", order_id, sym, _status_str(order))
-        cancelled += 1
+        try:
+            client.cancel_order_by_id(order_id)
+            logger.info("Cancelled open order %s (%s %s)", order_id, sym, status)
+            cancelled += 1
+        except APIError as exc:
+            logger.warning("Could not cancel order %s: %s", order_id, exc)
     return cancelled
 
 
@@ -56,13 +65,18 @@ def sell_full_position(client, symbol: str) -> bool:
         if qty <= 0:
             logger.info("No long position to sell for %s (qty=%.4f)", symbol, qty)
             return False
-        side = "long"
-        if qty < 0:
-            logger.warning("%s is a short position (qty=%.4f); this script only sells long qty", symbol, qty)
+        try:
+            order = orders.sell_market_qty(client, symbol, qty)
+            logger.info(
+                "Submitted SELL %s qty=%.4f order_id=%s",
+                symbol,
+                qty,
+                getattr(order, "id", order),
+            )
+            return True
+        except APIError as exc:
+            logger.error("SELL failed for %s: %s", symbol, exc)
             return False
-        order = orders.sell_market_qty(client, symbol, qty)
-        logger.info("Submitted SELL %s qty=%.4f order_id=%s", symbol, qty, getattr(order, "id", order))
-        return True
     logger.info("No open position for %s", symbol)
     return False
 
