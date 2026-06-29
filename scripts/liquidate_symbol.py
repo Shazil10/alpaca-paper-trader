@@ -56,6 +56,28 @@ def cancel_open_orders(client, symbol: str) -> int:
     return cancelled
 
 
+def cancel_all_open_orders(client) -> int:
+    """Cancel every open order on the account (used to clear stuck holds)."""
+    try:
+        client.delete("/orders")
+        logger.info("Requested cancel of all open orders")
+        return 1
+    except APIError as exc:
+        logger.warning("Could not cancel all orders: %s", exc)
+        return 0
+
+
+def close_position(client, symbol: str) -> bool:
+    symbol = symbol.upper()
+    try:
+        order = client.close_position(symbol)
+        logger.info("Closed position via Alpaca close_position: %s", getattr(order, "id", order))
+        return True
+    except APIError as exc:
+        logger.warning("close_position failed for %s: %s", symbol, exc)
+        return False
+
+
 def sell_full_position(client, symbol: str) -> bool:
     symbol = symbol.upper()
     for pos in client.get_all_positions():
@@ -84,12 +106,19 @@ def sell_full_position(client, symbol: str) -> bool:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Cancel open orders and sell full position.")
     parser.add_argument("symbol", help="Ticker symbol, e.g. NVO")
+    parser.add_argument(
+        "--force-cancel-all",
+        action="store_true",
+        help="Cancel all open account orders before closing (clears stuck held shares)",
+    )
     args = parser.parse_args()
     symbol = args.symbol.strip().upper()
 
     client = config.get_client()
     n_cancelled = cancel_open_orders(client, symbol)
-    sold = sell_full_position(client, symbol)
+    if args.force_cancel_all:
+        cancel_all_open_orders(client)
+    sold = close_position(client, symbol) or sell_full_position(client, symbol)
     logger.info("Done: cancelled=%d sold=%s", n_cancelled, sold)
     return 0
 

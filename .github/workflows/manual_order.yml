@@ -27,4 +27,4 @@ jobs:
           ALPACA_KEY: ${{ secrets.ALPACA_KEY }}
           ALPACA_SECRET: ${{ secrets.ALPACA_SECRET }}
           PYTHONPATH: src
-        run: python scripts/liquidate_symbol.py "${{ inputs.symbol }}"
+        run: python scripts/liquidate_symbol.py "${{ inputs.symbol }}" --force-cancel-all
