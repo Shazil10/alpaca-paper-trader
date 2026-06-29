@@ -288,6 +288,22 @@ def execute_daily_trades() -> None:
         if sell_signals:
             logger.info("Strategy %s returned %d SELL signals", strategy_path, len(sell_signals))
             _execute_sell_signals(client, sell_signals, positions, strategy_path)
+            # Refresh cash, positions, and budget after sells so same-run proceeds can fund buys.
+            try:
+                account = client.get_account()
+                cash = _safe_float(getattr(account, "cash", 0.0))
+            except Exception:
+                logger.exception("Failed to refresh account after SELLs for %s", strategy_path)
+            positions = _positions_by_symbol(client)
+            committed = _strategy_committed_dollars(client, strategy_id=strategy_path)
+            remaining_budget = float(budget) - committed
+            logger.info(
+                "Post-SELL refresh strategy=%s committed=%.2f remaining=%.2f cash=%.2f",
+                strategy_path,
+                committed,
+                remaining_budget,
+                cash,
+            )
 
         # ── Process BUY signals ──
         if remaining_budget <= 0:
