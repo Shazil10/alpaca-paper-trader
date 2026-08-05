@@ -20,9 +20,9 @@ load_dotenv()  # Loads ALPACA_KEY / ALPACA_SECRET from a local .env
 # cap — sell proceeds recycle into it.  The strategy internally sizes
 # positions from its own BASE_BUDGET × DAF leverage (1–2×).
 STRATEGY_ALLOCATIONS: dict[str, float] = {
-    "strategies.momentum.clenow_trend": 5_000,
+    "strategies.momentum.clenow_trend": 10_000,
     "strategies.ranks.ranked_asset_alloc": 15_000,
-    "strategies.mean_reversion.high_pullback_reversion": 10_000,
+    "strategies.mean_reversion.high_pullback_reversion": 15_000,
 }
 
 
