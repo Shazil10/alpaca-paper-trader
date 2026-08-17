@@ -7,6 +7,8 @@ This is meant to be run at the end of each daily bot run.
 Outputs:
 - reports/orders_latest.csv
 - reports/orders_latest.md
+- reports/orders_latest.html
+- reports/microsite_snapshot.json
 
 The report attributes each order to a strategy using the `client_order_id` prefix:
     "{strategy_id}:..."
@@ -21,6 +23,7 @@ Optional env vars:
 from __future__ import annotations
 
 import csv
+import json
 import logging
 import os
 from collections import deque
@@ -38,6 +41,7 @@ REPORTS_DIR = Path(__file__).resolve().parent.parent / "reports"
 CSV_PATH = REPORTS_DIR / "orders_latest.csv"
 MD_PATH = REPORTS_DIR / "orders_latest.md"
 HTML_PATH = REPORTS_DIR / "orders_latest.html"
+MICROSITE_DATA_PATH = REPORTS_DIR / "microsite_snapshot.json"
 
 
 @dataclass(frozen=True)
@@ -54,6 +58,15 @@ class ReportRow:
     strategy_type: str
     strategy_name: str
     pnl: float | None = None
+
+
+@dataclass(frozen=True)
+class PositionSnapshot:
+    symbol: str
+    qty: float
+    market_value: float
+    current_price: float
+    unrealized_pl: float
 
 
 def _safe_float(value: object, default: float = 0.0) -> float:
@@ -133,12 +146,35 @@ def fetch_orders(*, limit: int = 200) -> list[object]:
         return list(client.get_orders())
 
 
+def fetch_positions() -> dict[str, PositionSnapshot]:
+    """Return current Alpaca paper positions keyed by symbol."""
+
+    client = config.get_client()
+    positions: dict[str, PositionSnapshot] = {}
+
+    for p in client.get_all_positions():
+        symbol = str(getattr(p, "symbol", "") or "").strip().upper()
+        if not symbol:
+            continue
+        positions[symbol] = PositionSnapshot(
+            symbol=symbol,
+            qty=_safe_float(getattr(p, "qty", 0.0)),
+            market_value=_safe_float(getattr(p, "market_value", 0.0)),
+            current_price=_safe_float(getattr(p, "current_price", 0.0)),
+            unrealized_pl=_safe_float(getattr(p, "unrealized_pl", 0.0)),
+        )
+
+    return positions
+
+
 def build_rows(orders_list: list[object]) -> list[ReportRow]:
     # Sort chronologically (oldest-first) for FIFO cost-basis matching.
     chrono = sorted(orders_list, key=lambda o: str(getattr(o, "submitted_at", "") or ""))
 
-    # FIFO cost basis per symbol: symbol → deque of entry avg_price
-    cost_basis: dict[str, deque[float]] = {}
+    # FIFO cost basis per attributed strategy and symbol. Keeping strategy in the
+    # key prevents discretionary/manual fills or another strategy that holds the
+    # same ticker from contaminating a strategy's realized PnL.
+    cost_basis: dict[tuple[str, str], deque[float]] = {}
 
     rows: list[ReportRow] = []
     for o in chrono:
@@ -164,13 +200,17 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
 
         # Compute PnL for filled SELL orders using FIFO cost basis.
         pnl: float | None = None
+        strategy_key = client_order_id.partition(":")[0] if client_order_id else ""
+        basis_key = (strategy_key, symbol)
+
         if side == "BUY" and status == "FILLED" and filled_qty > 0 and filled_avg_price > 0:
-            if symbol not in cost_basis:
-                cost_basis[symbol] = deque()
-            cost_basis[symbol].append(filled_avg_price)
+            if strategy_key:
+                if basis_key not in cost_basis:
+                    cost_basis[basis_key] = deque()
+                cost_basis[basis_key].append(filled_avg_price)
         elif side == "SELL" and status == "FILLED" and filled_qty > 0 and filled_avg_price > 0:
-            if symbol in cost_basis and cost_basis[symbol]:
-                entry_price = cost_basis[symbol].popleft()
+            if strategy_key and basis_key in cost_basis and cost_basis[basis_key]:
+                entry_price = cost_basis[basis_key].popleft()
                 pnl = round((filled_avg_price - entry_price) * filled_qty, 2)
 
         rows.append(
@@ -193,6 +233,141 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
     # Restore newest-first ordering for display.
     rows.sort(key=lambda r: r.submitted_at, reverse=True)
     return rows
+
+
+def _strategy_display_name(strategy_id: str) -> str:
+    _, name = _parse_strategy_id(f"{strategy_id}:snapshot")
+    return name or strategy_id.replace("_", " ").title()
+
+
+def _net_strategy_positions(rows: list[ReportRow], strategy_id: str) -> dict[str, float]:
+    """Infer strategy-attributed quantities from the available order tape."""
+
+    prefix = f"{strategy_id}:"
+    quantities: dict[str, float] = {}
+
+    for r in rows:
+        if not r.client_order_id.startswith(prefix) or r.status != "FILLED":
+            continue
+        if r.side == "BUY":
+            quantities[r.symbol] = quantities.get(r.symbol, 0.0) + r.filled_qty
+        elif r.side == "SELL":
+            quantities[r.symbol] = quantities.get(r.symbol, 0.0) - r.filled_qty
+
+    return {symbol: qty for symbol, qty in sorted(quantities.items()) if qty > 0.0001}
+
+
+def _holding_payload(
+    order_quantities: dict[str, float],
+    positions: dict[str, PositionSnapshot] | None,
+) -> list[dict[str, object]]:
+    holdings: list[dict[str, object]] = []
+
+    for symbol, qty in order_quantities.items():
+        position = positions.get(symbol) if positions is not None else None
+        if positions is not None and position is None:
+            continue
+
+        item: dict[str, object] = {
+            "symbol": symbol,
+            "qty_attributed_from_order_window": round(qty, 4),
+        }
+        if position is not None:
+            item.update(
+                {
+                    "broker_qty": round(position.qty, 4),
+                    "market_value": round(position.market_value, 2),
+                    "current_price": round(position.current_price, 2),
+                    "unrealized_pl": round(position.unrealized_pl, 2),
+                }
+            )
+        holdings.append(item)
+
+    return holdings
+
+
+def build_microsite_snapshot(
+    rows: list[ReportRow],
+    *,
+    limit: int,
+    positions: dict[str, PositionSnapshot] | None = None,
+) -> dict[str, object]:
+    """Build a compact JSON payload a public microsite can consume.
+
+    The payload is intentionally data-driven from ``config.STRATEGY_ALLOCATIONS``
+    so a new strategy or budget change updates the website payload without
+    hardcoded frontend edits.
+    """
+
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    strategies: list[dict[str, object]] = []
+    total_committed = 0.0
+    total_realized = 0.0
+    total_market_value = 0.0
+
+    for strategy_id, budget in config.STRATEGY_ALLOCATIONS.items():
+        strategy_rows = [r for r in rows if r.client_order_id.startswith(f"{strategy_id}:")]
+        committed = 0.0
+        realized = 0.0
+        filled_buys = 0
+        filled_sells = 0
+
+        for r in strategy_rows:
+            if r.status != "FILLED":
+                continue
+            if r.side == "BUY":
+                committed += r.filled_value
+                filled_buys += 1
+            elif r.side == "SELL":
+                committed -= r.filled_value
+                filled_sells += 1
+            if r.pnl is not None:
+                realized += r.pnl
+
+        committed = max(committed, 0.0)
+        order_quantities = _net_strategy_positions(rows, strategy_id)
+        holdings = _holding_payload(order_quantities, positions)
+        market_value = sum(float(h.get("market_value", 0.0)) for h in holdings)
+
+        total_committed += committed
+        total_realized += realized
+        total_market_value += market_value
+
+        strategies.append(
+            {
+                "id": strategy_id,
+                "name": _strategy_display_name(strategy_id),
+                "budget": round(float(budget), 2),
+                "committed_from_order_window": round(committed, 2),
+                "remaining_from_order_window": round(max(float(budget) - committed, 0.0), 2),
+                "market_value_attributed": round(market_value, 2),
+                "realized_pnl_order_window": round(realized, 2),
+                "filled_buys_order_window": filled_buys,
+                "filled_sells_order_window": filled_sells,
+                "holdings": holdings,
+            }
+        )
+
+    total_budget = sum(float(v) for v in config.STRATEGY_ALLOCATIONS.values())
+    return {
+        "schema_version": 2,
+        "generated_at": generated_at,
+        "source": "Alpaca paper trading orders and positions",
+        "order_window_limit": limit,
+        "positions_included": positions is not None,
+        "caveat": "Closed-trade PnL and order-attributed quantities use the latest Alpaca order window, not a complete audited lifetime track record.",
+        "total_budget": round(total_budget, 2),
+        "strategy_count": len(config.STRATEGY_ALLOCATIONS),
+        "total_committed_from_order_window": round(total_committed, 2),
+        "total_market_value_attributed": round(total_market_value, 2),
+        "total_realized_pnl_order_window": round(total_realized, 2),
+        "strategies": strategies,
+    }
+
+
+def write_microsite_snapshot(snapshot: dict[str, object], path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def write_csv(rows: list[ReportRow], path: Path) -> None:
@@ -402,15 +577,23 @@ def main() -> int:
         return 2
 
     rows = build_rows(orders_list)
+    try:
+        positions = fetch_positions()
+    except Exception:
+        logger.exception("Failed to fetch positions for microsite snapshot")
+        positions = None
 
     # Persist artifacts
     write_csv(rows, CSV_PATH)
     write_markdown(rows, MD_PATH)
     write_html(rows, HTML_PATH)
+    snapshot = build_microsite_snapshot(rows, limit=limit, positions=positions)
+    write_microsite_snapshot(snapshot, MICROSITE_DATA_PATH)
 
     logger.info("Wrote %d rows -> %s", len(rows), CSV_PATH)
     logger.info("Wrote %d rows -> %s", len(rows), MD_PATH)
     logger.info("Wrote %d rows -> %s", len(rows), HTML_PATH)
+    logger.info("Wrote microsite snapshot -> %s", MICROSITE_DATA_PATH)
 
     # Also print a small preview to stdout so GH Actions logs show something useful.
     preview_n = min(10, len(rows))

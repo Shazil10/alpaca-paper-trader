@@ -8,13 +8,6 @@ Other modules import from here so the rest of the codebase stays simple.
 
 import os
 
-from alpaca.trading.client import TradingClient
-from dotenv import load_dotenv
-
-
-load_dotenv()  # Loads ALPACA_KEY / ALPACA_SECRET from a local .env
-
-
 # Strategy import path -> dollars to allocate for that strategy.
 # NOTE: For rotation strategies (ranked_asset_alloc), the budget is a lifetime
 # cap — sell proceeds recycle into it.  The strategy internally sizes
@@ -26,8 +19,12 @@ STRATEGY_ALLOCATIONS: dict[str, float] = {
 }
 
 
-def get_client() -> TradingClient:
+def get_client():
     """Create and return an authenticated Alpaca `TradingClient` (paper trading)."""
+    from alpaca.trading.client import TradingClient
+    from dotenv import load_dotenv
+
+    load_dotenv()  # Loads ALPACA_KEY / ALPACA_SECRET from a local .env
     api_key = os.getenv("ALPACA_KEY")
     secret_key = os.getenv("ALPACA_SECRET")
     if not api_key or not secret_key:
