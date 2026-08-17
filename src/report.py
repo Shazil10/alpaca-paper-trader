@@ -7,6 +7,8 @@ This is meant to be run at the end of each daily bot run.
 Outputs:
 - reports/orders_latest.csv
 - reports/orders_latest.md
+- reports/orders_latest.html
+- reports/microsite_snapshot.json
 
 The report attributes each order to a strategy using the `client_order_id` prefix:
     "{strategy_id}:..."
@@ -56,6 +58,15 @@ class ReportRow:
     strategy_type: str
     strategy_name: str
     pnl: float | None = None
+
+
+@dataclass(frozen=True)
+class PositionSnapshot:
+    symbol: str
+    qty: float
+    market_value: float
+    current_price: float
+    unrealized_pl: float
 
 
 def _safe_float(value: object, default: float = 0.0) -> float:
@@ -133,6 +144,27 @@ def fetch_orders(*, limit: int = 200) -> list[object]:
         return list(client.get_orders(limit=int(limit)))
     except TypeError:
         return list(client.get_orders())
+
+
+def fetch_positions() -> dict[str, PositionSnapshot]:
+    """Return current Alpaca paper positions keyed by symbol."""
+
+    client = config.get_client()
+    positions: dict[str, PositionSnapshot] = {}
+
+    for p in client.get_all_positions():
+        symbol = str(getattr(p, "symbol", "") or "").strip().upper()
+        if not symbol:
+            continue
+        positions[symbol] = PositionSnapshot(
+            symbol=symbol,
+            qty=_safe_float(getattr(p, "qty", 0.0)),
+            market_value=_safe_float(getattr(p, "market_value", 0.0)),
+            current_price=_safe_float(getattr(p, "current_price", 0.0)),
+            unrealized_pl=_safe_float(getattr(p, "unrealized_pl", 0.0)),
+        )
+
+    return positions
 
 
 def build_rows(orders_list: list[object]) -> list[ReportRow]:
@@ -229,15 +261,53 @@ def _net_strategy_positions(rows: list[ReportRow], strategy_id: str) -> dict[str
     return {symbol: qty for symbol, qty in sorted(quantities.items()) if qty > 0.0001}
 
 
-def build_microsite_snapshot(rows: list[ReportRow], *, limit: int) -> dict[str, object]:
+def _holding_payload(
+    order_quantities: dict[str, float],
+    positions: dict[str, PositionSnapshot] | None,
+) -> list[dict[str, object]]:
+    holdings: list[dict[str, object]] = []
+
+    for symbol, qty in order_quantities.items():
+        position = positions.get(symbol) if positions is not None else None
+        if positions is not None and position is None:
+            continue
+
+        item: dict[str, object] = {
+            "symbol": symbol,
+            "qty_attributed_from_order_window": round(qty, 4),
+        }
+        if position is not None:
+            item.update(
+                {
+                    "broker_qty": round(position.qty, 4),
+                    "market_value": round(position.market_value, 2),
+                    "current_price": round(position.current_price, 2),
+                    "unrealized_pl": round(position.unrealized_pl, 2),
+                }
+            )
+        holdings.append(item)
+
+    return holdings
+
+
+def build_microsite_snapshot(
+    rows: list[ReportRow],
+    *,
+    limit: int,
+    positions: dict[str, PositionSnapshot] | None = None,
+) -> dict[str, object]:
     """Build a compact JSON payload a public microsite can consume.
 
-    The payload deliberately carries the order-window caveat so the website does
-    not present closed-trade PnL as a full lifetime track record.
+    The payload is intentionally data-driven from ``config.STRATEGY_ALLOCATIONS``
+    so a new strategy or budget change updates the website payload without
+    hardcoded frontend edits.
     """
 
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     strategies: list[dict[str, object]] = []
+    total_committed = 0.0
+    total_realized = 0.0
+    total_market_value = 0.0
 
     for strategy_id, budget in config.STRATEGY_ALLOCATIONS.items():
         strategy_rows = [r for r in rows if r.client_order_id.startswith(f"{strategy_id}:")]
@@ -258,29 +328,42 @@ def build_microsite_snapshot(rows: list[ReportRow], *, limit: int) -> dict[str, 
             if r.pnl is not None:
                 realized += r.pnl
 
-        holdings = _net_strategy_positions(rows, strategy_id)
+        committed = max(committed, 0.0)
+        order_quantities = _net_strategy_positions(rows, strategy_id)
+        holdings = _holding_payload(order_quantities, positions)
+        market_value = sum(float(h.get("market_value", 0.0)) for h in holdings)
+
+        total_committed += committed
+        total_realized += realized
+        total_market_value += market_value
         strategies.append(
             {
                 "id": strategy_id,
                 "name": _strategy_display_name(strategy_id),
                 "budget": round(float(budget), 2),
-                "committed": round(max(committed, 0.0), 2),
-                "remaining": round(max(float(budget) - max(committed, 0.0), 0.0), 2),
+                "committed_from_order_window": round(committed, 2),
+                "remaining_from_order_window": round(max(float(budget) - committed, 0.0), 2),
+                "market_value_attributed": round(market_value, 2),
                 "realized_pnl_order_window": round(realized, 2),
                 "filled_buys_order_window": filled_buys,
                 "filled_sells_order_window": filled_sells,
-                "holdings_inferred_from_order_window": [
-                    {"symbol": symbol, "qty": round(qty, 4)} for symbol, qty in holdings.items()
-                ],
+                "holdings": holdings,
             }
         )
 
+    total_budget = sum(float(v) for v in config.STRATEGY_ALLOCATIONS.values())
     return {
+        "schema_version": 2,
         "generated_at": generated_at,
-        "source": "Alpaca paper trading orders",
+        "source": "Alpaca paper trading orders and positions",
         "order_window_limit": limit,
-        "caveat": "Closed-trade PnL and inferred holdings use the latest Alpaca order window, not a complete audited lifetime track record.",
-        "total_budget": round(sum(float(v) for v in config.STRATEGY_ALLOCATIONS.values()), 2),
+        "positions_included": positions is not None,
+        "caveat": "Closed-trade PnL and order-attributed quantities use the latest Alpaca order window, not a complete audited lifetime track record.",
+        "total_budget": round(total_budget, 2),
+        "strategy_count": len(config.STRATEGY_ALLOCATIONS),
+        "total_committed_from_order_window": round(total_committed, 2),
+        "total_market_value_attributed": round(total_market_value, 2),
+        "total_realized_pnl_order_window": round(total_realized, 2),
         "strategies": strategies,
     }
 
@@ -497,12 +580,17 @@ def main() -> int:
         return 2
 
     rows = build_rows(orders_list)
+    try:
+        positions = fetch_positions()
+    except Exception:
+        logger.exception("Failed to fetch positions for microsite snapshot")
+        positions = None
 
     # Persist artifacts
     write_csv(rows, CSV_PATH)
     write_markdown(rows, MD_PATH)
     write_html(rows, HTML_PATH)
-    snapshot = build_microsite_snapshot(rows, limit=limit)
+    snapshot = build_microsite_snapshot(rows, limit=limit, positions=positions)
     write_microsite_snapshot(snapshot, MICROSITE_DATA_PATH)
 
     logger.info("Wrote %d rows -> %s", len(rows), CSV_PATH)

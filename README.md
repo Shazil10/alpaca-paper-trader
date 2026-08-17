@@ -14,6 +14,8 @@ Both workflows write reports into `reports/`:
 - `reports/orders_latest.csv`
 - `reports/microsite_snapshot.json`
 
+The close-report workflow commits these report files back to the current branch when they change. A portfolio microsite should read `reports/microsite_snapshot.json` rather than hardcoding strategy counts, capital totals, holdings, or snapshot dates.
+
 ## Viewing the close report in VS Code
 
 The close report is generated on GitHub Actions and uploaded as an artifact. To view it locally in VS Code:
