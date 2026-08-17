@@ -21,6 +21,7 @@ Optional env vars:
 from __future__ import annotations
 
 import csv
+import json
 import logging
 import os
 from collections import deque
@@ -38,6 +39,7 @@ REPORTS_DIR = Path(__file__).resolve().parent.parent / "reports"
 CSV_PATH = REPORTS_DIR / "orders_latest.csv"
 MD_PATH = REPORTS_DIR / "orders_latest.md"
 HTML_PATH = REPORTS_DIR / "orders_latest.html"
+MICROSITE_DATA_PATH = REPORTS_DIR / "microsite_snapshot.json"
 
 
 @dataclass(frozen=True)
@@ -137,8 +139,10 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
     # Sort chronologically (oldest-first) for FIFO cost-basis matching.
     chrono = sorted(orders_list, key=lambda o: str(getattr(o, "submitted_at", "") or ""))
 
-    # FIFO cost basis per symbol: symbol → deque of entry avg_price
-    cost_basis: dict[str, deque[float]] = {}
+    # FIFO cost basis per attributed strategy and symbol. Keeping strategy in the
+    # key prevents discretionary/manual fills or another strategy that holds the
+    # same ticker from contaminating a strategy's realized PnL.
+    cost_basis: dict[tuple[str, str], deque[float]] = {}
 
     rows: list[ReportRow] = []
     for o in chrono:
@@ -164,13 +168,17 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
 
         # Compute PnL for filled SELL orders using FIFO cost basis.
         pnl: float | None = None
+        strategy_key = client_order_id.partition(":")[0] if client_order_id else ""
+        basis_key = (strategy_key, symbol)
+
         if side == "BUY" and status == "FILLED" and filled_qty > 0 and filled_avg_price > 0:
-            if symbol not in cost_basis:
-                cost_basis[symbol] = deque()
-            cost_basis[symbol].append(filled_avg_price)
+            if strategy_key:
+                if basis_key not in cost_basis:
+                    cost_basis[basis_key] = deque()
+                cost_basis[basis_key].append(filled_avg_price)
         elif side == "SELL" and status == "FILLED" and filled_qty > 0 and filled_avg_price > 0:
-            if symbol in cost_basis and cost_basis[symbol]:
-                entry_price = cost_basis[symbol].popleft()
+            if strategy_key and basis_key in cost_basis and cost_basis[basis_key]:
+                entry_price = cost_basis[basis_key].popleft()
                 pnl = round((filled_avg_price - entry_price) * filled_qty, 2)
 
         rows.append(
@@ -193,6 +201,93 @@ def build_rows(orders_list: list[object]) -> list[ReportRow]:
     # Restore newest-first ordering for display.
     rows.sort(key=lambda r: r.submitted_at, reverse=True)
     return rows
+
+
+def _strategy_display_name(strategy_id: str) -> str:
+    _, name = _parse_strategy_id(f"{strategy_id}:snapshot")
+    return name or strategy_id.replace("_", " ").title()
+
+
+def _net_strategy_positions(rows: list[ReportRow], strategy_id: str) -> dict[str, float]:
+    """Infer currently open strategy-attributed positions from the order tape.
+
+    This uses the same finite Alpaca order window as the report. It is intended
+    for a portfolio microsite snapshot, not as broker-grade position accounting.
+    """
+
+    prefix = f"{strategy_id}:"
+    quantities: dict[str, float] = {}
+
+    for r in rows:
+        if not r.client_order_id.startswith(prefix) or r.status != "FILLED":
+            continue
+        if r.side == "BUY":
+            quantities[r.symbol] = quantities.get(r.symbol, 0.0) + r.filled_qty
+        elif r.side == "SELL":
+            quantities[r.symbol] = quantities.get(r.symbol, 0.0) - r.filled_qty
+
+    return {symbol: qty for symbol, qty in sorted(quantities.items()) if qty > 0.0001}
+
+
+def build_microsite_snapshot(rows: list[ReportRow], *, limit: int) -> dict[str, object]:
+    """Build a compact JSON payload a public microsite can consume.
+
+    The payload deliberately carries the order-window caveat so the website does
+    not present closed-trade PnL as a full lifetime track record.
+    """
+
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    strategies: list[dict[str, object]] = []
+
+    for strategy_id, budget in config.STRATEGY_ALLOCATIONS.items():
+        strategy_rows = [r for r in rows if r.client_order_id.startswith(f"{strategy_id}:")]
+        committed = 0.0
+        realized = 0.0
+        filled_buys = 0
+        filled_sells = 0
+
+        for r in strategy_rows:
+            if r.status != "FILLED":
+                continue
+            if r.side == "BUY":
+                committed += r.filled_value
+                filled_buys += 1
+            elif r.side == "SELL":
+                committed -= r.filled_value
+                filled_sells += 1
+            if r.pnl is not None:
+                realized += r.pnl
+
+        holdings = _net_strategy_positions(rows, strategy_id)
+        strategies.append(
+            {
+                "id": strategy_id,
+                "name": _strategy_display_name(strategy_id),
+                "budget": round(float(budget), 2),
+                "committed": round(max(committed, 0.0), 2),
+                "remaining": round(max(float(budget) - max(committed, 0.0), 0.0), 2),
+                "realized_pnl_order_window": round(realized, 2),
+                "filled_buys_order_window": filled_buys,
+                "filled_sells_order_window": filled_sells,
+                "holdings_inferred_from_order_window": [
+                    {"symbol": symbol, "qty": round(qty, 4)} for symbol, qty in holdings.items()
+                ],
+            }
+        )
+
+    return {
+        "generated_at": generated_at,
+        "source": "Alpaca paper trading orders",
+        "order_window_limit": limit,
+        "caveat": "Closed-trade PnL and inferred holdings use the latest Alpaca order window, not a complete audited lifetime track record.",
+        "total_budget": round(sum(float(v) for v in config.STRATEGY_ALLOCATIONS.values()), 2),
+        "strategies": strategies,
+    }
+
+
+def write_microsite_snapshot(snapshot: dict[str, object], path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def write_csv(rows: list[ReportRow], path: Path) -> None:
@@ -407,10 +502,13 @@ def main() -> int:
     write_csv(rows, CSV_PATH)
     write_markdown(rows, MD_PATH)
     write_html(rows, HTML_PATH)
+    snapshot = build_microsite_snapshot(rows, limit=limit)
+    write_microsite_snapshot(snapshot, MICROSITE_DATA_PATH)
 
     logger.info("Wrote %d rows -> %s", len(rows), CSV_PATH)
     logger.info("Wrote %d rows -> %s", len(rows), MD_PATH)
     logger.info("Wrote %d rows -> %s", len(rows), HTML_PATH)
+    logger.info("Wrote microsite snapshot -> %s", MICROSITE_DATA_PATH)
 
     # Also print a small preview to stdout so GH Actions logs show something useful.
     preview_n = min(10, len(rows))
