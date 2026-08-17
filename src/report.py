@@ -241,7 +241,11 @@ def _strategy_display_name(strategy_id: str) -> str:
 
 
 def _net_strategy_positions(rows: list[ReportRow], strategy_id: str) -> dict[str, float]:
-    """Infer strategy-attributed quantities from the available order tape."""
+    """Infer currently open strategy-attributed positions from the order tape.
+
+    This uses the same finite Alpaca order window as the report. It is intended
+    for a portfolio microsite snapshot, not as broker-grade position accounting.
+    """
 
     prefix = f"{strategy_id}:"
     quantities: dict[str, float] = {}
@@ -332,7 +336,6 @@ def build_microsite_snapshot(
         total_committed += committed
         total_realized += realized
         total_market_value += market_value
-
         strategies.append(
             {
                 "id": strategy_id,
