@@ -10,9 +10,12 @@ Contains:
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Iterable, Protocol
+from typing import Iterable, List, Protocol
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -90,6 +93,68 @@ def _enum_str(value: object) -> str:
     if "." in s:
         return s.rsplit(".", 1)[-1]
     return s
+
+
+def fetch_all_orders(client, *, status: str = "all", page_size: int = 500) -> List[object]:
+    """Fetch all orders by paginating through the Alpaca API.
+
+    Uses the ``after`` parameter (oldest order ID of previous page) to walk
+    forward through pages until a page returns fewer than ``page_size`` results.
+    """
+    try:
+        from alpaca.trading.requests import GetOrdersRequest
+        from alpaca.trading.enums import QueryOrderStatus
+    except ImportError:
+        GetOrdersRequest = None  # type: ignore[assignment]
+        QueryOrderStatus = None  # type: ignore[assignment]
+
+    all_orders: List[object] = []
+    after_id = None
+
+    for _ in range(50):  # safety cap: 50 pages x 500 = 25k orders max
+        kwargs = {"status": status, "limit": page_size, "direction": "asc"}
+        if after_id:
+            kwargs["after"] = after_id
+
+        page: list = []
+        if GetOrdersRequest is not None and QueryOrderStatus is not None:
+            try:
+                req_kwargs = {
+                    "status": QueryOrderStatus(status),
+                    "limit": page_size,
+                    "nested": True,
+                }
+                if after_id:
+                    req_kwargs["after"] = after_id
+                req = GetOrdersRequest(**req_kwargs)
+                page = list(client.get_orders(req))
+            except Exception:
+                pass
+
+        if not page:
+            try:
+                page = list(client.get_orders(**kwargs, nested=True))
+            except TypeError:
+                try:
+                    page = list(client.get_orders(limit=page_size))
+                except TypeError:
+                    page = list(client.get_orders())
+
+        if not page:
+            break
+
+        all_orders.extend(page)
+
+        if len(page) < page_size:
+            break
+
+        last_id = getattr(page[-1], "id", None)
+        if last_id is None or str(last_id) == str(after_id):
+            break
+        after_id = str(last_id)
+
+    logger.info("fetch_all_orders: retrieved %d orders across pages", len(all_orders))
+    return all_orders
 
 
 def committed_dollars_from_orders(orders: Iterable[OrderLike], *, strategy_id: str) -> float:

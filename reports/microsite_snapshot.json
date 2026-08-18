@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-17T22:08:02-04:00",
+  "snapshot_date": "2026-08-17",
+  "last_report_date": "2026-08-17",
+  "status_label": "active",
+  "source": "Alpaca paper account",
+  "data_source": "Alpaca paper account",
+  "broker": "Alpaca paper",
+  "order_window_start": "2026-02-02",
+  "order_window_end": "2026-08-17",
+  "order_count_fetched": 269,
+  "positions_included": true,
+  "caveat": "Alpaca paper account. Realized figures cover closed trades only and are engineering proof-of-process, not a track record or investment advice.",
+  "capital_configured": 40000,
+  "strategy_count": 3,
+  "total_committed": 30184.17,
+  "total_remaining": 9815.83,
+  "total_market_value_attributed": 31235.14,
+  "total_realized_pnl_closed": 4102.79,
+  "pnl_basis": "realized_closed_trades",
+  "pnl_scope": "full_alpaca_order_history",
+  "strategies": [
+    {
+      "id": "clenow-trend",
+      "name": "Clenow Trend Following",
+      "status": "Running",
+      "summary": "Some shares climb steadily for months at a time. This sleeve ranks the market by how smooth a climb has been, not just how big, and buys the steadiest risers while the market overall is still healthy.",
+      "citation": "Based on Clenow's Stocks on the Move",
+      "cadence_note": "Smaller bets on jumpier shares",
+      "capital_cap": 10000,
+      "committed": 9842.44,
+      "remaining": 157.56,
+      "market_value_attributed": 5472.86,
+      "realized_pnl_closed": -232.03,
+      "utilization_by_market_value": 54.7,
+      "holdings": [
+        {
+          "symbol": "AVTR",
+          "qty": 191.0,
+          "market_value": 2578.5,
+          "current_price": 13.5,
+          "unrealized_pl": 5.73
+        },
+        {
+          "symbol": "CAKE",
+          "qty": 1.0,
+          "market_value": 109.42,
+          "current_price": 109.423,
+          "unrealized_pl": 9.92
+        },
+        {
+          "symbol": "EAT",
+          "qty": 11.0,
+          "market_value": 2658.81,
+          "current_price": 241.71,
+          "unrealized_pl": 183.04
+        },
+        {
+          "symbol": "MAN",
+          "qty": 1.0,
+          "market_value": 56.77,
+          "current_price": 56.77,
+          "unrealized_pl": 0.23
+        },
+        {
+          "symbol": "XNCR",
+          "qty": 3.0,
+          "market_value": 69.36,
+          "current_price": 23.12,
+          "unrealized_pl": 5.76
+        }
+      ]
+    },
+    {
+      "id": "ranked-asset-allocation",
+      "name": "Ranked Asset Allocation",
+      "status": "Running",
+      "summary": "Once a month it ranks broad industry funds \u2014 energy, banks, healthcare and the rest \u2014 and shifts money toward the leaders. When conditions look poor it holds defensive assets instead of forcing a bet.",
+      "citation": "Background: Faber on tactical asset allocation",
+      "cadence_note": "Weights shift with the ranking",
+      "capital_cap": 15000,
+      "committed": 11048.66,
+      "remaining": 3951.34,
+      "market_value_attributed": 10956.91,
+      "realized_pnl_closed": -303.84,
+      "utilization_by_market_value": 73.0,
+      "holdings": [
+        {
+          "symbol": "XLE",
+          "qty": 25.0,
+          "market_value": 1567.25,
+          "current_price": 62.69,
+          "unrealized_pl": 95.5
+        },
+        {
+          "symbol": "XLF",
+          "qty": 28.0,
+          "market_value": 1612.24,
+          "current_price": 57.58,
+          "unrealized_pl": 144.76
+        },
+        {
+          "symbol": "XLI",
+          "qty": 5.0,
+          "market_value": 931.6,
+          "current_price": 186.32,
+          "unrealized_pl": 22.97
+        },
+        {
+          "symbol": "XLK",
+          "qty": 4.0,
+          "market_value": 760.04,
+          "current_price": 190.01,
+          "unrealized_pl": 113.08
+        },
+        {
+          "symbol": "XLP",
+          "qty": 36.6802,
+          "market_value": 3106.45,
+          "current_price": 84.69,
+          "unrealized_pl": -18.55
+        },
+        {
+          "symbol": "XLU",
+          "qty": 67.4361,
+          "market_value": 2979.33,
+          "current_price": 44.18,
+          "unrealized_pl": -145.67
+        }
+      ]
+    },
+    {
+      "id": "high-pullback-reversion",
+      "name": "High Pullback Mean Reversion",
+      "status": "Running",
+      "summary": "Sometimes a good company is sold off far harder than its situation warrants. This sleeve looks for shares deep below their high point of the past year, checks the business still passes quality tests, and waits for the fall to stop before buying.",
+      "citation": "Background: De Bondt & Thaler on overreaction",
+      "cadence_note": "Equal risk per position",
+      "capital_cap": 15000,
+      "committed": 9293.07,
+      "remaining": 5706.93,
+      "market_value_attributed": 14805.37,
+      "realized_pnl_closed": 4638.66,
+      "utilization_by_market_value": 98.7,
+      "holdings": [
+        {
+          "symbol": "CRVL",
+          "qty": 53.0,
+          "market_value": 3544.11,
+          "current_price": 66.87,
+          "unrealized_pl": 294.15
+        },
+        {
+          "symbol": "FOUR",
+          "qty": 192.0,
+          "market_value": 8491.39,
+          "current_price": 44.226,
+          "unrealized_pl": -1540.61
+        },
+        {
+          "symbol": "HIMS",
+          "qty": 42.0,
+          "market_value": 1203.3,
+          "current_price": 28.65,
+          "unrealized_pl": -274.68
+        },
+        {
+          "symbol": "WWW",
+          "qty": 79.0,
+          "market_value": 1566.57,
+          "current_price": 19.83,
+          "unrealized_pl": 167.48
+        }
+      ]
+    }
+  ]
+}

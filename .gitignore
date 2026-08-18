@@ -21,4 +21,6 @@ venv/
 .DS_Store
 
 # Reports (generated locally / downloaded from Actions)
-reports/
+reports/*
+!reports/microsite_snapshot.json
+!reports/portfolio.meta.json
