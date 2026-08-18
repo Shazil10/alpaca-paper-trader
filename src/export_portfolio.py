@@ -61,6 +61,7 @@ META_CANDIDATES = (
 PNL_BASIS = "realized_closed_trades"
 PNL_SCOPE = "full_alpaca_order_history"
 SCHEMA_VERSION = 4
+RAW_REPORTS_BASE = "https://raw.githubusercontent.com/Shazil10/alpaca-paper-trader/main/reports"
 
 # Public-facing copy for the Lovable UI — avoids code-ish labels like client_order_id.
 ATTRIBUTION_LABEL = "Strategy-prefixed order IDs"
@@ -382,6 +383,9 @@ def build_microsite_snapshot(
         "total_market_value_attributed": round(total_market_value, 2),
         "total_realized_pnl_closed": round(total_realized, 2),
         "strategy_order_realized_pnl_desc": strategy_order,
+        "orders_report_html_url": f"{RAW_REPORTS_BASE}/orders_latest.html",
+        "orders_report_csv_url": f"{RAW_REPORTS_BASE}/orders_latest.csv",
+        "snapshot_json_url": f"{RAW_REPORTS_BASE}/microsite_snapshot.json",
         "pnl_basis": PNL_BASIS,
         "pnl_scope": PNL_SCOPE,
         "strategies": live_strategies,

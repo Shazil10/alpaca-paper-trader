@@ -20,7 +20,25 @@ venv/
 # macOS
 .DS_Store
 
+# Salvaged copy of the corrupted git directory
+.git-corrupted-backup/
+
 # Reports (generated locally / downloaded from Actions)
 reports/*
 !reports/microsite_snapshot.json
 !reports/portfolio.meta.json
+!reports/orders_latest.html
+!reports/orders_latest.csv
+!reports/orders_latest.md
+
+# Local price/data caches
+.cache/
+
+# Site (Vite)
+site/node_modules/
+site/dist/
+
+# Manus microsite
+microsite/node_modules/
+microsite/dist/
+microsite/.manus-logs/

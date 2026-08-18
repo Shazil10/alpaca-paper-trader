@@ -1,6 +1,6 @@
 {
   "schema_version": 4,
-  "generated_at": "2026-08-17T22:31:12-04:00",
+  "generated_at": "2026-08-17T23:09:43-04:00",
   "snapshot_date": "2026-08-17",
   "last_report_date": "2026-08-17",
   "status_label": "active",
@@ -23,13 +23,16 @@
   "strategy_count": 3,
   "total_committed": 30184.17,
   "total_remaining": 9815.83,
-  "total_market_value_attributed": 31231.51,
+  "total_market_value_attributed": 31225.06,
   "total_realized_pnl_closed": 4102.79,
   "strategy_order_realized_pnl_desc": [
     "high-pullback-reversion",
     "clenow-trend",
     "ranked-asset-allocation"
   ],
+  "orders_report_html_url": "https://raw.githubusercontent.com/Shazil10/alpaca-paper-trader/main/reports/orders_latest.html",
+  "orders_report_csv_url": "https://raw.githubusercontent.com/Shazil10/alpaca-paper-trader/main/reports/orders_latest.csv",
+  "snapshot_json_url": "https://raw.githubusercontent.com/Shazil10/alpaca-paper-trader/main/reports/microsite_snapshot.json",
   "pnl_basis": "realized_closed_trades",
   "pnl_scope": "full_alpaca_order_history",
   "strategies": [
@@ -43,7 +46,7 @@
       "capital_cap": 15000,
       "committed": 9293.07,
       "remaining": 5706.93,
-      "market_value_attributed": 14802.43,
+      "market_value_attributed": 14799.91,
       "realized_pnl_closed": 4638.66,
       "utilization_by_market_value": 98.7,
       "holdings": [
@@ -64,9 +67,9 @@
         {
           "symbol": "HIMS",
           "qty": 42.0,
-          "market_value": 1200.36,
-          "current_price": 28.58,
-          "unrealized_pl": -277.62
+          "market_value": 1197.84,
+          "current_price": 28.52,
+          "unrealized_pl": -280.14
         },
         {
           "symbol": "WWW",
@@ -146,16 +149,16 @@
       "capital_cap": 15000,
       "committed": 11048.66,
       "remaining": 3951.34,
-      "market_value_attributed": 10956.22,
+      "market_value_attributed": 10952.29,
       "realized_pnl_closed": -303.84,
       "utilization_by_market_value": 73.0,
       "holdings": [
         {
           "symbol": "XLE",
           "qty": 25.0,
-          "market_value": 1572.0,
-          "current_price": 62.88,
-          "unrealized_pl": 100.25
+          "market_value": 1569.75,
+          "current_price": 62.79,
+          "unrealized_pl": 98.0
         },
         {
           "symbol": "XLF",
@@ -174,9 +177,9 @@
         {
           "symbol": "XLK",
           "qty": 4.0,
-          "market_value": 754.6,
-          "current_price": 188.65,
-          "unrealized_pl": 107.64
+          "market_value": 752.92,
+          "current_price": 188.23,
+          "unrealized_pl": 105.96
         },
         {
           "symbol": "XLP",

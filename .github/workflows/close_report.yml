@@ -37,16 +37,16 @@ jobs:
           PYTHONPATH: src
         run: python src/export_portfolio.py
 
-      - name: Commit snapshot to repo
+      - name: Commit public reports to repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/microsite_snapshot.json
+          git add reports/microsite_snapshot.json reports/orders_latest.html reports/orders_latest.csv reports/orders_latest.md
           if git diff --staged --quiet; then
-            echo "Snapshot unchanged — no commit."
+            echo "Reports unchanged — no commit."
           else
             git commit -m "$(cat <<'EOF'
-chore: refresh microsite snapshot after close report
+chore: refresh daily reports and microsite snapshot
 
 EOF
 )"
