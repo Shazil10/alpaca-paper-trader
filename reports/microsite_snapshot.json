@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "generated_at": "2026-08-17T22:08:02-04:00",
+  "schema_version": 4,
+  "generated_at": "2026-08-17T22:31:12-04:00",
   "snapshot_date": "2026-08-17",
   "last_report_date": "2026-08-17",
   "status_label": "active",
@@ -12,15 +12,75 @@
   "order_count_fetched": 269,
   "positions_included": true,
   "caveat": "Alpaca paper account. Realized figures cover closed trades only and are engineering proof-of-process, not a track record or investment advice.",
+  "attribution_label": "Strategy-prefixed order IDs",
+  "closing_report_label": "Closing report and JSON snapshot",
+  "report_artifacts": [
+    "CSV",
+    "HTML",
+    "JSON"
+  ],
   "capital_configured": 40000,
   "strategy_count": 3,
   "total_committed": 30184.17,
   "total_remaining": 9815.83,
-  "total_market_value_attributed": 31235.14,
+  "total_market_value_attributed": 31231.51,
   "total_realized_pnl_closed": 4102.79,
+  "strategy_order_realized_pnl_desc": [
+    "high-pullback-reversion",
+    "clenow-trend",
+    "ranked-asset-allocation"
+  ],
   "pnl_basis": "realized_closed_trades",
   "pnl_scope": "full_alpaca_order_history",
   "strategies": [
+    {
+      "id": "high-pullback-reversion",
+      "name": "High Pullback Mean Reversion",
+      "status": "Running",
+      "summary": "Sometimes a good company is sold off far harder than its situation warrants. This sleeve looks for shares deep below their high point of the past year, checks the business still passes quality tests, and waits for the fall to stop before buying.",
+      "citation": "Background: De Bondt & Thaler on overreaction",
+      "cadence_note": "Equal risk per position",
+      "capital_cap": 15000,
+      "committed": 9293.07,
+      "remaining": 5706.93,
+      "market_value_attributed": 14802.43,
+      "realized_pnl_closed": 4638.66,
+      "utilization_by_market_value": 98.7,
+      "holdings": [
+        {
+          "symbol": "CRVL",
+          "qty": 53.0,
+          "market_value": 3544.11,
+          "current_price": 66.87,
+          "unrealized_pl": 294.15
+        },
+        {
+          "symbol": "FOUR",
+          "qty": 192.0,
+          "market_value": 8491.39,
+          "current_price": 44.226,
+          "unrealized_pl": -1540.61
+        },
+        {
+          "symbol": "HIMS",
+          "qty": 42.0,
+          "market_value": 1200.36,
+          "current_price": 28.58,
+          "unrealized_pl": -277.62
+        },
+        {
+          "symbol": "WWW",
+          "qty": 79.0,
+          "market_value": 1566.57,
+          "current_price": 19.83,
+          "unrealized_pl": 167.48
+        }
+      ],
+      "live_since_date": "2026-04-20",
+      "first_filled_order_date": "2026-04-20",
+      "live_since": "Apr 2026",
+      "realized_pnl_rank": 1
+    },
     {
       "id": "clenow-trend",
       "name": "Clenow Trend Following",
@@ -70,7 +130,11 @@
           "current_price": 23.12,
           "unrealized_pl": 5.76
         }
-      ]
+      ],
+      "live_since_date": "2026-02-12",
+      "first_filled_order_date": "2026-02-12",
+      "live_since": "Feb 2026",
+      "realized_pnl_rank": 2
     },
     {
       "id": "ranked-asset-allocation",
@@ -82,16 +146,16 @@
       "capital_cap": 15000,
       "committed": 11048.66,
       "remaining": 3951.34,
-      "market_value_attributed": 10956.91,
+      "market_value_attributed": 10956.22,
       "realized_pnl_closed": -303.84,
       "utilization_by_market_value": 73.0,
       "holdings": [
         {
           "symbol": "XLE",
           "qty": 25.0,
-          "market_value": 1567.25,
-          "current_price": 62.69,
-          "unrealized_pl": 95.5
+          "market_value": 1572.0,
+          "current_price": 62.88,
+          "unrealized_pl": 100.25
         },
         {
           "symbol": "XLF",
@@ -110,9 +174,9 @@
         {
           "symbol": "XLK",
           "qty": 4.0,
-          "market_value": 760.04,
-          "current_price": 190.01,
-          "unrealized_pl": 113.08
+          "market_value": 754.6,
+          "current_price": 188.65,
+          "unrealized_pl": 107.64
         },
         {
           "symbol": "XLP",
@@ -128,51 +192,11 @@
           "current_price": 44.18,
           "unrealized_pl": -145.67
         }
-      ]
-    },
-    {
-      "id": "high-pullback-reversion",
-      "name": "High Pullback Mean Reversion",
-      "status": "Running",
-      "summary": "Sometimes a good company is sold off far harder than its situation warrants. This sleeve looks for shares deep below their high point of the past year, checks the business still passes quality tests, and waits for the fall to stop before buying.",
-      "citation": "Background: De Bondt & Thaler on overreaction",
-      "cadence_note": "Equal risk per position",
-      "capital_cap": 15000,
-      "committed": 9293.07,
-      "remaining": 5706.93,
-      "market_value_attributed": 14805.37,
-      "realized_pnl_closed": 4638.66,
-      "utilization_by_market_value": 98.7,
-      "holdings": [
-        {
-          "symbol": "CRVL",
-          "qty": 53.0,
-          "market_value": 3544.11,
-          "current_price": 66.87,
-          "unrealized_pl": 294.15
-        },
-        {
-          "symbol": "FOUR",
-          "qty": 192.0,
-          "market_value": 8491.39,
-          "current_price": 44.226,
-          "unrealized_pl": -1540.61
-        },
-        {
-          "symbol": "HIMS",
-          "qty": 42.0,
-          "market_value": 1203.3,
-          "current_price": 28.65,
-          "unrealized_pl": -274.68
-        },
-        {
-          "symbol": "WWW",
-          "qty": 79.0,
-          "market_value": 1566.57,
-          "current_price": 19.83,
-          "unrealized_pl": 167.48
-        }
-      ]
+      ],
+      "live_since_date": "2026-03-11",
+      "first_filled_order_date": "2026-03-11",
+      "live_since": "Mar 2026",
+      "realized_pnl_rank": 3
     }
   ]
 }
