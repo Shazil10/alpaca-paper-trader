@@ -31,8 +31,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
-from order_ledger import build_ledger, held_symbols_by_strategy, realized_pnl_by_strategy
-from trade_models import committed_dollars_from_orders, fetch_all_orders, safe_float
+from order_ledger import (
+    build_ledger,
+    held_symbols_by_strategy,
+    realized_pnl_by_strategy,
+    strategy_id_of,
+)
+from trade_models import committed_dollars_from_orders, fetch_all_orders, safe_float, _enum_str
 
 try:
     from zoneinfo import ZoneInfo
@@ -55,7 +60,12 @@ META_CANDIDATES = (
 
 PNL_BASIS = "realized_closed_trades"
 PNL_SCOPE = "full_alpaca_order_history"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 4
+
+# Public-facing copy for the Lovable UI — avoids code-ish labels like client_order_id.
+ATTRIBUTION_LABEL = "Strategy-prefixed order IDs"
+CLOSING_REPORT_LABEL = "Closing report and JSON snapshot"
+REPORT_ARTIFACTS = ["CSV", "HTML", "JSON"]
 
 
 def _resolve_meta_path() -> Optional[Path]:
@@ -89,21 +99,77 @@ def _fetch_snapshot(client) -> Tuple[Dict[str, object], list, list]:
     return positions, build_ledger(orders), orders
 
 
+def _order_submitted_date(order: object) -> Optional[str]:
+    ts = getattr(order, "submitted_at", None)
+    if ts is None:
+        return None
+    if hasattr(ts, "strftime"):
+        return ts.strftime("%Y-%m-%d")
+    s = str(ts)
+    return s[:10] if len(s) >= 10 else s
+
+
 def _order_window(orders: list) -> Tuple[Optional[str], Optional[str]]:
     """Earliest and latest submitted_at dates across fetched orders."""
-    dates: List[str] = []
-    for o in orders:
-        ts = getattr(o, "submitted_at", None)
-        if ts is None:
-            continue
-        if hasattr(ts, "strftime"):
-            dates.append(ts.strftime("%Y-%m-%d"))
-        else:
-            s = str(ts)
-            dates.append(s[:10] if len(s) >= 10 else s)
-    if not dates:
+    dates = [_order_submitted_date(o) for o in orders]
+    known = [d for d in dates if d]
+    if not known:
         return None, None
-    return min(dates), max(dates)
+    return min(known), max(known)
+
+
+def _first_filled_order_dates(orders: list) -> Dict[str, str]:
+    """Earliest filled-order calendar date per strategy module path."""
+    dates: Dict[str, str] = {}
+    for o in orders:
+        sid = strategy_id_of(str(getattr(o, "client_order_id", "") or ""))
+        if not sid:
+            continue
+        if _enum_str(getattr(o, "status", "")).lower() != "filled":
+            continue
+        if safe_float(getattr(o, "filled_qty", 0.0)) <= 0:
+            continue
+        day = _order_submitted_date(o)
+        if day and (sid not in dates or day < dates[sid]):
+            dates[sid] = day
+    return dates
+
+
+def _format_live_since(iso_date: str) -> str:
+    """Human month label for UI, e.g. Feb 2026."""
+    return datetime.strptime(iso_date, "%Y-%m-%d").strftime("%b %Y")
+
+
+def _live_since_fields(
+    module: str,
+    first_filled: Dict[str, str],
+    entry: dict,
+) -> dict:
+    """Build live-since display fields; meta override wins when present."""
+    first = first_filled.get(module)
+    live_since_date = entry.get("live_since_date") or first
+    if not live_since_date:
+        return {}
+
+    out = {
+        "live_since_date": live_since_date,
+        "first_filled_order_date": first or live_since_date,
+        "live_since": entry.get("live_since") or _format_live_since(live_since_date),
+    }
+    return out
+
+
+def _rank_strategies_by_realized(strategies: List[dict]) -> Tuple[List[dict], List[str]]:
+    """Sort by realized PnL descending and attach rank metadata."""
+    ordered = sorted(
+        strategies,
+        key=lambda s: (-s["realized_pnl_closed"], s["name"]),
+    )
+    ids: List[str] = []
+    for rank, sleeve in enumerate(ordered, start=1):
+        sleeve["realized_pnl_rank"] = rank
+        ids.append(sleeve["id"])
+    return ordered, ids
 
 
 def _money_display(value: float) -> str:
@@ -229,6 +295,7 @@ def build_microsite_snapshot(
     """Public snapshot schema consumed by calm-execution-engine (src/lib/snapshot.ts)."""
     bought_by_strategy = held_symbols_by_strategy(ledger_rows)
     pnl_by_strategy = realized_pnl_by_strategy(ledger_rows)
+    first_filled = _first_filled_order_dates(orders)
 
     live_strategies: List[dict] = []
     total_committed = 0.0
@@ -262,23 +329,23 @@ def build_microsite_snapshot(
         utilization = round((market_value / cap) * 100, 1) if cap > 0 else 0.0
 
         evidence = entry.get("evidence") or {}
-        live_strategies.append(
-            {
-                "id": entry.get("id", module),
-                "name": entry.get("name", module),
-                "status": entry.get("status", "active"),
-                "summary": entry.get("thesis") or entry.get("plain", ""),
-                "citation": evidence.get("label", ""),
-                "cadence_note": entry.get("sizing", ""),
-                "capital_cap": cap,
-                "committed": committed,
-                "remaining": remaining,
-                "market_value_attributed": market_value,
-                "realized_pnl_closed": realized,
-                "utilization_by_market_value": utilization,
-                "holdings": holdings,
-            }
-        )
+        sleeve = {
+            "id": entry.get("id", module),
+            "name": entry.get("name", module),
+            "status": entry.get("status", "active"),
+            "summary": entry.get("thesis") or entry.get("plain", ""),
+            "citation": evidence.get("label", ""),
+            "cadence_note": entry.get("sizing", ""),
+            "capital_cap": cap,
+            "committed": committed,
+            "remaining": remaining,
+            "market_value_attributed": market_value,
+            "realized_pnl_closed": realized,
+            "utilization_by_market_value": utilization,
+            "holdings": holdings,
+            **_live_since_fields(module, first_filled, entry),
+        }
+        live_strategies.append(sleeve)
 
         total_committed += committed
         total_remaining += remaining
@@ -287,6 +354,9 @@ def build_microsite_snapshot(
 
     capital_configured = round(sum(allocations.values()), 2)
     window_start, window_end = _order_window(orders)
+    live_strategies, strategy_order = _rank_strategies_by_realized(live_strategies)
+
+    display = meta.get("display_labels") or {}
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -302,12 +372,16 @@ def build_microsite_snapshot(
         "order_count_fetched": len(orders),
         "positions_included": True,
         "caveat": meta.get("disclaimer", ""),
+        "attribution_label": display.get("attribution_label", ATTRIBUTION_LABEL),
+        "closing_report_label": display.get("closing_report_label", CLOSING_REPORT_LABEL),
+        "report_artifacts": display.get("report_artifacts", REPORT_ARTIFACTS),
         "capital_configured": capital_configured,
         "strategy_count": len(live_strategies),
         "total_committed": round(total_committed, 2),
         "total_remaining": round(total_remaining, 2),
         "total_market_value_attributed": round(total_market_value, 2),
         "total_realized_pnl_closed": round(total_realized, 2),
+        "strategy_order_realized_pnl_desc": strategy_order,
         "pnl_basis": PNL_BASIS,
         "pnl_scope": PNL_SCOPE,
         "strategies": live_strategies,

@@ -282,5 +282,93 @@ class PayloadTests(unittest.TestCase):
         self.assertEqual(payload["pnl_scope"], "full_alpaca_order_history")
 
 
+class SnapshotDisplayTests(unittest.TestCase):
+    META = {
+        "disclaimer": "paper account",
+        "strategies": [
+            {
+                "id": "clenow-trend",
+                "module": CLENOW,
+                "name": "Clenow Trend Following",
+                "status": "Running",
+            },
+            {
+                "id": "high-pullback-reversion",
+                "module": PULLBACK,
+                "name": "High Pullback Mean Reversion",
+                "status": "Running",
+            },
+            {
+                "id": "ranked-asset-allocation",
+                "module": RANKED,
+                "name": "Ranked Asset Allocation",
+                "status": "Running",
+            },
+        ],
+    }
+
+    ALLOCATIONS = {CLENOW: 10_000, PULLBACK: 15_000, RANKED: 15_000}
+
+    def _snapshot(self, positions, orders):
+        from export_portfolio import build_microsite_snapshot
+        from order_ledger import build_ledger
+
+        return build_microsite_snapshot(
+            self.META,
+            self.ALLOCATIONS,
+            positions,
+            build_ledger(orders),
+            orders,
+            as_of="2026-08-17",
+            generated_at="2026-08-17T16:30:00-04:00",
+        )
+
+    def test_schema_version_is_four(self):
+        snapshot = self._snapshot({}, [])
+        self.assertEqual(snapshot["schema_version"], 4)
+
+    def test_public_display_labels_present(self):
+        snapshot = self._snapshot({}, [])
+        self.assertEqual(snapshot["attribution_label"], "Strategy-prefixed order IDs")
+        self.assertEqual(snapshot["closing_report_label"], "Closing report and JSON snapshot")
+        self.assertEqual(snapshot["report_artifacts"], ["CSV", "HTML", "JSON"])
+
+    def test_live_since_from_first_filled_order(self):
+        orders = [
+            _buy("2026-03-10", "AAPL", CLENOW, 10, 100.0),
+            _buy("2026-02-02", "FOUR", PULLBACK, 5, 50.0),
+        ]
+        snapshot = self._snapshot({}, orders)
+        clenow = next(s for s in snapshot["strategies"] if s["id"] == "clenow-trend")
+        pullback = next(s for s in snapshot["strategies"] if s["id"] == "high-pullback-reversion")
+
+        self.assertEqual(clenow["first_filled_order_date"], "2026-03-10")
+        self.assertEqual(clenow["live_since_date"], "2026-03-10")
+        self.assertEqual(clenow["live_since"], "Mar 2026")
+        self.assertEqual(pullback["first_filled_order_date"], "2026-02-02")
+        self.assertEqual(pullback["live_since"], "Feb 2026")
+
+    def test_realized_pnl_rank_and_strategy_order(self):
+        orders = [
+            _buy("2026-01-01", "AAPL", CLENOW, 10, 100.0),
+            _sell("2026-02-01", "AAPL", CLENOW, 10, 120.0),
+            _buy("2026-01-01", "FOUR", PULLBACK, 10, 50.0),
+            _sell("2026-02-01", "FOUR", PULLBACK, 10, 100.0),
+            _buy("2026-01-01", "XLE", RANKED, 10, 80.0),
+            _sell("2026-02-01", "XLE", RANKED, 10, 70.0),
+        ]
+        snapshot = self._snapshot({}, orders)
+
+        self.assertEqual(
+            snapshot["strategy_order_realized_pnl_desc"],
+            ["high-pullback-reversion", "clenow-trend", "ranked-asset-allocation"],
+        )
+        ranks = {s["id"]: s["realized_pnl_rank"] for s in snapshot["strategies"]}
+        self.assertEqual(ranks["high-pullback-reversion"], 1)
+        self.assertEqual(ranks["clenow-trend"], 2)
+        self.assertEqual(ranks["ranked-asset-allocation"], 3)
+        self.assertEqual(snapshot["strategies"][0]["id"], "high-pullback-reversion")
+
+
 if __name__ == "__main__":
     unittest.main()
