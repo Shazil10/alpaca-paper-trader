@@ -1,9 +1,14 @@
 # Orders report
 
-Generated: 2026-08-18 03:09:42Z (UTC)
+Generated: 2026-08-24 03:49:57Z (UTC)
 
 | Submitted At | Symbol | Side | Status | Notional ($) | Filled Qty | Filled Avg Price | Filled Value ($) | PnL ($) | Strategy Type | Strategy Name | Client Order ID |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-08-21 15:02:34.478791+00:00 | QLYS | BUY | FILLED | 0.00 | 1.0000 | 181.14 | 181.14 |  | Momentum | Clenow Trend | strategies.momentum.clenow_trend:79669636d222465b |
+| 2026-08-20 15:05:44.240535+00:00 | SFM | BUY | FILLED | 0.00 | 120.0000 | 78.13 | 9,375.60 |  | Mean Reversion | High Pullback Reversion | strategies.mean_reversion.high_pullback_reversion:12b032af019548f3 |
+| 2026-08-20 15:04:33.202336+00:00 | MAN | SELL | FILLED | 0.00 | 1.0000 | 60.44 | 60.44 | +3.90 | Momentum | Clenow Trend | strategies.momentum.clenow_trend:5f29af3932324492 |
+| 2026-08-19 15:03:39.259455+00:00 | CRVL | SELL | FILLED | 0.00 | 53.0000 | 69.81 | 3,699.93 | +449.97 | Mean Reversion | High Pullback Reversion | strategies.mean_reversion.high_pullback_reversion:6f235b9b42a94462 |
+| 2026-08-18 15:01:39.339270+00:00 | CORT | BUY | FILLED | 0.00 | 1.0000 | 117.68 | 117.68 |  | Momentum | Clenow Trend | strategies.momentum.clenow_trend:86962ef6f73745a0 |
 | 2026-08-17 14:55:19.061592+00:00 | PBF | SELL | FILLED | 0.00 | 1.0000 | 74.62 | 74.62 | +8.29 | Momentum | Clenow Trend | strategies.momentum.clenow_trend:f8d015db0f95490e |
 | 2026-08-07 15:19:24.320110+00:00 | AVTR | BUY | FILLED | 0.00 | 191.0000 | 13.47 | 2,572.77 |  | Momentum | Clenow Trend | strategies.momentum.clenow_trend:677ee79fcae8401d |
 | 2026-08-07 15:19:24.162903+00:00 | EAT | BUY | FILLED | 0.00 | 11.0000 | 225.07 | 2,475.77 |  | Momentum | Clenow Trend | strategies.momentum.clenow_trend:b804650c7c274021 |
@@ -199,10 +204,5 @@ Generated: 2026-08-18 03:09:42Z (UTC)
 | 2026-03-11 08:02:30.386620+00:00 | UNH | SELL | CANCELED | 0.00 | 0.0000 | 0.00 | 0.00 |  | Ttl6Gch2B8 |  | Ttl6gCH2b8 |
 | 2026-03-11 08:02:30.382299+00:00 | AA | SELL | FILLED | 0.00 | 7.0000 | 65.51 | 458.57 |  | Lochqapypj |  | LoChQaPYPJ |
 | 2026-03-11 08:02:30.377961+00:00 | FORM | SELL | FILLED | 0.00 | 3.0000 | 101.60 | 304.80 |  | G75W0Z4B7X |  | g75W0z4B7x |
-| 2026-03-11 08:02:30.373631+00:00 | REGN | SELL | CANCELED | 0.00 | 0.0000 | 0.00 | 0.00 |  | 6A8Rsgqnow |  | 6A8rsgQNOW |
-| 2026-03-11 08:02:30.369248+00:00 | NBIS | SELL | FILLED | 0.00 | 20.0000 | 107.14 | 2,142.75 |  | Bqblt5Ggfv |  | BQBlT5GGfV |
-| 2026-03-11 08:02:30.364538+00:00 | XLRE | BUY | FILLED | 1,250.00 | 29.3126 | 42.64 | 1,250.00 |  | Ranks | Ranked Asset Alloc | strategies.ranks.ranked_asset_alloc:f037bcb7e6e94ab0 |
-| 2026-03-11 08:02:30.360026+00:00 | DAN | BUY | FILLED | 244.34 | 7.4946 | 32.60 | 244.34 |  | Momentum | Clenow Trend | strategies.momentum.clenow_trend:417ad477f6f9434f |
-| 2026-03-11 08:02:30.355636+00:00 | XLE | SELL | FILLED | 0.00 | 100.0000 | 62.00 | 6,200.00 |  | Mttq0Tbyrj |  | MttQ0TbyrJ |
 
-Showing first 200 rows out of 269.
+Showing first 200 rows out of 274.

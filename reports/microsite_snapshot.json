@@ -1,15 +1,15 @@
 {
   "schema_version": 4,
-  "generated_at": "2026-08-17T23:09:43-04:00",
-  "snapshot_date": "2026-08-17",
-  "last_report_date": "2026-08-17",
+  "generated_at": "2026-08-23T23:49:59-04:00",
+  "snapshot_date": "2026-08-23",
+  "last_report_date": "2026-08-23",
   "status_label": "active",
   "source": "Alpaca paper account",
   "data_source": "Alpaca paper account",
   "broker": "Alpaca paper",
   "order_window_start": "2026-02-02",
-  "order_window_end": "2026-08-17",
-  "order_count_fetched": 269,
+  "order_window_end": "2026-08-21",
+  "order_count_fetched": 274,
   "positions_included": true,
   "caveat": "Alpaca paper account. Realized figures cover closed trades only and are engineering proof-of-process, not a track record or investment advice.",
   "attribution_label": "Strategy-prefixed order IDs",
@@ -21,10 +21,10 @@
   ],
   "capital_configured": 40000,
   "strategy_count": 3,
-  "total_committed": 30184.17,
-  "total_remaining": 9815.83,
-  "total_market_value_attributed": 31225.06,
-  "total_realized_pnl_closed": 4102.79,
+  "total_committed": 36098.22,
+  "total_remaining": 3982.6,
+  "total_market_value_attributed": 38942.95,
+  "total_realized_pnl_closed": 4556.66,
   "strategy_order_realized_pnl_desc": [
     "high-pullback-reversion",
     "clenow-trend",
@@ -44,39 +44,39 @@
       "citation": "Background: De Bondt & Thaler on overreaction",
       "cadence_note": "Equal risk per position",
       "capital_cap": 15000,
-      "committed": 9293.07,
-      "remaining": 5706.93,
-      "market_value_attributed": 14799.91,
-      "realized_pnl_closed": 4638.66,
-      "utilization_by_market_value": 98.7,
+      "committed": 14968.74,
+      "remaining": 31.26,
+      "market_value_attributed": 22097.24,
+      "realized_pnl_closed": 5088.63,
+      "utilization_by_market_value": 147.3,
       "holdings": [
-        {
-          "symbol": "CRVL",
-          "qty": 53.0,
-          "market_value": 3544.11,
-          "current_price": 66.87,
-          "unrealized_pl": 294.15
-        },
         {
           "symbol": "FOUR",
           "qty": 192.0,
-          "market_value": 8491.39,
-          "current_price": 44.226,
-          "unrealized_pl": -1540.61
+          "market_value": 9302.4,
+          "current_price": 48.45,
+          "unrealized_pl": -729.6
         },
         {
           "symbol": "HIMS",
           "qty": 42.0,
-          "market_value": 1197.84,
-          "current_price": 28.52,
-          "unrealized_pl": -280.14
+          "market_value": 1407.0,
+          "current_price": 33.5,
+          "unrealized_pl": -70.98
+        },
+        {
+          "symbol": "SFM",
+          "qty": 120.0,
+          "market_value": 9732.0,
+          "current_price": 81.1,
+          "unrealized_pl": 356.4
         },
         {
           "symbol": "WWW",
           "qty": 79.0,
-          "market_value": 1566.57,
-          "current_price": 19.83,
-          "unrealized_pl": 167.48
+          "market_value": 1655.84,
+          "current_price": 20.96,
+          "unrealized_pl": 256.75
         }
       ],
       "live_since_date": "2026-04-20",
@@ -92,46 +92,53 @@
       "citation": "Based on Clenow's Stocks on the Move",
       "cadence_note": "Smaller bets on jumpier shares",
       "capital_cap": 10000,
-      "committed": 9842.44,
-      "remaining": 157.56,
-      "market_value_attributed": 5472.86,
-      "realized_pnl_closed": -232.03,
-      "utilization_by_market_value": 54.7,
+      "committed": 10080.82,
+      "remaining": 0.0,
+      "market_value_attributed": 5970.26,
+      "realized_pnl_closed": -228.13,
+      "utilization_by_market_value": 59.7,
       "holdings": [
         {
           "symbol": "AVTR",
           "qty": 191.0,
-          "market_value": 2578.5,
-          "current_price": 13.5,
-          "unrealized_pl": 5.73
+          "market_value": 2761.86,
+          "current_price": 14.46,
+          "unrealized_pl": 189.09
         },
         {
           "symbol": "CAKE",
           "qty": 1.0,
-          "market_value": 109.42,
-          "current_price": 109.423,
-          "unrealized_pl": 9.92
+          "market_value": 113.5,
+          "current_price": 113.5,
+          "unrealized_pl": 14.0
+        },
+        {
+          "symbol": "CORT",
+          "qty": 1.0,
+          "market_value": 122.25,
+          "current_price": 122.25,
+          "unrealized_pl": 4.57
         },
         {
           "symbol": "EAT",
           "qty": 11.0,
-          "market_value": 2658.81,
-          "current_price": 241.71,
-          "unrealized_pl": 183.04
+          "market_value": 2706.66,
+          "current_price": 246.06,
+          "unrealized_pl": 230.89
         },
         {
-          "symbol": "MAN",
+          "symbol": "QLYS",
           "qty": 1.0,
-          "market_value": 56.77,
-          "current_price": 56.77,
-          "unrealized_pl": 0.23
+          "market_value": 181.99,
+          "current_price": 181.9856,
+          "unrealized_pl": 0.85
         },
         {
           "symbol": "XNCR",
           "qty": 3.0,
-          "market_value": 69.36,
-          "current_price": 23.12,
-          "unrealized_pl": 5.76
+          "market_value": 84.0,
+          "current_price": 28.0,
+          "unrealized_pl": 20.4
         }
       ],
       "live_since_date": "2026-02-12",
@@ -149,51 +156,51 @@
       "capital_cap": 15000,
       "committed": 11048.66,
       "remaining": 3951.34,
-      "market_value_attributed": 10952.29,
+      "market_value_attributed": 10875.45,
       "realized_pnl_closed": -303.84,
-      "utilization_by_market_value": 73.0,
+      "utilization_by_market_value": 72.5,
       "holdings": [
         {
           "symbol": "XLE",
           "qty": 25.0,
-          "market_value": 1569.75,
-          "current_price": 62.79,
-          "unrealized_pl": 98.0
+          "market_value": 1585.5,
+          "current_price": 63.42,
+          "unrealized_pl": 113.75
         },
         {
           "symbol": "XLF",
           "qty": 28.0,
-          "market_value": 1612.24,
-          "current_price": 57.58,
-          "unrealized_pl": 144.76
+          "market_value": 1609.72,
+          "current_price": 57.49,
+          "unrealized_pl": 142.24
         },
         {
           "symbol": "XLI",
           "qty": 5.0,
-          "market_value": 931.6,
-          "current_price": 186.32,
-          "unrealized_pl": 22.97
+          "market_value": 901.25,
+          "current_price": 180.25,
+          "unrealized_pl": -7.38
         },
         {
           "symbol": "XLK",
           "qty": 4.0,
-          "market_value": 752.92,
-          "current_price": 188.23,
-          "unrealized_pl": 105.96
+          "market_value": 733.24,
+          "current_price": 183.31,
+          "unrealized_pl": 86.28
         },
         {
           "symbol": "XLP",
           "qty": 36.6802,
-          "market_value": 3106.45,
-          "current_price": 84.69,
-          "unrealized_pl": -18.55
+          "market_value": 3149.36,
+          "current_price": 85.86,
+          "unrealized_pl": 24.36
         },
         {
           "symbol": "XLU",
           "qty": 67.4361,
-          "market_value": 2979.33,
-          "current_price": 44.18,
-          "unrealized_pl": -145.67
+          "market_value": 2896.38,
+          "current_price": 42.95,
+          "unrealized_pl": -228.62
         }
       ],
       "live_since_date": "2026-03-11",
