@@ -31,8 +31,18 @@ reports/*
 !reports/orders_latest.csv
 !reports/orders_latest.md
 
-# Local price/data caches
+# Local price/data caches (incl. sync checkpoint state)
 .cache/
+
+# Price lake
+# Cold years are committed Parquet; the hot year is a committed CSV that git can
+# delta cheaply. Parquet is ignored by default and un-ignored per closed year --
+# gitignore cannot know the current year, so this list is maintained by hand at
+# the January rollover. See data/prices/_schema.md.
+data/prices/daily/*.parquet
+!data/prices/daily/2023.parquet
+!data/prices/daily/2024.parquet
+!data/prices/daily/2025.parquet
 
 # Site (Vite)
 site/node_modules/

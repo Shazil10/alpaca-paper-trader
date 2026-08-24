@@ -2,9 +2,15 @@ name: Daily Trading Bot
 
 on:
   schedule:
-    # 9:30 AM ET = 14:30 UTC (standard time). Adjust for DST when needed.
+    # 9:30 AM ET: 13:30 UTC during EDT (summer), 14:30 UTC during EST (winter).
+    # Both fire; runner_gate.py decides which one is really the open window.
+    - cron: '30 13 * * 1-5'
     - cron: '30 14 * * 1-5'
   workflow_dispatch:
+
+permissions:
+  # Needed to commit the refreshed price lake back to main.
+  contents: write
 
 jobs:
   run-script:
@@ -15,22 +21,102 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-          
+
       - name: Install dependencies
         run: python -m pip install --upgrade pip && python -m pip install -r requirements.txt
 
+      - name: DST time gate
+        id: gate
+        env:
+          PYTHONPATH: src
+        run: |
+          python src/runner_gate.py open 2>&1 | tee /tmp/gate.out
+          if grep -q "GATE_RESULT=skip" /tmp/gate.out; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Refresh tradable universe
+        if: steps.gate.outputs.skip != 'true'
+        env:
+          PYTHONPATH: src
+        run: python src/universe.py
+
+      # Runs after universe.py because sync reads universe.csv rather than
+      # scraping Wikipedia itself.
+      #
+      # continue-on-error: a Yahoo hiccup must not stop the day's trading. A
+      # failed fetch leaves yesterday's committed bars in place and the next
+      # run's 5-day overlap re-fetches the gap, so the lake self-heals.
+      # Strategies skip only when their required lookback is uncovered --
+      # missing today's bar is not that.
+      - name: Sync price lake
+        id: sync
+        if: steps.gate.outputs.skip != 'true'
+        continue-on-error: true
+        timeout-minutes: 25
+        env:
+          PYTHONPATH: src
+        run: python src/data_pipeline/sync_prices.py
+
+      # Commit BEFORE trading. The hot-year CSV is only present on the next
+      # runner if it was committed, and ordering the commit first means a later
+      # trade failure cannot lose the day's bars.
+      #
+      # Paths are explicit, never `git add -A`: src/strategies/momentum/
+      # clenow_trend.py is 0 bytes locally (iCloud eviction) and a broad add
+      # would push the empty file over the working copy and silently kill that
+      # sleeve.
+      - name: Commit refreshed price lake
+        if: steps.gate.outputs.skip != 'true'
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/prices/daily data/universe/master_tickers.csv
+          if git diff --staged --quiet; then
+            echo "Price lake unchanged — nothing to commit."
+          else
+            git commit -m "chore(data): refresh daily price lake"
+            # Rebase first: the close-report job also pushes to main, so a
+            # straight push can be rejected as non-fast-forward.
+            git pull --rebase --autostash origin main
+            git push
+          fi
+
       - name: Run Trading Bot
+        if: steps.gate.outputs.skip != 'true'
         env:
           ALPACA_KEY: ${{ secrets.ALPACA_KEY }}
           ALPACA_SECRET: ${{ secrets.ALPACA_SECRET }}
           PYTHONPATH: src
+          # Single control point for the data source. Phase 6 flips this to
+          # `lake` once several consecutive sessions of current bars have been
+          # observed. Strategies never fall back between sources.
+          PRICE_SOURCE: yfinance
         run: |
           echo "Python $(python --version)"
-          python src/universe.py
           python src/trade.py
           python src/report.py
 
+      - name: Report price lake status
+        if: steps.gate.outputs.skip != 'true'
+        continue-on-error: true
+        env:
+          PYTHONPATH: src
+        run: |
+          echo "sync step outcome: ${{ steps.sync.outcome }}"
+          python - <<'PY'
+          from data_pipeline import store
+          last = store.last_bar_date()
+          print(f"price lake newest session: {last}")
+          gaps = store.find_gaps()
+          print(f"symbols with gaps: {len(gaps)}")
+          PY
+
       - name: Upload reports artifact
+        if: steps.gate.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: trading-reports

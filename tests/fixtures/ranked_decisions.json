@@ -1,0 +1,39 @@
+{
+  "as_of": "2026-08-19",
+  "lookback_days": 730,
+  "sessions": 502,
+  "last_session": "2026-08-19",
+  "regime_v4": "B",
+  "regime_v8": "B",
+  "alloc_v4": {
+    "XLE": 0.166667,
+    "XLF": 0.166667,
+    "XLI": 0.166667,
+    "XLK": 0.166667,
+    "XLP": 0.166667,
+    "XLU": 0.166667
+  },
+  "alloc_v8": {
+    "XLE": 0.25,
+    "XLI": 0.25,
+    "XLK": 0.25,
+    "XLP": 0.25
+  },
+  "target": {
+    "XLE": 0.208333,
+    "XLF": 0.083333,
+    "XLI": 0.208333,
+    "XLK": 0.208333,
+    "XLP": 0.208333,
+    "XLU": 0.083333
+  },
+  "daf_leverage": 2.0,
+  "target_symbols": [
+    "XLE",
+    "XLF",
+    "XLI",
+    "XLK",
+    "XLP",
+    "XLU"
+  ]
+}

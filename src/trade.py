@@ -18,7 +18,7 @@ from uuid import uuid4
 
 import config
 import orders
-from trade_models import Side, Signal, committed_dollars_from_orders, _enum_str
+from trade_models import Side, Signal, committed_dollars_from_orders, _enum_str, fetch_all_orders
 
 try:
     from alpaca.trading.requests import GetOrdersRequest
@@ -108,7 +108,7 @@ def _held_symbols_for_strategy(client, strategy_id: str) -> Set[str]:
     bought_symbols: Set[str] = set()
 
     try:
-        batch = _get_orders_page(client, status="all", limit=500)
+        batch = fetch_all_orders(client, status="all")
     except Exception:
         logger.exception("Failed to fetch orders for held-symbol scan (%s)", strategy_id)
         batch = []
@@ -135,31 +135,23 @@ def _held_symbols_for_strategy(client, strategy_id: str) -> Set[str]:
     return held
 
 
-def _existing_symbols(client) -> Set[str]:
-    """Return symbols we already hold or have pending buy orders for."""
-    existing: Set[str] = set()
-
-    # 1) Current positions
-    try:
-        for p in client.get_all_positions():
-            existing.add(str(p.symbol).strip().upper())
-    except Exception:
-        logger.exception("Failed to fetch positions")
-
-    # 2) Open orders (prevents double-buys when a previous run already submitted orders)
+def _pending_buy_symbols_for_strategy(client, strategy_id: str) -> Set[str]:
+    """Return symbols with open/pending BUY orders for this strategy."""
+    prefix = f"{strategy_id}:"
+    pending: Set[str] = set()
     try:
         for o in client.get_orders():
+            cid = str(getattr(o, "client_order_id", "") or "")
+            if not cid.startswith(prefix):
+                continue
             side = _enum_str(getattr(o, "side", "")).upper()
             status = _enum_str(getattr(o, "status", "")).lower()
             sym = str(getattr(o, "symbol", "")).strip().upper()
-            if not sym:
-                continue
             if side == "BUY" and status in {"new", "accepted", "pending_new", "held", "partially_filled"}:
-                existing.add(sym)
+                pending.add(sym)
     except Exception:
-        logger.exception("Failed to fetch open orders")
-
-    return existing
+        logger.exception("Failed to fetch open orders for strategy %s", strategy_id)
+    return pending
 
 
 def _strategy_committed_dollars(client, *, strategy_id: str) -> float:
@@ -169,7 +161,7 @@ def _strategy_committed_dollars(client, *, strategy_id: str) -> float:
     We attribute orders to strategies by ``client_order_id`` prefix.
     """
     try:
-        batch = _get_orders_page(client, status="all", limit=500)
+        batch = fetch_all_orders(client, status="all")
     except Exception:
         logger.exception("Failed to fetch orders for strategy accounting (%s)", strategy_id)
         batch = []
@@ -232,9 +224,8 @@ def execute_daily_trades() -> None:
 
     cash_reserve = cash * 0.10  # keep 10 % as a safety buffer
 
-    existing = _existing_symbols(client)
     positions = _positions_by_symbol(client)
-    submitted_this_run: Set[str] = set()
+    submitted_this_run: Dict[str, Set[str]] = {}  # strategy_path -> symbols submitted
 
     for strategy_path, budget in config.STRATEGY_ALLOCATIONS.items():
         if budget <= 0:
@@ -322,11 +313,17 @@ def execute_daily_trades() -> None:
             logger.info("Strategy %s returned no BUY signals", strategy_path)
             continue
 
+        # Per-strategy duplicate block: skip if this strategy already holds the
+        # symbol or has a pending BUY for it.
+        strategy_held = held  # already computed above
+        strategy_pending = _pending_buy_symbols_for_strategy(client, strategy_path)
+        strategy_submitted = submitted_this_run.setdefault(strategy_path, set())
+
         for s in buy_signals:
             symbol = s.normalized_symbol()
             try:
-                if symbol in existing or symbol in submitted_this_run:
-                    logger.info("Already have/pending %s (skipping)", symbol)
+                if symbol in strategy_held or symbol in strategy_pending or symbol in strategy_submitted:
+                    logger.info("Already held/pending for %s in strategy %s (skipping)", symbol, strategy_path)
                     continue
 
                 dollars = _safe_float(s.notional)
@@ -354,7 +351,7 @@ def execute_daily_trades() -> None:
                         symbol, strategy_path,
                     )
                     continue
-                submitted_this_run.add(symbol)
+                strategy_submitted.add(symbol)
                 cash -= dollars
                 logger.info(
                     "Submitted BUY %s notional=%.2f (strategy=%s, client_order_id=%s)",
@@ -375,3 +372,8 @@ def execute_daily_trades() -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     execute_daily_trades()
+    try:
+        from equity_log import log_equity
+        log_equity()
+    except Exception:
+        logger.exception("Failed to log equity snapshot")

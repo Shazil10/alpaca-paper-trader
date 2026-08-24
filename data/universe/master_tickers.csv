@@ -1,0 +1,1413 @@
+symbol,sector,industry,first_seen,last_seen,consecutive_failures
+A,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+AA,Materials,Aluminum,2026-08-20,2026-08-23,0
+AAL,Industrials,Passenger Airlines,2026-08-20,2026-08-23,0
+AAMI,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+AAON,Industrials,Building Products,2026-08-20,2026-08-23,0
+AAP,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+AAPL,Information Technology,"Technology Hardware, Storage & Peripherals",2026-08-20,2026-08-23,0
+AAT,Real Estate,Diversified REITs,2026-08-20,2026-08-23,0
+ABBV,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+ABCB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+ABG,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+ABM,Industrials,Environmental & Facilities Services,2026-08-20,2026-08-23,0
+ABNB,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+ABT,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+ACA,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+ACAD,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+ACGL,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+ACHC,Health Care,Health Care Facilities,2026-08-20,2026-08-23,0
+ACI,Consumer Staples,Food Retail,2026-08-20,2026-08-23,0
+ACIW,Information Technology,Application Software,2026-08-20,2026-08-23,0
+ACLS,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+ACM,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+ACMR,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+ACN,Information Technology,IT Consulting & Other Services,2026-08-20,2026-08-23,0
+ACT,Financials,Commercial & Residential Mortgage Finance,2026-08-20,2026-08-23,0
+ADBE,Information Technology,Application Software,2026-08-20,2026-08-23,0
+ADC,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+ADEA,Information Technology,IT Consulting & Other Services,2026-08-20,2026-08-23,0
+ADI,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+ADM,Consumer Staples,Agricultural Products & Services,2026-08-20,2026-08-23,0
+ADMA,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+ADNT,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+ADP,Industrials,Human Resource & Employment Services,2026-08-20,2026-08-23,0
+ADSK,Information Technology,Application Software,2026-08-20,2026-08-23,0
+ADUS,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+AEE,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+AEIS,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+AEO,Consumer Discretionary,Apparel Retail,2026-08-20,2026-08-23,0
+AEP,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+AES,Utilities,Independent Power Producers & Energy Traders,2026-08-20,2026-08-23,0
+AESI,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+AFG,Financials,Multi-line Insurance,2026-08-20,2026-08-23,0
+AFL,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+AGCO,Industrials,Agricultural & Farm Machinery,2026-08-20,2026-08-23,0
+AGO,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+AGYS,Information Technology,Application Software,2026-08-20,2026-08-23,0
+AHCO,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+AHR,Real Estate,Health Care REITs,2026-08-20,2026-08-23,0
+AIG,Financials,Multi-line Insurance,2026-08-20,2026-08-23,0
+AIN,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+AIR,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+AIT,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+AIZ,Financials,Multi-line Insurance,2026-08-20,2026-08-23,0
+AJG,Financials,Insurance Brokers,2026-08-20,2026-08-23,0
+AKAM,Information Technology,Internet Services & Infrastructure,2026-08-20,2026-08-23,0
+AKR,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+AL,Industrials,Passenger Airlines,,,2
+ALB,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+ALEX,Real Estate,Diversified REITs,,,2
+ALG,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+ALGM,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+ALGN,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+ALGT,Industrials,Passenger Airlines,2026-08-20,2026-08-23,0
+ALK,Industrials,Passenger Airlines,2026-08-20,2026-08-23,0
+ALKS,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+ALL,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+ALLE,Industrials,Building Products,2026-08-20,2026-08-23,0
+ALLY,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+ALRM,Financials,Application Software,2026-08-20,2026-08-23,0
+ALV,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+AM,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+AMAT,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+AMCR,Materials,Paper & Plastic Packaging Products & Materials,2026-08-20,2026-08-23,0
+AMD,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+AME,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+AMG,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+AMGN,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+AMH,Real Estate,Single-Family Residential REITs,2026-08-20,2026-08-23,0
+AMKR,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+AMN,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+AMP,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+AMPH,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+AMR,Materials,Steel,2026-08-20,2026-08-23,0
+AMRX,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+AMT,Real Estate,Telecom Tower REITs,2026-08-20,2026-08-23,0
+AMTM,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+AMWD,Industrials,Building Products,,,2
+AMZN,Consumer Discretionary,Broadline Retail,2026-08-20,2026-08-23,0
+AN,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+ANDE,Consumer Staples,Food Distributors,2026-08-20,2026-08-23,0
+ANET,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+ANF,Consumer Discretionary,Apparel Retail,2026-08-20,2026-08-23,0
+ANIP,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+AON,Financials,Insurance Brokers,2026-08-20,2026-08-23,0
+AORT,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+AOS,Industrials,Building Products,2026-08-20,2026-08-23,0
+AOSL,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+APA,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+APAM,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+APD,Materials,Industrial Gases,2026-08-20,2026-08-23,0
+APG,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+APH,Information Technology,Electronic Components,2026-08-20,2026-08-23,0
+APLE,Real Estate,Hotel & Resort REITs,2026-08-20,2026-08-23,0
+APLS,Health Care,Pharmaceuticals,,,2
+APO,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+APP,Information Technology,Application Software,2026-08-20,2026-08-23,0
+APPF,Information Technology,Application Software,2026-08-20,2026-08-23,0
+APTV,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+AR,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+ARCB,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+ARE,Real Estate,Office REITs,2026-08-20,2026-08-23,0
+ARES,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+ARI,Real Estate,Mortgage REITs,2026-08-20,2026-08-23,0
+ARLO,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+ARMK,Consumer Discretionary,Distributors,2026-08-20,2026-08-23,0
+AROC,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+ARR,Real Estate,Mortgage REITs,2026-08-20,2026-08-23,0
+ARW,Information Technology,Technology Distributors,2026-08-20,2026-08-23,0
+ARWR,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+ASB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+ASGN,Information Technology,IT Consulting & Other Services,,,2
+ASH,Materials,Diversified Chemicals,2026-08-20,2026-08-23,0
+ASO,Consumer Discretionary,Specialty Stores,2026-08-20,2026-08-23,0
+ASTE,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+ASTH,Health Care,Health Care Facilities,2026-08-20,2026-08-23,0
+ATEN,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+ATGE,Consumer Discretionary,Education Services,,,2
+ATI,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+ATO,Utilities,Gas Utilities,2026-08-20,2026-08-23,0
+ATR,Materials,"Metal, Glass & Plastic Containers",2026-08-20,2026-08-23,0
+AUB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+AVA,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+AVAV,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+AVB,Real Estate,Multi-Family Residential REITs,2026-08-20,2026-08-23,0
+AVGO,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+AVNT,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+AVT,Information Technology,Technology Distributors,2026-08-20,2026-08-23,0
+AVTR,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+AVY,Materials,Paper & Plastic Packaging Products & Materials,2026-08-20,2026-08-23,0
+AWI,Industrials,Building Products,2026-08-20,2026-08-23,0
+AWK,Utilities,Water Utilities,2026-08-20,2026-08-23,0
+AWR,Utilities,Water Utilities,2026-08-20,2026-08-23,0
+AX,Financials,Regional Banks,2026-08-20,2026-08-23,0
+AXON,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+AXP,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+AXTA,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+AYI,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+AZO,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+AZTA,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+AZZ,Industrials,Heavy Electrical Equipment,2026-08-20,2026-08-23,0
+BA,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+BAC,Financials,Diversified Banks,2026-08-20,2026-08-23,0
+BAH,Industrials,Research & Consulting Services,2026-08-20,2026-08-23,0
+BALL,Materials,"Metal, Glass & Plastic Containers",2026-08-20,2026-08-23,0
+BANC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+BANF,Financials,Regional Banks,2026-08-20,2026-08-23,0
+BANR,Financials,Regional Banks,2026-08-20,2026-08-23,0
+BAX,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+BBT,Financials,Regional Banks,2026-08-20,2026-08-23,0
+BBWI,Consumer Discretionary,Other Specialty Retail,2026-08-20,2026-08-23,0
+BBY,Consumer Discretionary,Computer & Electronics Retail,2026-08-20,2026-08-23,0
+BC,Consumer Discretionary,Leisure Products,2026-08-20,2026-08-23,0
+BCC,Industrials,Building Products,2026-08-20,2026-08-23,0
+BCO,Industrials,Security & Alarm Services,2026-08-20,2026-08-23,0
+BCPC,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+BDC,Information Technology,Electronic Components,2026-08-20,2026-08-23,0
+BDX,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+BEN,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+BF-B,Consumer Staples,Distillers & Vintners,2026-08-20,2026-08-23,0
+BFH,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+BG,Consumer Staples,Agricultural Products & Services,2026-08-20,2026-08-23,0
+BHE,Information Technology,Electronic Manufacturing Services,2026-08-20,2026-08-23,0
+BHF,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+BIIB,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+BILL,Information Technology,Application Software,2026-08-20,2026-08-23,0
+BIO,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+BJ,Consumer Staples,Consumer Staples Merchandise Retail,2026-08-20,2026-08-23,0
+BJRI,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+BK,Financials,Asset Management & Custody Banks,,,2
+BKE,Consumer Discretionary,Apparel Retail,2026-08-20,2026-08-23,0
+BKH,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+BKNG,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+BKR,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+BKU,Financials,Regional Banks,2026-08-20,2026-08-23,0
+BL,Information Technology,Application Software,2026-08-20,2026-08-23,0
+BLD,Consumer Discretionary,Homebuilding,2026-08-23,2026-08-23,0
+BLDR,Industrials,Building Products,2026-08-20,2026-08-23,0
+BLFS,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+BLK,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+BLKB,Information Technology,Application Software,2026-08-20,2026-08-23,0
+BMI,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+BMRN,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+BMY,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+BOH,Financials,Regional Banks,2026-08-20,2026-08-23,0
+BOOT,Consumer Discretionary,Apparel Retail,2026-08-20,2026-08-23,0
+BOX,Information Technology,Application Software,2026-08-20,2026-08-23,0
+BR,Industrials,Data Processing & Outsourced Services,2026-08-20,2026-08-23,0
+BRBR,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+BRC,Industrials,Commercial Printing,2026-08-20,2026-08-23,0
+BRK-B,Financials,Multi-Sector Holdings,2026-08-20,2026-08-23,0
+BRKR,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+BRO,Financials,Insurance Brokers,2026-08-20,2026-08-23,0
+BROS,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+BRX,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+BSX,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+BSY,Information Technology,Application Software,2026-08-20,2026-08-23,0
+BTSG,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+BTU,Energy,Coal & Consumable Fuels,2026-08-20,2026-08-23,0
+BURL,Consumer Discretionary,Apparel Retail,2026-08-20,2026-08-23,0
+BWA,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+BWXT,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+BX,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+BXMT,Financials,Mortgage REITs,2026-08-20,2026-08-23,0
+BXP,Real Estate,Office REITs,2026-08-20,2026-08-23,0
+BYD,Consumer Discretionary,Casinos & Gaming,2026-08-20,2026-08-23,0
+C,Financials,Diversified Banks,2026-08-20,2026-08-23,0
+CABO,Communication Services,Cable & Satellite,2026-08-20,2026-08-23,0
+CACI,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+CAG,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+CAH,Health Care,Health Care Distributors,2026-08-20,2026-08-23,0
+CAKE,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+CALM,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+CALX,Information Technology,Application Software,2026-08-20,2026-08-23,0
+CAR,Industrials,Passenger Ground Transportation,2026-08-20,2026-08-23,0
+CARG,Communication Services,Interactive Media & Services,2026-08-20,2026-08-23,0
+CARR,Industrials,Building Products,2026-08-20,2026-08-23,0
+CARS,Communication Services,Interactive Media & Services,2026-08-20,2026-08-23,0
+CART,Consumer Staples,Food Retail,2026-08-20,2026-08-23,0
+CASH,Financials,Regional Banks,2026-08-20,2026-08-23,0
+CASY,Consumer Staples,Food Retail,2026-08-20,2026-08-23,0
+CAT,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+CATY,Financials,Regional Banks,2026-08-20,2026-08-23,0
+CAVA,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+CB,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+CBOE,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+CBRE,Real Estate,Real Estate Services,2026-08-20,2026-08-23,0
+CBRL,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+CBSH,Financials,Regional Banks,2026-08-20,2026-08-23,0
+CBT,Materials,Diversified Chemicals,2026-08-20,2026-08-23,0
+CBU,Financials,Regional Banks,2026-08-20,2026-08-23,0
+CC,Materials,Diversified Chemicals,2026-08-20,2026-08-23,0
+CCI,Real Estate,Telecom Tower REITs,2026-08-20,2026-08-23,0
+CCK,Materials,Paper & Plastic Packaging Products & Materials,2026-08-20,2026-08-23,0
+CCL,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+CCOI,Communication Services,Alternative Carriers,2026-08-20,2026-08-23,0
+CCS,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+CDNS,Information Technology,Application Software,2026-08-20,2026-08-23,0
+CDP,Real Estate,Office REITs,2026-08-20,2026-08-23,0
+CDW,Information Technology,Technology Distributors,2026-08-20,2026-08-23,0
+CE,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+CEG,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+CELH,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,2026-08-20,2026-08-23,0
+CENTA,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+CENX,Materials,Aluminum,2026-08-20,2026-08-23,0
+CF,Materials,Fertilizers & Agricultural Chemicals,2026-08-20,2026-08-23,0
+CFG,Financials,Regional Banks,2026-08-20,2026-08-23,0
+CFR,Financials,Regional Banks,2026-08-20,2026-08-23,0
+CG,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+CGNX,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+CHCO,Financials,Regional Banks,2026-08-20,2026-08-23,0
+CHD,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+CHDN,Consumer Discretionary,Casinos & Gaming,2026-08-20,2026-08-23,0
+CHE,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+CHEF,Consumer Staples,Food Distributors,2026-08-20,2026-08-23,0
+CHH,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+CHRD,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+CHRW,Industrials,Air Freight & Logistics,2026-08-20,2026-08-23,0
+CHTR,Communication Services,Cable & Satellite,2026-08-20,2026-08-23,0
+CHWY,Consumer Discretionary,Other Specialty Retail,2026-08-20,2026-08-23,0
+CI,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+CIEN,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+CINF,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+CL,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+CLF,Materials,Steel,2026-08-20,2026-08-23,0
+CLH,Industrials,Environmental & Facilities Services,2026-08-20,2026-08-23,0
+CLSK,Information Technology,Internet Services & Infrastructure,2026-08-20,2026-08-23,0
+CLX,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+CMC,Materials,Steel,2026-08-20,2026-08-23,0
+CMCSA,Communication Services,Cable & Satellite,2026-08-20,2026-08-23,0
+CME,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+CMG,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+CMI,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+CMS,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+CNC,Health Care,Managed Health Care,2026-08-20,2026-08-23,0
+CNH,Industrials,Agricultural & Farm Machinery,2026-08-20,2026-08-23,0
+CNK,Communication Services,Movies & Entertainment,2026-08-20,2026-08-23,0
+CNM,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+CNMD,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+CNO,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+CNP,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+CNR,Energy,Coal & Consumable Fuels,2026-08-20,2026-08-23,0
+CNS,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+CNX,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+CNXC,Industrials,Data Processing & Outsourced Services,2026-08-20,2026-08-23,0
+COF,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+COHR,Information Technology,Electronic Components,2026-08-20,2026-08-23,0
+COHU,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+COIN,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+COKE,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,2026-08-20,2026-08-23,0
+COLB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+COLL,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+COLM,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+CON,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+COO,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+COP,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+COR,Health Care,Health Care Distributors,2026-08-20,2026-08-23,0
+CORT,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+COST,Consumer Staples,Consumer Staples Merchandise Retail,2026-08-20,2026-08-23,0
+CPAY,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+CPB,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+CPK,Utilities,Gas Utilities,2026-08-20,2026-08-23,0
+CPRI,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+CPRT,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+CPRX,Health Care,Biotechnology,2026-08-23,2026-08-23,0
+CPT,Real Estate,Multi-Family Residential REITs,2026-08-20,2026-08-23,0
+CR,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+CRBG,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+CRC,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+CRH,Materials,Construction Materials,2026-08-20,2026-08-23,0
+CRI,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+CRK,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+CRL,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+CRM,Information Technology,Application Software,2026-08-20,2026-08-23,0
+CROX,Consumer Discretionary,Footwear,2026-08-20,2026-08-23,0
+CRS,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+CRUS,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+CRVL,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+CRWD,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+CSCO,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+CSGP,Real Estate,Real Estate Services,2026-08-20,2026-08-23,0
+CSGS,Industrials,Data Processing & Outsourced Services,,,2
+CSL,Industrials,Industrial Conglomerates,2026-08-20,2026-08-23,0
+CSW,Industrials,Industrial Conglomerates,2026-08-20,2026-08-23,0
+CSX,Industrials,Rail Transportation,2026-08-20,2026-08-23,0
+CTAS,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+CTRA,Energy,Oil & Gas Exploration & Production,,,2
+CTRE,Real Estate,Health Care REITs,2026-08-20,2026-08-23,0
+CTSH,Information Technology,IT Consulting & Other Services,2026-08-20,2026-08-23,0
+CTVA,Materials,Fertilizers & Agricultural Chemicals,2026-08-20,2026-08-23,0
+CUBE,Real Estate,Industrial REITs,2026-08-20,2026-08-23,0
+CUBI,Financials,Regional Banks,2026-08-20,2026-08-23,0
+CURB,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+CUZ,Real Estate,Office REITs,2026-08-20,2026-08-23,0
+CVBF,Financials,Regional Banks,2026-08-20,2026-08-23,0
+CVCO,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+CVI,Energy,Oil & Gas Refining & Marketing,2026-08-20,2026-08-23,0
+CVLT,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+CVNA,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+CVS,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+CVX,Energy,Integrated Oil & Gas,2026-08-20,2026-08-23,0
+CW,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+CWEN,Utilities,Renewable Electricity,2026-08-20,2026-08-23,0
+CWK,Real Estate,Real Estate Services,2026-08-20,2026-08-23,0
+CWST,Industrials,Environmental & Facilities Services,2026-08-20,2026-08-23,0
+CWT,Utilities,Water Utilities,2026-08-20,2026-08-23,0
+CXT,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+CXW,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+CYTK,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+CZR,Consumer Discretionary,Casinos & Gaming,2026-08-20,2026-08-23,0
+D,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+DAL,Industrials,Passenger Airlines,2026-08-20,2026-08-23,0
+DAN,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+DAR,Consumer Staples,Agricultural Products & Services,2026-08-20,2026-08-23,0
+DASH,Consumer Discretionary,Specialized Consumer Services,2026-08-20,2026-08-23,0
+DBX,Information Technology,Application Software,2026-08-20,2026-08-23,0
+DCI,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+DD,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+DDOG,Information Technology,Application Software,2026-08-20,2026-08-23,0
+DE,Industrials,Agricultural & Farm Machinery,2026-08-20,2026-08-23,0
+DECK,Consumer Discretionary,Footwear,2026-08-20,2026-08-23,0
+DEI,Real Estate,Office REITs,2026-08-20,2026-08-23,0
+DELL,Information Technology,"Technology Hardware, Storage & Peripherals",2026-08-20,2026-08-23,0
+DG,Consumer Staples,Consumer Staples Merchandise Retail,2026-08-20,2026-08-23,0
+DGII,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+DGX,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+DHI,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+DHR,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+DINO,Energy,Oil & Gas Refining & Marketing,2026-08-20,2026-08-23,0
+DIOD,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+DIS,Communication Services,Movies & Entertainment,2026-08-20,2026-08-23,0
+DKS,Consumer Discretionary,Specialty Stores,2026-08-20,2026-08-23,0
+DLB,Information Technology,Application Software,2026-08-20,2026-08-23,0
+DLR,Real Estate,Data Center REITs,2026-08-20,2026-08-23,0
+DLTR,Consumer Staples,Consumer Staples Merchandise Retail,2026-08-20,2026-08-23,0
+DLX,Industrials,Commercial Printing,2026-08-20,2026-08-23,0
+DNOW,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+DOC,Real Estate,Health Care REITs,2026-08-20,2026-08-23,0
+DOCN,Information Technology,Internet Services & Infrastructure,2026-08-20,2026-08-23,0
+DOCS,Health Care,Health Care Technology,2026-08-20,2026-08-23,0
+DOCU,Information Technology,Application Software,2026-08-20,2026-08-23,0
+DORM,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+DOV,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+DOW,Materials,Commodity Chemicals,2026-08-20,2026-08-23,0
+DPZ,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+DRI,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+DT,Information Technology,Application Software,2026-08-20,2026-08-23,0
+DTE,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+DTM,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+DUK,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+DUOL,Consumer Discretionary,Education Services,2026-08-20,2026-08-23,0
+DVA,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+DVAX,Health Care,Biotechnology,,,2
+DVN,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+DXC,Information Technology,IT Consulting & Other Services,2026-08-20,2026-08-23,0
+DXCM,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+DXPE,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+DY,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+EA,Communication Services,Interactive Home Entertainment,2026-08-20,2026-08-23,0
+EAT,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+EBAY,Consumer Discretionary,Broadline Retail,2026-08-20,2026-08-23,0
+ECG,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+ECL,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+ECPG,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+ED,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+EEFT,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+EFC,Financials,Specialized Finance,2026-08-20,2026-08-23,0
+EFX,Industrials,Research & Consulting Services,2026-08-20,2026-08-23,0
+EG,Financials,Reinsurance,2026-08-20,2026-08-23,0
+EGBN,Financials,Regional Banks,2026-08-20,2026-08-23,0
+EGP,Real Estate,Industrial REITs,2026-08-20,2026-08-23,0
+EHC,Health Care,Health Care Facilities,2026-08-20,2026-08-23,0
+EIX,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+EL,Consumer Staples,Personal Care Products,2026-08-20,2026-08-23,0
+ELAN,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+ELF,Consumer Staples,Personal Care Products,2026-08-20,2026-08-23,0
+ELS,Real Estate,Single-Family Residential REITs,2026-08-20,2026-08-23,0
+ELV,Health Care,Managed Health Care,2026-08-20,2026-08-23,0
+EMBC,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+EME,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+EMN,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+EMR,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+ENOV,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+ENPH,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+ENR,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+ENS,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+ENSG,Health Care,Health Care Facilities,2026-08-20,2026-08-23,0
+ENTG,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+ENVA,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+EOG,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+EPAC,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+EPAM,Information Technology,IT Consulting & Other Services,2026-08-20,2026-08-23,0
+EPC,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+EPR,Real Estate,Other Specialized REITs,2026-08-20,2026-08-23,0
+EPRT,Real Estate,Diversified REITs,2026-08-20,2026-08-23,0
+EQH,Financials,Diversified Financial Services,2026-08-20,2026-08-23,0
+EQIX,Real Estate,Data Center REITs,2026-08-20,2026-08-23,0
+EQR,Real Estate,Multi-Family Residential REITs,2026-08-20,2026-08-23,0
+EQT,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+ERIE,Financials,Insurance Brokers,2026-08-20,2026-08-23,0
+ES,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+ESAB,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+ESE,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+ESI,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+ESNT,Financials,Commercial & Residential Mortgage Finance,2026-08-20,2026-08-23,0
+ESS,Real Estate,Multi-Family Residential REITs,2026-08-20,2026-08-23,0
+ETD,Consumer Discretionary,Home Furnishings,2026-08-20,2026-08-23,0
+ETN,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+ETR,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+ETSY,Consumer Discretionary,Broadline Retail,2026-08-20,2026-08-23,0
+EVR,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+EVRG,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+EVTC,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+EW,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+EWBC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+EXC,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+EXE,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+EXEL,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+EXLS,Industrials,Data Processing & Outsourced Services,2026-08-20,2026-08-23,0
+EXP,Materials,Construction Materials,2026-08-20,2026-08-23,0
+EXPD,Industrials,Air Freight & Logistics,2026-08-20,2026-08-23,0
+EXPE,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+EXPO,Industrials,Research & Consulting Services,2026-08-20,2026-08-23,0
+EXR,Real Estate,Self-Storage REITs,2026-08-20,2026-08-23,0
+EXTR,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+EYE,Consumer Discretionary,Specialty Stores,2026-08-20,2026-08-23,0
+EZPW,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+F,Consumer Discretionary,Automobile Manufacturers,2026-08-20,2026-08-23,0
+FAF,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+FANG,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+FAST,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+FBIN,Industrials,Building Products,2026-08-20,2026-08-23,0
+FBK,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FBNC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FBP,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FCF,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FCFS,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+FCN,Industrials,Research & Consulting Services,2026-08-20,2026-08-23,0
+FCPT,Real Estate,Other Specialized REITs,2026-08-20,2026-08-23,0
+FCX,Materials,Copper,2026-08-20,2026-08-23,0
+FDS,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+FDX,Industrials,Air Freight & Logistics,2026-08-20,2026-08-23,0
+FE,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+FELE,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+FFBC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FFIN,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FFIV,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+FHB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FHI,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+FHN,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FIBK,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FICO,Information Technology,Application Software,2026-08-20,2026-08-23,0
+FIS,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+FISV,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+FITB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FIVE,Consumer Discretionary,Specialty Stores,2026-08-20,2026-08-23,0
+FIX,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+FIZZ,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,2026-08-20,2026-08-23,0
+FLEX,Information Technology,Electronic Manufacturing Services,2026-08-20,2026-08-23,0
+FLG,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FLO,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+FLR,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+FLS,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+FMC,Materials,Fertilizers & Agricultural Chemicals,2026-08-20,2026-08-23,0
+FN,Information Technology,Electronic Manufacturing Services,2026-08-20,2026-08-23,0
+FNB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FND,Consumer Discretionary,Home Improvement Retail,2026-08-20,2026-08-23,0
+FNF,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+FORM,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+FOUR,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+FOX,Communication Services,Broadcasting,2026-08-20,2026-08-23,0
+FOXA,Communication Services,Broadcasting,2026-08-20,2026-08-23,0
+FOXF,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+FR,Real Estate,Industrial REITs,2026-08-20,2026-08-23,0
+FRPT,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+FRT,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+FSLR,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+FSS,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+FTDR,Consumer Discretionary,Specialized Consumer Services,2026-08-20,2026-08-23,0
+FTI,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+FTNT,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+FTRE,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+FTV,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+FUL,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+FULT,Financials,Regional Banks,2026-08-20,2026-08-23,0
+FUN,Consumer Discretionary,Leisure Facilities,2026-08-20,2026-08-23,0
+FWRD,Industrials,Air Freight & Logistics,2026-08-20,2026-08-23,0
+FXF,,,2026-08-20,2026-08-23,0
+FXY,,,2026-08-20,2026-08-23,0
+G,Industrials,Data Processing & Outsourced Services,2026-08-20,2026-08-23,0
+GAP,Consumer Discretionary,Apparel Retail,2026-08-20,2026-08-23,0
+GATX,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+GBCI,Financials,Regional Banks,2026-08-20,2026-08-23,0
+GBX,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+GD,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+GDDY,Information Technology,Internet Services & Infrastructure,2026-08-20,2026-08-23,0
+GE,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+GEF,Materials,"Metal, Glass & Plastic Containers",2026-08-20,2026-08-23,0
+GEHC,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+GEN,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+GEO,Industrials,Environmental & Facilities Services,2026-08-20,2026-08-23,0
+GEV,Industrials,Heavy Electrical Equipment,2026-08-20,2026-08-23,0
+GFF,Industrials,Building Products,2026-08-20,2026-08-23,0
+GGG,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+GHC,Consumer Discretionary,Education Services,2026-08-20,2026-08-23,0
+GIII,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+GILD,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+GIS,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+GKOS,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+GL,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+GLD,,,2026-08-20,2026-08-23,0
+GLPI,Real Estate,Other Specialized REITs,2026-08-20,2026-08-23,0
+GLW,Information Technology,Electronic Components,2026-08-20,2026-08-23,0
+GM,Consumer Discretionary,Automobile Manufacturers,2026-08-20,2026-08-23,0
+GME,Consumer Discretionary,Computer & Electronics Retail,2026-08-20,2026-08-23,0
+GMED,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+GNRC,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+GNTX,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+GOLF,Consumer Discretionary,Leisure Products,2026-08-20,2026-08-23,0
+GOOG,Communication Services,Interactive Media & Services,2026-08-20,2026-08-23,0
+GOOGL,Communication Services,Interactive Media & Services,2026-08-20,2026-08-23,0
+GPC,Consumer Discretionary,Distributors,2026-08-20,2026-08-23,0
+GPI,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+GPK,Materials,Paper & Plastic Packaging Products & Materials,2026-08-20,2026-08-23,0
+GPN,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+GRBK,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+GRMN,Consumer Discretionary,Consumer Electronics,2026-08-20,2026-08-23,0
+GS,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+GSHD,Financials,Insurance Brokers,2026-08-20,2026-08-23,0
+GT,Consumer Discretionary,Tires & Rubber,2026-08-20,2026-08-23,0
+GTES,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+GTLS,Industrials,Industrial Machinery & Supplies & Components,2026-08-23,2026-08-23,0
+GTY,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+GVA,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+GWRE,Information Technology,Application Software,2026-08-20,2026-08-23,0
+GWW,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+GXO,Industrials,Air Freight & Logistics,2026-08-20,2026-08-23,0
+H,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+HAE,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+HAL,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+HALO,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+HAS,Consumer Discretionary,Leisure Products,2026-08-20,2026-08-23,0
+HASI,Financials,Specialized Finance,2026-08-20,2026-08-23,0
+HAYW,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+HBAN,Financials,Regional Banks,2026-08-20,2026-08-23,0
+HCA,Health Care,Health Care Facilities,2026-08-20,2026-08-23,0
+HCC,Materials,Steel,2026-08-20,2026-08-23,0
+HCI,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+HCSG,Industrials,Environmental & Facilities Services,2026-08-20,2026-08-23,0
+HD,Consumer Discretionary,Home Improvement Retail,2026-08-20,2026-08-23,0
+HE,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+HGV,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+HI,Industrials,Industrial Machinery & Supplies & Components,,,2
+HIG,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+HII,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+HIMS,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+HIW,Real Estate,Office REITs,2026-08-20,2026-08-23,0
+HL,Materials,Silver,2026-08-20,2026-08-23,0
+HLI,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+HLNE,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+HLT,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+HMN,Financials,Multi-line Insurance,2026-08-20,2026-08-23,0
+HNI,Industrials,Office Services & Supplies,2026-08-20,2026-08-23,0
+HOG,Consumer Discretionary,Motorcycle Manufacturers,2026-08-20,2026-08-23,0
+HOLX,Health Care,Health Care Equipment,,,2
+HOMB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+HON,Industrials,Industrial Conglomerates,2026-08-20,2026-08-23,0
+HOOD,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+HOPE,Financials,Regional Banks,2026-08-20,2026-08-23,0
+HP,Energy,Oil & Gas Drilling,2026-08-20,2026-08-23,0
+HPE,Information Technology,"Technology Hardware, Storage & Peripherals",2026-08-20,2026-08-23,0
+HPQ,Information Technology,"Technology Hardware, Storage & Peripherals",2026-08-20,2026-08-23,0
+HQY,Health Care,Managed Health Care,2026-08-20,2026-08-23,0
+HR,Real Estate,Health Care REITs,2026-08-20,2026-08-23,0
+HRB,Consumer Discretionary,Specialized Consumer Services,2026-08-20,2026-08-23,0
+HRL,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+HRMY,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+HSIC,Health Care,Health Care Distributors,2026-08-20,2026-08-23,0
+HST,Real Estate,Hotel & Resort REITs,2026-08-20,2026-08-23,0
+HSY,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+HTH,Financials,Regional Banks,2026-08-20,2026-08-23,0
+HTLD,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+HTO,Utilities,Water Utilities,2026-08-20,2026-08-23,0
+HUBB,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+HUBG,Industrials,Air Freight & Logistics,2026-08-20,2026-08-23,0
+HUM,Health Care,Managed Health Care,2026-08-20,2026-08-23,0
+HWC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+HWKN,Materials,Commodity Chemicals,2026-08-20,2026-08-23,0
+HWM,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+HXL,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+HZO,Consumer Discretionary,Specialty Stores,2026-08-20,2026-08-23,0
+IAC,Communication Services,Publishing,,,2
+IBKR,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+IBM,Information Technology,IT Consulting & Other Services,2026-08-20,2026-08-23,0
+IBOC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+IBP,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+ICE,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+ICHR,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+ICUI,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+IDA,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+IDCC,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+IDXX,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+IEX,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+IFF,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+IIPR,Real Estate,Industrial REITs,2026-08-20,2026-08-23,0
+IJH,,,2026-08-20,2026-08-23,0
+IJR,,,2026-08-20,2026-08-23,0
+ILMN,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+INCY,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+INDB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+INDV,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+INGR,Consumer Staples,Agricultural Products & Services,2026-08-20,2026-08-23,0
+INSP,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+INSW,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+INTC,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+INTU,Information Technology,Application Software,2026-08-20,2026-08-23,0
+INVA,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+INVH,Real Estate,Single-Family Residential REITs,2026-08-20,2026-08-23,0
+IOSP,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+IP,Materials,Paper & Plastic Packaging Products & Materials,2026-08-20,2026-08-23,0
+IPAR,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+IPGP,Information Technology,Electronic Manufacturing Services,2026-08-20,2026-08-23,0
+IQV,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+IR,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+IRDM,Communication Services,Alternative Carriers,2026-08-20,2026-08-23,0
+IRM,Real Estate,Other Specialized REITs,2026-08-20,2026-08-23,0
+IRT,Real Estate,Multi-Family Residential REITs,2026-08-20,2026-08-23,0
+ISRG,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+IT,Information Technology,IT Consulting & Other Services,2026-08-20,2026-08-23,0
+ITGR,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+ITRI,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+ITT,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+ITW,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+IVZ,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+J,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+JAZZ,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+JBHT,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+JBL,Information Technology,Electronic Manufacturing Services,2026-08-20,2026-08-23,0
+JBTM,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+JCI,Industrials,Building Products,2026-08-20,2026-08-23,0
+JEF,Financials,Multi-Sector Holdings,2026-08-20,2026-08-23,0
+JHG,Financials,Asset Management & Custody Banks,2026-08-23,2026-08-23,0
+JJSF,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+JKHY,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+JLL,Real Estate,Real Estate Services,2026-08-20,2026-08-23,0
+JNJ,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+JOE,Real Estate,Real Estate Development,2026-08-20,2026-08-23,0
+JPM,Financials,Diversified Banks,2026-08-20,2026-08-23,0
+JXN,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+KAI,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+KALU,Materials,Aluminum,2026-08-20,2026-08-23,0
+KBH,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+KBR,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+KD,Information Technology,IT Consulting & Other Services,2026-08-20,2026-08-23,0
+KDP,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,2026-08-20,2026-08-23,0
+KEX,Industrials,Marine Transportation,2026-08-20,2026-08-23,0
+KEY,Financials,Regional Banks,2026-08-20,2026-08-23,0
+KEYS,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+KFY,Industrials,Human Resource & Employment Services,2026-08-20,2026-08-23,0
+KGS,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+KHC,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+KIM,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+KKR,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+KLAC,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+KLIC,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+KMB,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+KMI,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+KMPR,Financials,Multi-line Insurance,2026-08-20,2026-08-23,0
+KMT,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+KMX,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+KN,Information Technology,Electronic Components,2026-08-20,2026-08-23,0
+KNF,Materials,Construction Materials,2026-08-20,2026-08-23,0
+KNSL,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+KNTK,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+KNX,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+KO,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,2026-08-20,2026-08-23,0
+KR,Consumer Staples,Food Retail,2026-08-20,2026-08-23,0
+KRC,Real Estate,Office REITs,2026-08-20,2026-08-23,0
+KRG,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+KRYS,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+KSS,Consumer Discretionary,Broadline Retail,2026-08-20,2026-08-23,0
+KTB,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+KTOS,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+KVUE,Consumer Staples,Personal Care Products,2026-08-20,2026-08-23,0
+KWR,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+L,Financials,Multi-line Insurance,2026-08-20,2026-08-23,0
+LAD,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+LAMR,Real Estate,Other Specialized REITs,2026-08-20,2026-08-23,0
+LBRT,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+LCII,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+LDOS,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+LEA,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+LECO,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+LEG,Consumer Discretionary,Home Furnishings,2026-08-20,2026-08-23,0
+LEN,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+LFUS,Information Technology,Electronic Components,2026-08-20,2026-08-23,0
+LGIH,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+LGND,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+LH,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+LHX,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+LII,Industrials,Building Products,2026-08-20,2026-08-23,0
+LIN,Materials,Industrial Gases,2026-08-20,2026-08-23,0
+LITE,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+LIVN,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+LKFN,Financials,Regional Banks,2026-08-20,2026-08-23,0
+LKQ,Consumer Discretionary,Distributors,2026-08-20,2026-08-23,0
+LLY,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+LMAT,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+LMT,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+LNC,Financials,Multi-line Insurance,2026-08-20,2026-08-23,0
+LNN,Materials,Agricultural & Farm Machinery,2026-08-20,2026-08-23,0
+LNT,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+LNTH,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+LOPE,Consumer Discretionary,Education Services,2026-08-20,2026-08-23,0
+LOW,Consumer Discretionary,Home Improvement Retail,2026-08-20,2026-08-23,0
+LPG,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+LPX,Materials,Forest Products,2026-08-20,2026-08-23,0
+LRCX,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+LRN,Consumer Discretionary,Education Services,2026-08-20,2026-08-23,0
+LSCC,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+LSTR,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+LTC,Real Estate,Health Care REITs,2026-08-20,2026-08-23,0
+LULU,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+LUV,Industrials,Passenger Airlines,2026-08-20,2026-08-23,0
+LVS,Consumer Discretionary,Casinos & Gaming,2026-08-20,2026-08-23,0
+LW,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+LXP,Real Estate,Diversified REITs,2026-08-20,2026-08-23,0
+LYB,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+LYV,Communication Services,Movies & Entertainment,2026-08-20,2026-08-23,0
+LZB,Consumer Discretionary,Home Furnishings,2026-08-20,2026-08-23,0
+M,Consumer Discretionary,Broadline Retail,2026-08-20,2026-08-23,0
+MA,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+MAA,Real Estate,Multi-Family Residential REITs,2026-08-20,2026-08-23,0
+MAC,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+MAN,Industrials,Human Resource & Employment Services,2026-08-20,2026-08-23,0
+MANH,Information Technology,Application Software,2026-08-20,2026-08-23,0
+MAR,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+MAS,Industrials,Building Products,2026-08-20,2026-08-23,0
+MASI,Health Care,Health Care Equipment,,,2
+MAT,Consumer Discretionary,Leisure Products,2026-08-20,2026-08-23,0
+MATX,Industrials,Marine Transportation,2026-08-20,2026-08-23,0
+MBC,Industrials,Building Products,2026-08-20,2026-08-23,0
+MC,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+MCD,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+MCHP,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+MCK,Health Care,Health Care Distributors,2026-08-20,2026-08-23,0
+MCO,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+MCRI,Consumer Discretionary,Casinos & Gaming,2026-08-20,2026-08-23,0
+MCY,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+MD,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+MDLZ,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+MDT,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+MDU,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+MEDP,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+MET,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+META,Communication Services,Interactive Media & Services,2026-08-20,2026-08-23,0
+MGEE,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+MGM,Consumer Discretionary,Casinos & Gaming,2026-08-20,2026-08-23,0
+MGY,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+MHK,Consumer Discretionary,Home Furnishings,2026-08-20,2026-08-23,0
+MHO,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+MIDD,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+MIR,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+MKC,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+MKSI,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+MKTX,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+MLI,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+MLKN,Industrials,Office Services & Supplies,2026-08-20,2026-08-23,0
+MLM,Materials,Construction Materials,2026-08-20,2026-08-23,0
+MMM,Industrials,Industrial Conglomerates,2026-08-20,2026-08-23,0
+MMS,Industrials,Data Processing & Outsourced Services,2026-08-20,2026-08-23,0
+MMSI,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+MNRO,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+MNST,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,2026-08-20,2026-08-23,0
+MO,Consumer Staples,Tobacco,2026-08-20,2026-08-23,0
+MODG,Consumer Discretionary,Leisure Products,,,2
+MOG-A,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+MOH,Health Care,Managed Health Care,2026-08-20,2026-08-23,0
+MORN,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+MOS,Materials,Fertilizers & Agricultural Chemicals,2026-08-20,2026-08-23,0
+MP,Materials,Diversified Metals & Mining,2026-08-20,2026-08-23,0
+MPC,Energy,Oil & Gas Refining & Marketing,2026-08-20,2026-08-23,0
+MPWR,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+MRCY,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+MRK,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+MRNA,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+MRP,Real Estate,Single-Family Residential REITs,2026-08-20,2026-08-23,0
+MRSH,Financials,Insurance Brokers,2026-08-20,2026-08-23,0
+MRTN,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+MS,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+MSA,Industrials,Office Services & Supplies,2026-08-20,2026-08-23,0
+MSCI,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+MSFT,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+MSGS,Communication Services,Movies & Entertainment,2026-08-20,2026-08-23,0
+MSI,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+MSM,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+MTB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+MTCH,Communication Services,Interactive Media & Services,2026-08-20,2026-08-23,0
+MTD,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+MTDR,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+MTG,Financials,Reinsurance,2026-08-20,2026-08-23,0
+MTH,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+MTN,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+MTRN,Materials,Diversified Metals & Mining,2026-08-20,2026-08-23,0
+MTSI,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+MTX,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+MTZ,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+MU,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+MUR,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+MUSA,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+MWA,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+MXL,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+MYRG,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+MZTI,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+NATL,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+NAVI,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+NBHC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+NBIX,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+NBTB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+NCLH,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+NDAQ,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+NDSN,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+NE,Energy,Oil & Gas Drilling,2026-08-20,2026-08-23,0
+NEE,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+NEM,Materials,Gold,2026-08-20,2026-08-23,0
+NEO,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+NEOG,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+NEU,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+NFG,Utilities,Gas Utilities,2026-08-20,2026-08-23,0
+NFLX,Communication Services,Movies & Entertainment,2026-08-20,2026-08-23,0
+NGVT,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+NI,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+NJR,Utilities,Gas Utilities,2026-08-20,2026-08-23,0
+NKE,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+NLY,Financials,Mortgage REITs,2026-08-20,2026-08-23,0
+NMIH,Financials,Commercial & Residential Mortgage Finance,2026-08-20,2026-08-23,0
+NNN,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+NOC,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+NOG,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+NOV,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+NOVT,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+NOW,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+NPK,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+NPO,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+NRG,Utilities,Independent Power Producers & Energy Traders,2026-08-20,2026-08-23,0
+NSA,Real Estate,Self-Storage REITs,2026-08-23,2026-08-23,0
+NSC,Industrials,Rail Transportation,2026-08-20,2026-08-23,0
+NSIT,Industrials,Technology Distributors,2026-08-20,2026-08-23,0
+NSP,Industrials,Human Resource & Employment Services,2026-08-20,2026-08-23,0
+NTAP,Information Technology,"Technology Hardware, Storage & Peripherals",2026-08-20,2026-08-23,0
+NTCT,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+NTNX,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+NTRS,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+NUE,Materials,Steel,2026-08-20,2026-08-23,0
+NVDA,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+NVR,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+NVRI,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+NVST,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+NVT,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+NWBI,Financials,Regional Banks,2026-08-20,2026-08-23,0
+NWE,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+NWN,Utilities,Gas Utilities,2026-08-20,2026-08-23,0
+NWS,Communication Services,Publishing,2026-08-20,2026-08-23,0
+NWSA,Communication Services,Publishing,2026-08-20,2026-08-23,0
+NX,Industrials,Building Products,2026-08-20,2026-08-23,0
+NXPI,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+NXST,Communication Services,Broadcasting,2026-08-20,2026-08-23,0
+NXT,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+NYT,Communication Services,Publishing,2026-08-20,2026-08-23,0
+O,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+OC,Industrials,Building Products,2026-08-20,2026-08-23,0
+ODFL,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+OFG,Financials,Regional Banks,2026-08-20,2026-08-23,0
+OGE,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+OGS,Utilities,Gas Utilities,2026-08-20,2026-08-23,0
+OHI,Real Estate,Health Care REITs,2026-08-20,2026-08-23,0
+OI,Materials,"Metal, Glass & Plastic Containers",2026-08-20,2026-08-23,0
+OII,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+OKE,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+OKTA,Information Technology,Application Software,2026-08-20,2026-08-23,0
+OLED,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+OLLI,Consumer Discretionary,Broadline Retail,2026-08-20,2026-08-23,0
+OLN,Materials,Diversified Chemicals,2026-08-20,2026-08-23,0
+OMC,Communication Services,Advertising,2026-08-20,2026-08-23,0
+OMCL,Health Care,Health Care Technology,2026-08-20,2026-08-23,0
+ON,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+ONB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+ONTO,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+OPCH,Health Care,Health Care Facilities,2026-08-20,2026-08-23,0
+OPLN,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+ORA,Utilities,Renewable Electricity,2026-08-20,2026-08-23,0
+ORCL,Information Technology,Application Software,2026-08-20,2026-08-23,0
+ORI,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+ORLY,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+OSIS,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+OSK,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+OTIS,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+OTTR,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+OUT,Real Estate,Other Specialized REITs,2026-08-20,2026-08-23,0
+OVV,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+OXM,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+OXY,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+OZK,Financials,Regional Banks,2026-08-20,2026-08-23,0
+PAG,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+PAHC,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+PANW,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+PARR,Energy,Oil & Gas Refining & Marketing,2026-08-20,2026-08-23,0
+PATH,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+PATK,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+PAYC,Industrials,Human Resource & Employment Services,2026-08-20,2026-08-23,0
+PAYX,Industrials,Human Resource & Employment Services,2026-08-20,2026-08-23,0
+PB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+PBF,Energy,Oil & Gas Refining & Marketing,2026-08-20,2026-08-23,0
+PBH,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+PBI,Industrials,Office Services & Supplies,2026-08-20,2026-08-23,0
+PCAR,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+PCG,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+PCRX,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+PCTY,Industrials,Human Resource & Employment Services,2026-08-20,2026-08-23,0
+PDFS,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+PEB,Real Estate,Hotel & Resort REITs,2026-08-20,2026-08-23,0
+PECO,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+PEG,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+PEGA,Information Technology,Application Software,2026-08-20,2026-08-23,0
+PEN,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+PENG,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+PENN,Consumer Discretionary,Casinos & Gaming,2026-08-20,2026-08-23,0
+PEP,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,2026-08-20,2026-08-23,0
+PFBC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+PFE,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+PFG,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+PFGC,Consumer Staples,Food Distributors,2026-08-20,2026-08-23,0
+PFS,Financials,Regional Banks,2026-08-20,2026-08-23,0
+PG,Consumer Staples,Personal Care Products,2026-08-20,2026-08-23,0
+PGNY,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+PGR,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+PH,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+PHIN,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+PHM,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+PI,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+PII,Consumer Discretionary,Leisure Products,2026-08-20,2026-08-23,0
+PINS,Communication Services,,2026-08-20,2026-08-23,0
+PIPR,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+PJT,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+PK,Real Estate,Hotel & Resort REITs,2026-08-20,2026-08-23,0
+PKG,Materials,Paper & Plastic Packaging Products & Materials,2026-08-20,2026-08-23,0
+PLAB,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+PLAY,Consumer Discretionary,Restaurants,2026-08-23,2026-08-23,0
+PLD,Real Estate,Industrial REITs,2026-08-20,2026-08-23,0
+PLMR,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+PLNT,Consumer Discretionary,Leisure Facilities,2026-08-20,2026-08-23,0
+PLTR,Information Technology,Application Software,2026-08-20,2026-08-23,0
+PLUS,Information Technology,Technology Distributors,2026-08-20,2026-08-23,0
+PLXS,Information Technology,Electronic Manufacturing Services,2026-08-20,2026-08-23,0
+PM,Consumer Staples,Tobacco,2026-08-20,2026-08-23,0
+PMT,Real Estate,Mortgage REITs,2026-08-20,2026-08-23,0
+PNC,Financials,Diversified Banks,2026-08-20,2026-08-23,0
+PNFP,Financials,Regional Banks,2026-08-20,2026-08-23,0
+PNR,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+PNW,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+PODD,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+POOL,Consumer Discretionary,Distributors,2026-08-20,2026-08-23,0
+POR,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+POST,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+POWI,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+POWL,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+PPC,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+PPG,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+PPL,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+PR,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+PRA,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+PRDO,Consumer Discretionary,Education Services,2026-08-20,2026-08-23,0
+PRG,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+PRGO,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+PRGS,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+PRI,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+PRIM,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+PRK,Financials,Regional Banks,2026-08-20,2026-08-23,0
+PRKS,Consumer Discretionary,Leisure Facilities,2026-08-20,2026-08-23,0
+PRLB,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+PRU,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+PRVA,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+PSA,Real Estate,Self-Storage REITs,2026-08-20,2026-08-23,0
+PSKY,Communication Services,Movies & Entertainment,2026-08-20,2026-08-23,0
+PSMT,Consumer Staples,Consumer Staples Merchandise Retail,2026-08-20,2026-08-23,0
+PSN,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+PSTG,Information Technology,"Technology Hardware, Storage & Peripherals",,,2
+PSX,Energy,Oil & Gas Refining & Marketing,2026-08-20,2026-08-23,0
+PTC,Information Technology,Application Software,2026-08-20,2026-08-23,0
+PTCT,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+PTGX,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+PVH,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+PWR,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+PYPL,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+PZZA,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+Q,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+QCOM,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+QDEL,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+QLYS,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+QNST,Communication Services,Interactive Media & Services,2026-08-20,2026-08-23,0
+QRVO,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+QTWO,Information Technology,Application Software,2026-08-20,2026-08-23,0
+R,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+RAL,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+RAMP,Information Technology,Application Software,2026-08-20,2026-08-23,0
+RBA,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+RBC,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+RCL,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+RCUS,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+RDN,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+RDNT,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+REG,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+REGN,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+REXR,Real Estate,Industrial REITs,2026-08-20,2026-08-23,0
+REYN,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+REZI,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+RF,Financials,Regional Banks,2026-08-20,2026-08-23,0
+RGA,Financials,Reinsurance,2026-08-20,2026-08-23,0
+RGEN,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+RGLD,Materials,Gold,2026-08-20,2026-08-23,0
+RH,Consumer Discretionary,Homefurnishing Retail,2026-08-20,2026-08-23,0
+RHI,Industrials,Human Resource & Employment Services,2026-08-20,2026-08-23,0
+RHP,Real Estate,Hotel & Resort REITs,2026-08-20,2026-08-23,0
+RJF,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+RL,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+RLI,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+RMBS,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+RMD,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+RNR,Financials,Reinsurance,2026-08-20,2026-08-23,0
+RNST,Financials,Regional Banks,2026-08-20,2026-08-23,0
+ROCK,Industrials,Building Products,2026-08-20,2026-08-23,0
+ROG,Information Technology,Electronic Components,2026-08-20,2026-08-23,0
+ROIV,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+ROK,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+ROL,Industrials,Environmental & Facilities Services,2026-08-20,2026-08-23,0
+ROP,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+ROST,Consumer Discretionary,Apparel Retail,2026-08-20,2026-08-23,0
+RPM,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+RRC,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+RRR,Consumer Discretionary,Casinos & Gaming,2026-08-20,2026-08-23,0
+RRX,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+RS,Materials,Steel,2026-08-20,2026-08-23,0
+RSG,Industrials,Environmental & Facilities Services,2026-08-20,2026-08-23,0
+RTX,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+RUN,Industrials,Building Products,2026-08-20,2026-08-23,0
+RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+RVTY,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+RXO,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+RYAN,Financials,Insurance Brokers,2026-08-20,2026-08-23,0
+RYN,Real Estate,Timber REITs,2026-08-20,2026-08-23,0
+SAH,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+SAIA,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+SAIC,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+SAM,Consumer Staples,Brewers,2026-08-20,2026-08-23,0
+SANM,Information Technology,Electronic Manufacturing Services,2026-08-20,2026-08-23,0
+SARO,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+SATS,Communication Services,Wireless Telecommunication Services,2026-08-20,2026-08-23,0
+SBAC,Real Estate,Telecom Tower REITs,2026-08-20,2026-08-23,0
+SBCF,Financials,Regional Banks,2026-08-20,2026-08-23,0
+SBH,Consumer Discretionary,Specialty Stores,2026-08-20,2026-08-23,0
+SBRA,Real Estate,Health Care REITs,2026-08-20,2026-08-23,0
+SBUX,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+SCHL,Consumer Discretionary,Publishing,2026-08-20,2026-08-23,0
+SCHW,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+SCI,Consumer Discretionary,Specialized Consumer Services,2026-08-20,2026-08-23,0
+SCL,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+SCSC,Information Technology,Technology Distributors,2026-08-20,2026-08-23,0
+SDGR,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+SEDG,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+SEE,Materials,Paper & Plastic Packaging Products & Materials,,,2
+SEIC,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+SEM,Health Care,Health Care Facilities,,,2
+SEZL,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+SF,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+SFBS,Financials,Regional Banks,2026-08-20,2026-08-23,0
+SFM,Consumer Staples,Food Retail,2026-08-20,2026-08-23,0
+SFNC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+SGI,Consumer Discretionary,Home Furnishings,2026-08-20,2026-08-23,0
+SHAK,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+SHC,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+SHOO,Consumer Discretionary,Footwear,2026-08-20,2026-08-23,0
+SHW,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+SHY,,,2026-08-20,2026-08-23,0
+SIG,Consumer Discretionary,Specialty Stores,2026-08-20,2026-08-23,0
+SIGI,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+SITM,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+SJM,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+SKT,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+SKY,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+SKYW,Industrials,Passenger Airlines,2026-08-20,2026-08-23,0
+SLAB,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+SLB,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+SLG,Real Estate,Office REITs,2026-08-20,2026-08-23,0
+SLGN,Materials,"Metal, Glass & Plastic Containers",2026-08-20,2026-08-23,0
+SLM,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+SLVM,Materials,Paper Products,2026-08-20,2026-08-23,0
+SM,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+SMCI,Information Technology,"Technology Hardware, Storage & Peripherals",2026-08-20,2026-08-23,0
+SMG,Materials,Fertilizers & Agricultural Chemicals,2026-08-20,2026-08-23,0
+SMPL,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+SMTC,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+SNA,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+SNCY,Industrials,Passenger Airlines,,,2
+SNDK,Information Technology,"Technology Hardware, Storage & Peripherals",2026-08-20,2026-08-23,0
+SNDR,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+SNEX,Financials,Investment Banking & Brokerage,2026-08-20,2026-08-23,0
+SNPS,Information Technology,Application Software,2026-08-20,2026-08-23,0
+SNX,Information Technology,Technology Distributors,2026-08-20,2026-08-23,0
+SO,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+SOLS,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+SOLV,Health Care,Health Care Technology,2026-08-20,2026-08-23,0
+SON,Materials,Paper & Plastic Packaging Products & Materials,2026-08-20,2026-08-23,0
+SONO,Consumer Discretionary,Consumer Electronics,2026-08-20,2026-08-23,0
+SPG,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+SPGI,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+SPNT,Financials,Reinsurance,2026-08-20,2026-08-23,0
+SPSC,Information Technology,Application Software,2026-08-20,2026-08-23,0
+SPXC,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+SPY,,,2026-08-20,2026-08-23,0
+SR,Utilities,Gas Utilities,2026-08-20,2026-08-23,0
+SRE,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+SRPT,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+SSB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+SSD,Industrials,Building Products,2026-08-20,2026-08-23,0
+ST,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+STAA,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+STAG,Real Estate,Industrial REITs,2026-08-20,2026-08-23,0
+STC,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+STE,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+STEL,Financials,Regional Banks,2026-08-23,2026-08-23,0
+STEP,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+STLD,Materials,Steel,2026-08-20,2026-08-23,0
+STRA,Consumer Discretionary,Education Services,2026-08-20,2026-08-23,0
+STRL,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+STT,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+STWD,Financials,Mortgage REITs,2026-08-20,2026-08-23,0
+STX,Information Technology,"Technology Hardware, Storage & Peripherals",2026-08-20,2026-08-23,0
+STZ,Consumer Staples,Distillers & Vintners,2026-08-20,2026-08-23,0
+SUPN,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+SW,Materials,Paper & Plastic Packaging Products & Materials,2026-08-20,2026-08-23,0
+SWK,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+SWKS,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+SWX,Utilities,Gas Utilities,2026-08-20,2026-08-23,0
+SXI,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+SXT,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+SYF,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+SYK,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+SYNA,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+SYY,Consumer Staples,Food Distributors,2026-08-20,2026-08-23,0
+T,Communication Services,Integrated Telecommunication Services,2026-08-20,2026-08-23,0
+TALO,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+TAP,Consumer Staples,Brewers,2026-08-20,2026-08-23,0
+TBBK,Financials,Regional Banks,2026-08-20,2026-08-23,0
+TCBI,Financials,Regional Banks,2026-08-20,2026-08-23,0
+TDC,Information Technology,IT Consulting & Other Services,2026-08-20,2026-08-23,0
+TDG,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+TDS,Communication Services,Integrated Telecommunication Services,2026-08-20,2026-08-23,0
+TDW,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+TDY,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+TECH,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+TEL,Information Technology,Electronic Manufacturing Services,2026-08-20,2026-08-23,0
+TER,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+TEX,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+TFC,Financials,Diversified Banks,2026-08-20,2026-08-23,0
+TFIN,Financials,Regional Banks,2026-08-20,2026-08-23,0
+TFX,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+TGNA,Communication Services,Broadcasting,,,2
+TGT,Consumer Staples,Consumer Staples Merchandise Retail,2026-08-20,2026-08-23,0
+TGTX,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+THC,Health Care,Health Care Facilities,2026-08-20,2026-08-23,0
+THG,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+THO,Consumer Discretionary,Leisure Products,2026-08-20,2026-08-23,0
+THS,Consumer Staples,Packaged Foods & Meats,,,2
+TILE,Industrials,Office Services & Supplies,2026-08-20,2026-08-23,0
+TJX,Consumer Discretionary,Apparel Retail,2026-08-20,2026-08-23,0
+TKO,Communication Services,Movies & Entertainment,2026-08-20,2026-08-23,0
+TKR,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+TLN,Utilities,Independent Power Producers & Energy Traders,2026-08-20,2026-08-23,0
+TLT,,,2026-08-20,2026-08-23,0
+TMDX,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+TMHC,Consumer Discretionary,Homebuilding,2026-08-23,2026-08-23,0
+TMO,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+TMUS,Communication Services,Wireless Telecommunication Services,2026-08-20,2026-08-23,0
+TNDM,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+TNL,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+TOL,Consumer Discretionary,Homebuilding,2026-08-20,2026-08-23,0
+TPH,Consumer Discretionary,Homebuilding,,,2
+TPL,Energy,Oil & Gas Exploration & Production,2026-08-20,2026-08-23,0
+TPR,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+TREX,Industrials,Building Products,2026-08-20,2026-08-23,0
+TRGP,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+TRIP,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+TRMB,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+TRMK,Financials,Regional Banks,2026-08-20,2026-08-23,0
+TRN,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+TRNO,Real Estate,Industrial REITs,2026-08-20,2026-08-23,0
+TROW,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+TRU,Industrials,Research & Consulting Services,2026-08-20,2026-08-23,0
+TRUP,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+TRV,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+TSCO,Consumer Discretionary,Other Specialty Retail,2026-08-20,2026-08-23,0
+TSLA,Consumer Discretionary,Automobile Manufacturers,2026-08-20,2026-08-23,0
+TSN,Consumer Staples,Packaged Foods & Meats,2026-08-20,2026-08-23,0
+TT,Industrials,Building Products,2026-08-20,2026-08-23,0
+TTC,Industrials,Agricultural & Farm Machinery,2026-08-20,2026-08-23,0
+TTD,Communication Services,Advertising,2026-08-20,2026-08-23,0
+TTEK,Industrials,Construction & Engineering,2026-08-20,2026-08-23,0
+TTMI,Information Technology,Electronic Manufacturing Services,2026-08-20,2026-08-23,0
+TTWO,Communication Services,Interactive Home Entertainment,2026-08-20,2026-08-23,0
+TWLO,Information Technology,Systems Software,2026-08-20,2026-08-23,0
+TWO,Financials,Mortgage REITs,2026-08-20,2026-08-23,0
+TXN,Information Technology,Semiconductors,2026-08-20,2026-08-23,0
+TXNM,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+TXRH,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+TXT,Industrials,Aerospace & Defense,2026-08-20,2026-08-23,0
+TYL,Information Technology,Application Software,2026-08-20,2026-08-23,0
+UAL,Industrials,Passenger Airlines,2026-08-20,2026-08-23,0
+UBER,Industrials,Passenger Ground Transportation,2026-08-20,2026-08-23,0
+UBSI,Financials,Regional Banks,2026-08-20,2026-08-23,0
+UCB,Financials,Regional Banks,2026-08-20,2026-08-23,0
+UCTT,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+UDR,Real Estate,Multi-Family Residential REITs,2026-08-20,2026-08-23,0
+UE,Real Estate,Retail REITs,2026-08-20,2026-08-23,0
+UFPI,Industrials,Building Products,2026-08-20,2026-08-23,0
+UFPT,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+UGI,Utilities,Gas Utilities,2026-08-20,2026-08-23,0
+UHS,Health Care,Health Care Facilities,2026-08-20,2026-08-23,0
+ULS,Industrials,,2026-08-20,2026-08-23,0
+ULTA,Consumer Discretionary,Other Specialty Retail,2026-08-20,2026-08-23,0
+UMBF,Financials,Regional Banks,2026-08-20,2026-08-23,0
+UNF,Industrials,Diversified Support Services,2026-08-20,2026-08-23,0
+UNFI,Consumer Staples,Food Retail,2026-08-20,2026-08-23,0
+UNH,Health Care,Managed Health Care,2026-08-20,2026-08-23,0
+UNM,Financials,Life & Health Insurance,2026-08-20,2026-08-23,0
+UNP,Industrials,Rail Transportation,2026-08-20,2026-08-23,0
+UPBD,Consumer Discretionary,Computer & Electronics Retail,2026-08-20,2026-08-23,0
+UPS,Industrials,Air Freight & Logistics,2026-08-20,2026-08-23,0
+UPWK,Industrials,Human Resource & Employment Services,2026-08-20,2026-08-23,0
+URBN,Consumer Discretionary,Apparel Retail,2026-08-20,2026-08-23,0
+URI,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+USB,Financials,Diversified Banks,2026-08-20,2026-08-23,0
+USFD,Consumer Staples,Food Distributors,2026-08-20,2026-08-23,0
+USPH,Health Care,Health Care Facilities,2026-08-20,2026-08-23,0
+UTHR,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+UUP,,,2026-08-20,2026-08-23,0
+UVV,Consumer Staples,Tobacco,2026-08-20,2026-08-23,0
+V,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+VAC,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+VAL,Energy,Oil & Gas Drilling,2026-08-20,2026-08-23,0
+VC,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+VCEL,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+VCTR,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+VCYT,Health Care,Health Care Services,2026-08-20,2026-08-23,0
+VECO,Information Technology,Semiconductor Materials & Equipment,2026-08-20,2026-08-23,0
+VFC,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2026-08-20,2026-08-23,0
+VIAV,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+VICI,Real Estate,Hotel & Resort REITs,2026-08-20,2026-08-23,0
+VICR,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+VIRT,Financials,Financial Exchanges & Data,2026-08-20,2026-08-23,0
+VITL,Consumer Staples,Agricultural Products & Services,2026-08-20,2026-08-23,0
+VLO,Energy,Oil & Gas Refining & Marketing,2026-08-20,2026-08-23,0
+VLTO,Industrials,Environmental & Facilities Services,2026-08-20,2026-08-23,0
+VLY,Financials,Regional Banks,2026-08-20,2026-08-23,0
+VMC,Materials,Construction Materials,2026-08-20,2026-08-23,0
+VMI,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+VNO,Real Estate,Office REITs,2026-08-20,2026-08-23,0
+VNOM,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+VNT,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+VOYA,Financials,Multi-Sector Holdings,2026-08-20,2026-08-23,0
+VRE,Real Estate,Office REITs,,,2
+VRRM,Industrials,Data Processing & Outsourced Services,2026-08-20,2026-08-23,0
+VRSK,Industrials,Research & Consulting Services,2026-08-20,2026-08-23,0
+VRSN,Information Technology,Internet Services & Infrastructure,2026-08-20,2026-08-23,0
+VRTS,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+VRTX,Health Care,Biotechnology,2026-08-20,2026-08-23,0
+VSAT,Information Technology,Communications Equipment,2026-08-20,2026-08-23,0
+VSCO,Consumer Discretionary,Apparel Retail,,,2
+VSH,Information Technology,Electronic Components,2026-08-20,2026-08-23,0
+VSNT,Communication Services,Cable & Satellite,2026-08-20,2026-08-23,0
+VST,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+VTR,Real Estate,Health Care REITs,2026-08-20,2026-08-23,0
+VTRS,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+VVV,Consumer Discretionary,Automotive Retail,2026-08-20,2026-08-23,0
+VZ,Communication Services,Integrated Telecommunication Services,2026-08-20,2026-08-23,0
+WAB,Industrials,Construction Machinery & Heavy Transportation Equipment,2026-08-20,2026-08-23,0
+WAFD,Financials,Regional Banks,2026-08-20,2026-08-23,0
+WAL,Financials,Regional Banks,2026-08-20,2026-08-23,0
+WAT,Health Care,Life Sciences Tools & Services,2026-08-20,2026-08-23,0
+WAY,Health Care,Health Care Technology,2026-08-20,2026-08-23,0
+WBD,Communication Services,Broadcasting,2026-08-20,2026-08-23,0
+WBS,Financials,Regional Banks,2026-08-20,2026-08-23,0
+WCC,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+WD,Financials,Commercial & Residential Mortgage Finance,2026-08-20,2026-08-23,0
+WDAY,Information Technology,Application Software,2026-08-20,2026-08-23,0
+WDC,Information Technology,"Technology Hardware, Storage & Peripherals",2026-08-20,2026-08-23,0
+WDFC,Consumer Staples,Household Products,2026-08-20,2026-08-23,0
+WEC,Utilities,Electric Utilities,2026-08-20,2026-08-23,0
+WELL,Real Estate,Health Care REITs,2026-08-20,2026-08-23,0
+WERN,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+WEX,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+WFC,Financials,Diversified Banks,2026-08-20,2026-08-23,0
+WFRD,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+WGO,Consumer Discretionary,Automobile Manufacturers,2026-08-20,2026-08-23,0
+WH,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",2026-08-20,2026-08-23,0
+WHD,Energy,Oil & Gas Equipment & Services,2026-08-20,2026-08-23,0
+WHR,Consumer Discretionary,Household Appliances,2026-08-20,2026-08-23,0
+WINA,Consumer Discretionary,Other Specialty Retail,2026-08-20,2026-08-23,0
+WING,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+WKC,Energy,Oil & Gas Refining & Marketing,2026-08-20,2026-08-23,0
+WLK,Materials,Specialty Chemicals,2026-08-20,2026-08-23,0
+WLY,Communication Services,Publishing,2026-08-20,2026-08-23,0
+WM,Industrials,Environmental & Facilities Services,2026-08-20,2026-08-23,0
+WMB,Energy,Oil & Gas Storage & Transportation,2026-08-20,2026-08-23,0
+WMG,Communication Services,Movies & Entertainment,2026-08-20,2026-08-23,0
+WMS,Industrials,Building Products,2026-08-20,2026-08-23,0
+WMT,Consumer Staples,Consumer Staples Merchandise Retail,2026-08-20,2026-08-23,0
+WOR,Industrials,Building Products,2026-08-20,2026-08-23,0
+WPC,Real Estate,Diversified REITs,2026-08-20,2026-08-23,0
+WRB,Financials,Property & Casualty Insurance,2026-08-20,2026-08-23,0
+WRLD,Financials,Consumer Finance,2026-08-20,2026-08-23,0
+WS,Materials,Steel,2026-08-20,2026-08-23,0
+WSC,Industrials,Office Services & Supplies,2026-08-20,2026-08-23,0
+WSFS,Financials,Regional Banks,2026-08-20,2026-08-23,0
+WSM,Consumer Discretionary,Homefurnishing Retail,2026-08-20,2026-08-23,0
+WSO,Industrials,Trading Companies & Distributors,2026-08-20,2026-08-23,0
+WST,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+WT,Financials,Asset Management & Custody Banks,2026-08-20,2026-08-23,0
+WTFC,Financials,Regional Banks,2026-08-20,2026-08-23,0
+WTRG,Utilities,Water Utilities,2026-08-20,2026-08-23,0
+WTS,Industrials,Building Products,2026-08-20,2026-08-23,0
+WTW,Financials,Insurance Brokers,2026-08-20,2026-08-23,0
+WWD,Industrials,Electrical Components & Equipment,2026-08-20,2026-08-23,0
+WWW,Consumer Discretionary,Footwear,2026-08-20,2026-08-23,0
+WY,Real Estate,Timber REITs,2026-08-20,2026-08-23,0
+WYNN,Consumer Discretionary,Casinos & Gaming,2026-08-20,2026-08-23,0
+XEL,Utilities,Multi-Utilities,2026-08-20,2026-08-23,0
+XLB,,,2026-08-20,2026-08-23,0
+XLC,,,2026-08-20,2026-08-23,0
+XLE,,,2026-08-20,2026-08-23,0
+XLF,,,2026-08-20,2026-08-23,0
+XLI,,,2026-08-20,2026-08-23,0
+XLK,,,2026-08-20,2026-08-23,0
+XLP,,,2026-08-20,2026-08-23,0
+XLRE,,,2026-08-20,2026-08-23,0
+XLU,,,2026-08-20,2026-08-23,0
+XLV,,,2026-08-20,2026-08-23,0
+XLY,,,2026-08-20,2026-08-23,0
+XOM,Energy,Integrated Oil & Gas,2026-08-20,2026-08-23,0
+XPEL,Consumer Discretionary,Automotive Parts & Equipment,2026-08-20,2026-08-23,0
+XPO,Industrials,Cargo Ground Transportation,2026-08-20,2026-08-23,0
+XRAY,Health Care,Health Care Supplies,2026-08-20,2026-08-23,0
+XYL,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0
+XYZ,Financials,Transaction & Payment Processing Services,2026-08-20,2026-08-23,0
+YELP,Communication Services,Interactive Media & Services,2026-08-20,2026-08-23,0
+YETI,Consumer Discretionary,Leisure Products,2026-08-20,2026-08-23,0
+YOU,Information Technology,Application Software,2026-08-20,2026-08-23,0
+YUM,Consumer Discretionary,Restaurants,2026-08-20,2026-08-23,0
+ZBH,Health Care,Health Care Equipment,2026-08-20,2026-08-23,0
+ZBRA,Information Technology,Electronic Equipment & Instruments,2026-08-20,2026-08-23,0
+ZD,Communication Services,Advertising,2026-08-20,2026-08-23,0
+ZION,Financials,Regional Banks,2026-08-20,2026-08-23,0
+ZTS,Health Care,Pharmaceuticals,2026-08-20,2026-08-23,0
+ZWS,Industrials,Industrial Machinery & Supplies & Components,2026-08-20,2026-08-23,0

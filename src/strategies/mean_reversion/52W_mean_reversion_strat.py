@@ -30,6 +30,8 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 
+from data_pipeline import source as price_source
+from data_pipeline import store
 from trade_models import Signal, Side
 
 
@@ -58,10 +60,80 @@ REGIME_MIN_ABOVE      = 2      # at least 2 of 3 ETFs above 200-SMA → risk-on
 
 DATA_PERIOD           = "2y"   # enough for 252-day high + 200-day MA
 
+#: Explicit calendar-day equivalents of DATA_PERIOD / the regime's period="1y".
+#: Pinned so the download path and the lake path request the *identical* window;
+#: every window here is a trailing slice (``iloc[-n:]``, ``min(252, len(s))``), so
+#: unlike the rotation sleeve there is no expanding() to protect -- but keeping
+#: the windows equal is what makes the canary a real comparison.
+LOOKBACK_DAYS         = 730
+REGIME_LOOKBACK_DAYS  = 365
+
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+def _window(days: int, as_of: Optional[pd.Timestamp] = None) -> tuple:
+    """Return an inclusive (start, end) window ``days`` wide."""
+    end = pd.Timestamp(as_of).normalize() if as_of is not None else pd.Timestamp.now().normalize()
+    return end - pd.Timedelta(days=days), end
+
+
+def _close_panel(
+    symbols: List[str],
+    days: int,
+    as_of: Optional[pd.Timestamp] = None,
+    *,
+    context: str,
+) -> pd.DataFrame:
+    """Load a date x symbol panel of adjusted closes from the active source.
+
+    Returns the same shape either way, so callers need no source-specific code.
+    ``adj_close`` is what the download path produced via ``auto_adjust=True``'s
+    ``Close``; there is no fallback between sources.
+    """
+    symbols = [str(s).strip().upper() for s in symbols if str(s).strip()]
+    if not symbols:
+        return pd.DataFrame(dtype="float64")
+
+    start, end = _window(days, as_of)
+
+    if price_source.using_lake():
+        panel = store.load_close_matrix(symbols, start=start, end=end)
+        last = None if panel.empty else pd.Timestamp(panel.index[-1])
+        price_source.log_staleness(last, context=context)
+        return panel
+
+    data = yf.download(
+        symbols,
+        start=start.strftime("%Y-%m-%d"),
+        end=(end + pd.Timedelta(days=1)).strftime("%Y-%m-%d"),
+        group_by="ticker",
+        auto_adjust=True,
+        progress=False,
+        threads=True,
+    )
+    if data is None or len(data) == 0:
+        return pd.DataFrame(dtype="float64")
+
+    out: Dict[str, pd.Series] = {}
+    multi = isinstance(data.columns, pd.MultiIndex)
+    for sym in symbols:
+        try:
+            sub = data[sym] if multi else data
+            series = sub["Close"]
+            if isinstance(series, pd.DataFrame):
+                series = series.iloc[:, 0]
+            series = series.dropna()
+            if len(series) > 0:
+                out[sym] = series
+        except (KeyError, IndexError):
+            continue
+
+    if not out:
+        return pd.DataFrame(dtype="float64")
+    return pd.DataFrame(out).sort_index()
+
 
 def _sma(series: pd.Series, period: int) -> float:
     """Return simple moving average of the last *period* values."""
@@ -82,37 +154,36 @@ def _high_52w(series: pd.Series) -> float:
 # 1. Regime filter (R2 Trend Stack)
 # ---------------------------------------------------------------------------
 
-def check_regime() -> bool:
+def check_regime(as_of: Optional[pd.Timestamp] = None) -> bool:
     """Return True (risk-on) if >= 2 of SPY/IJH/IJR are above their 200-day SMA."""
     try:
-        data = yf.download(
-            list(REGIME_ETFS),
-            period="1y",
-            group_by="ticker",
-            auto_adjust=True,
-            progress=False,
-            threads=True,
+        panel = _close_panel(
+            list(REGIME_ETFS), REGIME_LOOKBACK_DAYS, as_of, context="pullback_regime"
         )
     except Exception:
-        logger.warning("Regime check failed (download error). Defaulting to risk-ON.")
+        logger.warning("Regime check failed (data error). Defaulting to risk-ON.")
+        return True
+
+    if panel.empty:
+        logger.warning("Regime check got no data. Defaulting to risk-ON.")
         return True
 
     above = 0
     for etf in REGIME_ETFS:
-        try:
-            s: pd.Series = data[etf]["Close"].dropna()
-            if len(s) < REGIME_SMA_PERIOD:
-                continue
-            if float(s.iloc[-1]) > _sma(s, REGIME_SMA_PERIOD):
-                above += 1
-        except (KeyError, IndexError):
+        if etf not in panel.columns:
             continue
+        s = panel[etf].dropna()
+        if len(s) < REGIME_SMA_PERIOD:
+            continue
+        if float(s.iloc[-1]) > _sma(s, REGIME_SMA_PERIOD):
+            above += 1
 
     risk_on = above >= REGIME_MIN_ABOVE
     logger.info(
-        "R2 regime: %d/%d ETFs above %d-SMA → %s",
+        "R2 regime: %d/%d ETFs above %d-SMA → %s (source=%s)",
         above, len(REGIME_ETFS), REGIME_SMA_PERIOD,
         "RISK-ON" if risk_on else "RISK-OFF",
+        price_source.active_source(),
     )
     return risk_on
 
@@ -121,7 +192,49 @@ def check_regime() -> bool:
 # 2. Score universe — find candidates
 # ---------------------------------------------------------------------------
 
-def _score_universe(universe_file: str) -> pd.DataFrame:
+def _score_series(symbol: str, series: pd.Series) -> Optional[Dict]:
+    """Apply the entry gates to one price series. Returns a record or None.
+
+    Extracted so both the lake and download paths run byte-identical gate logic
+    -- the gates are the decision, and they should live in exactly one place.
+    """
+    s = series.dropna()
+    if len(s) < max(HIGH_LOOKBACK, MA_LOOKBACK):
+        return None
+
+    cur_price = float(s.iloc[-1])
+    high52 = _high_52w(s)
+    ma200 = _sma(s, MA_LOOKBACK)
+
+    if cur_price <= 0 or np.isnan(high52) or np.isnan(ma200):
+        return None
+
+    pullback = (high52 - cur_price) / high52
+
+    # Entry depth gate
+    if pullback < ENTRY_DEPTH:
+        return None
+
+    # F2: not in freefall
+    if cur_price < MA_FREEFALL_RATIO * high52:
+        return None
+
+    # F3: not structurally broken
+    if cur_price < MA_BROKEN_RATIO * ma200:
+        return None
+
+    return {
+        "symbol": symbol,
+        "pullback": round(pullback, 4),
+        "price": round(cur_price, 4),
+        "high52": round(high52, 4),
+        "ma200": round(ma200, 4),
+    }
+
+
+def _score_universe(
+    universe_file: str, as_of: Optional[pd.Timestamp] = None
+) -> pd.DataFrame:
     """Return DataFrame of stocks meeting entry criteria, ranked by pullback depth."""
     if not os.path.exists(universe_file):
         universe_file = os.path.join(os.path.dirname(__file__), "../../../universe.csv")
@@ -129,61 +242,53 @@ def _score_universe(universe_file: str) -> pd.DataFrame:
         logger.error("universe.csv not found")
         return pd.DataFrame()
 
-    tickers = pd.read_csv(universe_file)["Symbol"].tolist()
+    tickers = [
+        str(t).strip().upper()
+        for t in pd.read_csv(universe_file)["Symbol"].tolist()
+        if str(t).strip()
+    ]
     records: List[Dict] = []
 
-    chunk_size = 300
-    for i in range(0, len(tickers), chunk_size):
-        batch = tickers[i: i + chunk_size]
+    if price_source.using_lake():
+        # One read serves the whole universe; no chunking needed off local disk.
         try:
-            data = yf.download(
-                batch,
-                period=DATA_PERIOD,
-                group_by="ticker",
-                auto_adjust=True,
-                progress=False,
-                threads=True,
+            panel = _close_panel(
+                tickers, LOOKBACK_DAYS, as_of, context="pullback_universe"
             )
         except Exception:
-            logger.exception("Download failed for batch %d:%d", i, i + chunk_size)
-            continue
+            logger.exception("Lake read failed for universe scoring")
+            return pd.DataFrame()
 
-        for sym in batch:
+        for sym in panel.columns:
+            record = _score_series(str(sym), panel[sym])
+            if record is not None:
+                records.append(record)
+
+        logger.info(
+            "Scored %d symbol(s) from the lake (%d requested, %d candidates)",
+            len(panel.columns), len(tickers), len(records),
+        )
+    else:
+        chunk_size = 300
+        for i in range(0, len(tickers), chunk_size):
+            batch = tickers[i: i + chunk_size]
             try:
-                s: pd.Series = data[sym]["Close"].dropna()
-                if len(s) < max(HIGH_LOOKBACK, MA_LOOKBACK):
-                    continue
-
-                cur_price = float(s.iloc[-1])
-                high52    = _high_52w(s)
-                ma200     = _sma(s, MA_LOOKBACK)
-
-                if cur_price <= 0 or np.isnan(high52) or np.isnan(ma200):
-                    continue
-
-                pullback = (high52 - cur_price) / high52
-
-                # Entry depth gate
-                if pullback < ENTRY_DEPTH:
-                    continue
-
-                # F2: not in freefall
-                if cur_price < MA_FREEFALL_RATIO * high52:
-                    continue
-
-                # F3: not structurally broken
-                if cur_price < MA_BROKEN_RATIO * ma200:
-                    continue
-
-                records.append({
-                    "symbol":   sym,
-                    "pullback": round(pullback, 4),
-                    "price":    round(cur_price, 4),
-                    "high52":   round(high52, 4),
-                    "ma200":    round(ma200, 4),
-                })
-            except (KeyError, IndexError):
+                panel = _close_panel(
+                    batch, LOOKBACK_DAYS, as_of, context="pullback_universe"
+                )
+            except Exception:
+                logger.exception("Download failed for batch %d:%d", i, i + chunk_size)
                 continue
+
+            for sym in panel.columns:
+                record = _score_series(str(sym), panel[sym])
+                if record is not None:
+                    records.append(record)
+
+        logger.info(
+            "Scored %d requested symbol(s) via yfinance (%d candidates)",
+            len(tickers), len(records),
+        )
 
     df = pd.DataFrame(records)
     if df.empty:
@@ -207,17 +312,8 @@ def _get_entry_dates(
 
     prefix = f"{strategy_id}:"
     try:
-        try:
-            from alpaca.trading.requests import GetOrdersRequest
-            from alpaca.trading.enums import QueryOrderStatus
-            req = GetOrdersRequest(
-                status=QueryOrderStatus.ALL,
-                limit=500,
-                nested=True,
-            )
-            orders = list(client.get_orders(req))
-        except Exception:
-            orders = list(client.get_orders(status="all", limit=500))
+        from trade_models import fetch_all_orders
+        orders = fetch_all_orders(client, status="all")
     except Exception:
         logger.exception("Failed to fetch order history for entry-date lookup")
         return entry_dates
@@ -259,6 +355,7 @@ def _generate_exit_signals(
     held_symbols: Set[str],
     strategy_id: str,
     universe_file: str,
+    as_of: Optional[pd.Timestamp] = None,
 ) -> List[Signal]:
     """Generate SELL signals for positions that hit target, stop, or timeout."""
     if not held_symbols:
@@ -278,32 +375,26 @@ def _generate_exit_signals(
     except Exception:
         logger.warning("Could not fetch Alpaca positions/orders — stop/timeout checks may be skipped")
 
-    # Download current prices + 52w high for held stocks
-    held_list = list(held_symbols)
+    # Current prices + 52w high for held stocks
+    held_list = sorted(held_symbols)
     current_data: Dict[str, Dict] = {}
     try:
-        data = yf.download(
-            held_list,
-            period=DATA_PERIOD,
-            group_by="ticker",
-            auto_adjust=True,
-            progress=False,
-            threads=True,
+        panel = _close_panel(
+            held_list, LOOKBACK_DAYS, as_of, context="pullback_exits"
         )
         for sym in held_list:
-            try:
-                s: pd.Series = data[sym]["Close"].dropna()
-                if len(s) < 10:
-                    continue
-                cur_price = float(s.iloc[-1])
-                high52    = _high_52w(s)
-                if cur_price > 0 and not np.isnan(high52):
-                    pullback = (high52 - cur_price) / high52
-                    current_data[sym] = {"price": cur_price, "high52": high52, "pullback": pullback}
-            except (KeyError, IndexError):
+            if sym not in panel.columns:
                 continue
+            s = panel[sym].dropna()
+            if len(s) < 10:
+                continue
+            cur_price = float(s.iloc[-1])
+            high52 = _high_52w(s)
+            if cur_price > 0 and not np.isnan(high52):
+                pullback = (high52 - cur_price) / high52
+                current_data[sym] = {"price": cur_price, "high52": high52, "pullback": pullback}
     except Exception:
-        logger.exception("Failed to download prices for exit checks")
+        logger.exception("Failed to load prices for exit checks")
 
     now = datetime.now(tz=None)
     signals: List[Signal] = []
@@ -313,7 +404,21 @@ def _generate_exit_signals(
         info = current_data.get(sym)
 
         if info is None:
-            reason = "exit:data_unavailable"
+            # Deliberately does NOT liquidate. Absent price data is an
+            # infrastructure condition, not a market signal, and it became far
+            # more likely once the source moved to a local lake (a failed sync,
+            # a name dropped from the universe). Selling on it would realise a
+            # loss and pay spread because of a plumbing fault.
+            #
+            # Asymmetry: failing to exit is recoverable -- the next run exits.
+            # Selling by mistake is not. Stop-loss and timeout below are also
+            # skipped for this symbol, since both need a current price.
+            logger.error(
+                "PRICE_DATA_MISSING: no usable bars for held %s — holding "
+                "position, exit checks deferred (source=%s)",
+                sym, price_source.active_source(),
+            )
+            continue
         else:
             cur_pb = info["pullback"]
 
@@ -366,6 +471,7 @@ def generate_signals(
     budget: Optional[float] = None,
     strategy_id: str = "strategies.mean_reversion.high_pullback_reversion",
     held_symbols: Optional[Set[str]] = None,
+    as_of: Optional[pd.Timestamp] = None,
 ) -> List[Signal]:
     """Main entry point called by trade.py.
 
@@ -386,13 +492,15 @@ def generate_signals(
         universe_file = os.path.join(os.path.dirname(__file__), "../../../universe.csv")
 
     # ── Step 1: Score universe (entry filters built-in) ──
-    scores_df = _score_universe(universe_file)
+    scores_df = _score_universe(universe_file, as_of)
 
     # ── Step 2: EXIT signals (always, even in risk-off) ──
-    exit_signals = _generate_exit_signals(scores_df, held_symbols, strategy_id, universe_file)
+    exit_signals = _generate_exit_signals(
+        scores_df, held_symbols, strategy_id, universe_file, as_of
+    )
 
     # ── Step 3: Regime gate ──
-    if not check_regime():
+    if not check_regime(as_of):
         logger.info("R2 regime RISK-OFF → no new buys. Returning %d exit signals.", len(exit_signals))
         return exit_signals
 

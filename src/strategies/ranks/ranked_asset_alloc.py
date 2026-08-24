@@ -15,12 +15,14 @@ from __future__ import annotations
 
 import datetime
 import logging
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 import pandas as pd
 import yfinance as yf
 
+from data_pipeline import source as price_source
+from data_pipeline import store
 from trade_models import Signal, Side
 
 
@@ -67,14 +69,51 @@ DAF_MAX_LEV     = 2.0
 DAF_VOL_LB      = 21     # rolling-vol window
 DAF_VOL_PCT     = 35     # percentile threshold
 
+# ---------------------------------------------------------------------------
+# Data window
+# ---------------------------------------------------------------------------
+#: Calendar days of history to load. Pinned explicitly rather than relying on
+#: yfinance's ``period="2y"`` so that both the download path and the lake path
+#: see the *identical* window.
+#:
+#: This matters more than it looks. ``_daf_leverage`` uses ``expanding()``, which
+#: consumes all history it is handed -- not a fixed window. Feeding it the lake's
+#: full 3+ years instead of 2 would move the 35th-percentile volatility
+#: threshold and flip the 2x leverage decision on different days. Widening this
+#: is a deliberate, separately-tested change, never a side effect of swapping
+#: data source.
+LOOKBACK_DAYS = 730
+
+#: Minimum sessions required before the sleeve will act. ``_regime`` needs a
+#: 200-day SPY average and ``_daf_leverage`` needs 200 return observations;
+#: below that both silently degrade to neutral/unleveraged rather than failing.
+MIN_SESSIONS = 200
+
 
 # ═══════════════════════════════════════════════════════════════════════════
-# Data download
+# Data loading
 # ═══════════════════════════════════════════════════════════════════════════
 
-def _download_data() -> tuple:
-    """Download ~2 years of daily data.  Returns (closes_df, ohlc_dict)."""
-    raw = yf.download(ALL_TICKERS, period="2y", progress=False, group_by="ticker")
+def _window(as_of: Optional[pd.Timestamp] = None) -> Tuple[pd.Timestamp, pd.Timestamp]:
+    """Return the (start, end) window, inclusive of both ends."""
+    end = pd.Timestamp(as_of).normalize() if as_of is not None else pd.Timestamp.now().normalize()
+    return end - pd.Timedelta(days=LOOKBACK_DAYS), end
+
+
+def _download_data(as_of: Optional[pd.Timestamp] = None) -> tuple:
+    """Download the lookback window from yfinance. Returns (closes, ohlc_dict).
+
+    ``auto_adjust`` is left unset, matching the original call: it defaults to
+    True, so every OHLC field comes back split/dividend adjusted.
+    """
+    start, end = _window(as_of)
+    raw = yf.download(
+        ALL_TICKERS,
+        start=start.strftime("%Y-%m-%d"),
+        end=(end + pd.Timedelta(days=1)).strftime("%Y-%m-%d"),
+        progress=False,
+        group_by="ticker",
+    )
 
     closes = pd.DataFrame()
     for t in ALL_TICKERS:
@@ -99,10 +138,49 @@ def _download_data() -> tuple:
             pass
 
     logger.info(
-        "Downloaded %d days, %d tickers, OHLC for %d sectors",
+        "yfinance: %d sessions, %d tickers, OHLC for %d sectors",
         len(closes), len(closes.columns), len(ohlc_dict),
     )
     return closes, ohlc_dict
+
+
+def _lake_data(as_of: Optional[pd.Timestamp] = None) -> tuple:
+    """Read the same window from the price lake. Returns (closes, ohlc_dict).
+
+    ``adj_close`` is used for the close panel, which is what the download path
+    got from ``auto_adjust=True``'s ``Close``. The OHLC dict is rescaled onto the
+    adjusted basis for the same reason -- the ATR trend signal reads highs and
+    lows, and mixing raw highs with adjusted closes would corrupt the term that
+    carries most of the composite rank weight.
+    """
+    start, end = _window(as_of)
+
+    closes = store.load_close_matrix(ALL_TICKERS, start=start, end=end)
+    # Preserve ALL_TICKERS ordering so column positions match the download path.
+    closes = closes[[t for t in ALL_TICKERS if t in closes.columns]]
+
+    ohlc_dict = store.load_ohlc_adjusted(SECTOR_ETFS, start=start, end=end)
+
+    logger.info(
+        "lake: %d sessions, %d tickers, OHLC for %d sectors",
+        len(closes), len(closes.columns), len(ohlc_dict),
+    )
+    return closes, ohlc_dict
+
+
+def _load_data(as_of: Optional[pd.Timestamp] = None) -> tuple:
+    """Load price data from whichever source ``PRICE_SOURCE`` selects.
+
+    No cross-source fallback: if the lake is short, the sleeve declines to act
+    rather than quietly reasoning over a different window.
+    """
+    if price_source.using_lake():
+        closes, ohlc_dict = _lake_data(as_of)
+        last = None if closes.empty else pd.Timestamp(closes.index[-1])
+        price_source.log_staleness(last, context="ranked_asset_alloc")
+        return closes, ohlc_dict
+
+    return _download_data(as_of)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -396,14 +474,35 @@ def generate_signals(
         )
         return []
 
-    # ── Download data ─────────────────────────────────────────────────────
+    # ── Load data ─────────────────────────────────────────────────────────
     try:
-        closes, ohlc_dict = _download_data()
+        closes, ohlc_dict = _load_data()
     except Exception:
-        logger.exception("Ranked-alloc: data download failed")
+        logger.exception("Ranked-alloc: data load failed (source=%s)",
+                         price_source.active_source())
         return []
     if closes.empty:
-        logger.error("Ranked-alloc: no data")
+        logger.error("Ranked-alloc: no data (source=%s)", price_source.active_source())
+        return []
+
+    # Lookback guard. Below this, _regime degrades to neutral and
+    # _daf_leverage to 1x *without raising*, which would silently rotate the
+    # book on a technicality. Emitting nothing is the safe outcome; missing
+    # today's bar is not what this guards against.
+    if len(closes) < MIN_SESSIONS:
+        logger.error(
+            "Ranked-alloc: only %d session(s) available, need %d — skipping "
+            "(source=%s)",
+            len(closes), MIN_SESSIONS, price_source.active_source(),
+        )
+        return []
+
+    missing_sectors = [t for t in SECTOR_ETFS if t not in closes.columns]
+    if missing_sectors:
+        logger.error(
+            "Ranked-alloc: missing sector ETF(s) %s — skipping (source=%s)",
+            ", ".join(missing_sectors), price_source.active_source(),
+        )
         return []
 
     sector_closes = closes[SECTOR_ETFS]  # keep same row index as closes

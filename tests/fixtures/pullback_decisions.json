@@ -1,0 +1,181 @@
+{
+  "as_of": "2026-08-21",
+  "lookback_days": 730,
+  "regime_lookback_days": 365,
+  "entry_depth": 0.4,
+  "top_n": 5,
+  "regime": {
+    "above_count": 3,
+    "per_etf": {
+      "SPY": true,
+      "IJH": true,
+      "IJR": true
+    },
+    "risk_on": true
+  },
+  "candidate_count": 19,
+  "candidates": [
+    {
+      "symbol": "CLSK",
+      "pullback": 0.4836,
+      "price": 11.98,
+      "high52": 23.2,
+      "ma200": 12.6213
+    },
+    {
+      "symbol": "STRL",
+      "pullback": 0.4799,
+      "price": 516.81,
+      "high52": 993.74,
+      "ma200": 517.2494
+    },
+    {
+      "symbol": "MXL",
+      "pullback": 0.4797,
+      "price": 66.61,
+      "high52": 128.03,
+      "ma200": 45.0859
+    },
+    {
+      "symbol": "FOUR",
+      "pullback": 0.4763,
+      "price": 47.93,
+      "high52": 91.53,
+      "ma200": 52.8824
+    },
+    {
+      "symbol": "VICR",
+      "pullback": 0.472,
+      "price": 200.54,
+      "high52": 379.78,
+      "ma200": 197.4723
+    },
+    {
+      "symbol": "PSKY",
+      "pullback": 0.4681,
+      "price": 10.35,
+      "high52": 19.4602,
+      "ma200": 11.1615
+    },
+    {
+      "symbol": "ALGM",
+      "pullback": 0.4662,
+      "price": 37.16,
+      "high52": 69.62,
+      "ma200": 38.9229
+    },
+    {
+      "symbol": "ENPH",
+      "pullback": 0.4662,
+      "price": 38.61,
+      "high52": 72.33,
+      "ma200": 40.4035
+    },
+    {
+      "symbol": "UCTT",
+      "pullback": 0.464,
+      "price": 76.43,
+      "high52": 142.59,
+      "ma200": 64.9046
+    },
+    {
+      "symbol": "ICHR",
+      "pullback": 0.4638,
+      "price": 60.2,
+      "high52": 112.28,
+      "ma200": 52.32
+    },
+    {
+      "symbol": "GPK",
+      "pullback": 0.4629,
+      "price": 11.96,
+      "high52": 22.2697,
+      "ma200": 12.0214
+    },
+    {
+      "symbol": "AMKR",
+      "pullback": 0.4627,
+      "price": 50.26,
+      "high52": 93.55,
+      "ma200": 55.3244
+    },
+    {
+      "symbol": "HIMS",
+      "pullback": 0.4618,
+      "price": 33.78,
+      "high52": 62.76,
+      "ma200": 28.8901
+    },
+    {
+      "symbol": "SFM",
+      "pullback": 0.4537,
+      "price": 81.08,
+      "high52": 148.41,
+      "ma200": 79.0783
+    },
+    {
+      "symbol": "ON",
+      "pullback": 0.4459,
+      "price": 74.21,
+      "high52": 133.93,
+      "ma200": 77.0998
+    },
+    {
+      "symbol": "CHWY",
+      "pullback": 0.4326,
+      "price": 24.02,
+      "high52": 42.33,
+      "ma200": 26.3162
+    },
+    {
+      "symbol": "FWRD",
+      "pullback": 0.4298,
+      "price": 18.11,
+      "high52": 31.76,
+      "ma200": 19.603
+    },
+    {
+      "symbol": "VECO",
+      "pullback": 0.4237,
+      "price": 47.86,
+      "high52": 83.04,
+      "ma200": 43.0989
+    },
+    {
+      "symbol": "GLW",
+      "pullback": 0.414,
+      "price": 149.84,
+      "high52": 255.69,
+      "ma200": 140.4127
+    }
+  ],
+  "ranked_symbols": [
+    "CLSK",
+    "STRL",
+    "MXL",
+    "FOUR",
+    "VICR",
+    "PSKY",
+    "ALGM",
+    "ENPH",
+    "UCTT",
+    "ICHR",
+    "GPK",
+    "AMKR",
+    "HIMS",
+    "SFM",
+    "ON",
+    "CHWY",
+    "FWRD",
+    "VECO",
+    "GLW"
+  ],
+  "top_picks": [
+    "CLSK",
+    "STRL",
+    "MXL",
+    "FOUR",
+    "VICR"
+  ],
+  "boundary_symbols": []
+}

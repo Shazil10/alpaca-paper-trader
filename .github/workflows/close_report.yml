@@ -45,11 +45,13 @@ jobs:
           if git diff --staged --quiet; then
             echo "Reports unchanged — no commit."
           else
-            git commit -m "$(cat <<'EOF'
-chore: refresh daily reports and microsite snapshot
-
-EOF
-)"
+            # Plain -m, not a heredoc. The previous version closed its heredoc
+            # at column 0, which terminates the YAML block scalar and made this
+            # whole workflow file unparseable.
+            git commit -m "chore: refresh daily reports and microsite snapshot"
+            # Rebase first: the morning job also pushes to main (price lake), so
+            # a straight push can be rejected as non-fast-forward.
+            git pull --rebase --autostash origin main
             git push
           fi
 
