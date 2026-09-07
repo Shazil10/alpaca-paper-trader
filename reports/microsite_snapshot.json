@@ -1,8 +1,8 @@
 {
   "schema_version": 4,
-  "generated_at": "2026-09-04T19:12:16-04:00",
-  "snapshot_date": "2026-09-04",
-  "last_report_date": "2026-09-04",
+  "generated_at": "2026-09-07T19:40:20-04:00",
+  "snapshot_date": "2026-09-07",
+  "last_report_date": "2026-09-07",
   "status_label": "active",
   "source": "Alpaca paper account",
   "data_source": "Alpaca paper account",
@@ -23,7 +23,7 @@
   "strategy_count": 3,
   "total_committed": 36098.22,
   "total_remaining": 3982.6,
-  "total_market_value_attributed": 38116.98,
+  "total_market_value_attributed": 38116.04,
   "total_realized_pnl_closed": 4556.66,
   "strategy_order_realized_pnl_desc": [
     "high-pullback-reversion",
@@ -46,7 +46,7 @@
       "capital_cap": 15000,
       "committed": 14968.74,
       "remaining": 31.26,
-      "market_value_attributed": 21394.44,
+      "market_value_attributed": 21392.34,
       "realized_pnl_closed": 5088.63,
       "utilization_by_market_value": 142.6,
       "holdings": [
@@ -60,9 +60,9 @@
         {
           "symbol": "HIMS",
           "qty": 42.0,
-          "market_value": 1165.92,
-          "current_price": 27.76,
-          "unrealized_pl": -312.06
+          "market_value": 1163.82,
+          "current_price": 27.71,
+          "unrealized_pl": -314.16
         },
         {
           "symbol": "SFM",
@@ -94,7 +94,7 @@
       "capital_cap": 10000,
       "committed": 10080.82,
       "remaining": 0.0,
-      "market_value_attributed": 5860.02,
+      "market_value_attributed": 5862.37,
       "realized_pnl_closed": -228.13,
       "utilization_by_market_value": 58.6,
       "holdings": [
@@ -108,16 +108,16 @@
         {
           "symbol": "CAKE",
           "qty": 1.0,
-          "market_value": 107.75,
-          "current_price": 107.75,
-          "unrealized_pl": 8.25
+          "market_value": 107.58,
+          "current_price": 107.58,
+          "unrealized_pl": 8.08
         },
         {
           "symbol": "CORT",
           "qty": 1.0,
-          "market_value": 110.09,
-          "current_price": 110.09,
-          "unrealized_pl": -7.59
+          "market_value": 111.62,
+          "current_price": 111.62,
+          "unrealized_pl": -6.06
         },
         {
           "symbol": "EAT",
@@ -136,9 +136,9 @@
         {
           "symbol": "XNCR",
           "qty": 3.0,
-          "market_value": 78.84,
-          "current_price": 26.28,
-          "unrealized_pl": 15.24
+          "market_value": 79.83,
+          "current_price": 26.61,
+          "unrealized_pl": 16.23
         }
       ],
       "live_since_date": "2026-02-12",
@@ -156,23 +156,23 @@
       "capital_cap": 15000,
       "committed": 11048.66,
       "remaining": 3951.34,
-      "market_value_attributed": 10862.52,
+      "market_value_attributed": 10861.33,
       "realized_pnl_closed": -303.84,
       "utilization_by_market_value": 72.4,
       "holdings": [
         {
           "symbol": "XLE",
           "qty": 25.0,
-          "market_value": 1603.25,
-          "current_price": 64.1301,
-          "unrealized_pl": 131.5
+          "market_value": 1601.5,
+          "current_price": 64.06,
+          "unrealized_pl": 129.75
         },
         {
           "symbol": "XLF",
           "qty": 28.0,
-          "market_value": 1626.24,
-          "current_price": 58.08,
-          "unrealized_pl": 158.76
+          "market_value": 1626.8,
+          "current_price": 58.1,
+          "unrealized_pl": 159.32
         },
         {
           "symbol": "XLI",
