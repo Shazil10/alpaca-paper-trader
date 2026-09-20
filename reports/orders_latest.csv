@@ -1,4 +1,9 @@
 Submitted At,Symbol,Side,Status,Notional,Filled Qty,Filled Avg Price,Filled Value,PnL ($),Client Order ID,Strategy Type,Strategy Name
+2026-08-21 15:02:34.478791+00:00,QLYS,BUY,FILLED,0.000000,1.000000,181.140000,181.140000,,strategies.momentum.clenow_trend:79669636d222465b,Momentum,Clenow Trend
+2026-08-20 15:05:44.240535+00:00,SFM,BUY,FILLED,0.000000,120.000000,78.130000,9375.600000,,strategies.mean_reversion.high_pullback_reversion:12b032af019548f3,Mean Reversion,High Pullback Reversion
+2026-08-20 15:04:33.202336+00:00,MAN,SELL,FILLED,0.000000,1.000000,60.440000,60.440000,3.90,strategies.momentum.clenow_trend:5f29af3932324492,Momentum,Clenow Trend
+2026-08-19 15:03:39.259455+00:00,CRVL,SELL,FILLED,0.000000,53.000000,69.810000,3699.930000,449.97,strategies.mean_reversion.high_pullback_reversion:6f235b9b42a94462,Mean Reversion,High Pullback Reversion
+2026-08-18 15:01:39.339270+00:00,CORT,BUY,FILLED,0.000000,1.000000,117.680000,117.680000,,strategies.momentum.clenow_trend:86962ef6f73745a0,Momentum,Clenow Trend
 2026-08-17 14:55:19.061592+00:00,PBF,SELL,FILLED,0.000000,1.000000,74.620000,74.620000,8.29,strategies.momentum.clenow_trend:f8d015db0f95490e,Momentum,Clenow Trend
 2026-08-07 15:19:24.320110+00:00,AVTR,BUY,FILLED,0.000000,191.000000,13.470000,2572.770000,,strategies.momentum.clenow_trend:677ee79fcae8401d,Momentum,Clenow Trend
 2026-08-07 15:19:24.162903+00:00,EAT,BUY,FILLED,0.000000,11.000000,225.070000,2475.770000,,strategies.momentum.clenow_trend:b804650c7c274021,Momentum,Clenow Trend
