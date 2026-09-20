@@ -1,0 +1,184 @@
+{
+  "as_of": "2026-08-05",
+  "disclaimer": "Alpaca paper account. Not investment advice. Short live sample; research metrics are not live performance.",
+  "repo": "https://github.com/Shazil10/alpaca-paper-trader",
+  "portfolio_home": "https://shazilfarukh.com",
+  "budgets": {
+    "strategies.momentum.clenow_trend": 10000,
+    "strategies.ranks.ranked_asset_alloc": 15000,
+    "strategies.mean_reversion.high_pullback_reversion": 15000
+  },
+  "sleeve_realized_pnl": [
+    { "id": "mean_reversion", "label": "High Pullback Reversion", "pnl": 5000 },
+    { "id": "clenow", "label": "Clenow Trend", "pnl": 600 },
+    { "id": "ranked", "label": "Ranked Asset Alloc", "pnl": -50 }
+  ],
+  "strategies": [
+    {
+      "id": "clenow",
+      "name": "Clenow Trend",
+      "status": "running",
+      "module": "strategies.momentum.clenow_trend",
+      "budget": 10000,
+      "code_url": "https://github.com/Shazil10/alpaca-paper-trader/tree/main/src/strategies/momentum",
+      "notebook_url": null,
+      "thesis": "Cross-sectional equity momentum with trend and regime filters; size by inverse volatility.",
+      "rules": [
+        "Score = 60-day log-price slope × R²",
+        "Entry: price > 200-SMA, near 52-week highs, momentum persistence",
+        "Regime: ≥2 of SPY / IJH / IJR above 200-SMA (fail closed on bad data)",
+        "Sizing: inverse volatility, concentrated top names",
+        "Exits owned by the strategy; runner tags every fill"
+      ],
+      "note": "Live sample short. Modest positive sleeve PnL; budget-capped."
+    },
+    {
+      "id": "ranked",
+      "name": "Ranked Asset Alloc",
+      "status": "running",
+      "module": "strategies.ranks.ranked_asset_alloc",
+      "budget": 15000,
+      "code_url": "https://github.com/Shazil10/alpaca-paper-trader/blob/main/src/strategies/ranks/ranked_asset_alloc.py",
+      "notebook_url": "https://github.com/Shazil10/alpaca-paper-trader/blob/main/analysis/strategies/momentum/ranked_asset_allocation.ipynb",
+      "thesis": "Monthly sector rotation: 50/50 blend of momentum rotation and all-weather hedges, with optional low-vol leverage.",
+      "rules": [
+        "Rebalance on the first trading day of each month",
+        "V4 sleeve: multi-factor ranks on sector ETFs by regime",
+        "V8 sleeve: bull → sectors; bear → hedge ETFs (TLT / GLD / UUP…)",
+        "DAF: up to 2× when sector vol is in a low percentile and regime is bull",
+        "Lifetime budget cap; sell proceeds recycle"
+      ],
+      "note": "Live adapter ≠ full research harness. Flat-to-slightly-red so far — treated as a learning sleeve."
+    },
+    {
+      "id": "mean_reversion",
+      "name": "High Pullback Reversion",
+      "status": "running",
+      "module": "strategies.mean_reversion.high_pullback_reversion",
+      "budget": 15000,
+      "code_url": "https://github.com/Shazil10/alpaca-paper-trader/blob/main/src/strategies/mean_reversion/52W_mean_reversion_strat.py",
+      "notebook_url": "https://github.com/Shazil10/alpaca-paper-trader/blob/main/analysis/strategies/mean_reversion/52W_mean_reversion.ipynb",
+      "thesis": "Buy deep pullbacks from the 52-week high that still pass quality and regime gates; exit on recovery, stop, or time.",
+      "rules": [
+        "Entry: ≥40% below 52-week high",
+        "Quality: not freefall vs high; not broken vs 200-day MA",
+        "Regime: ≥2 of SPY / IJH / IJR above 200-SMA",
+        "Exit: within 25% of high, −25% stop, or ~63 trading days",
+        "Cooldown after exits; pullback-weighted sizing; max 5 names"
+      ],
+      "note": "Primary live contributor so far. Parameters locked from R2 v2 research."
+    },
+    {
+      "id": "deep_momentum",
+      "name": "Deep Momentum",
+      "status": "research",
+      "module": null,
+      "budget": null,
+      "code_url": null,
+      "notebook_url": "https://github.com/Shazil10/alpaca-paper-trader/blob/main/analysis/strategies/momentum/deep_momentum.ipynb",
+      "thesis": "Learned expected-return ranking from cross-sectional features — research only until walk-forward discipline is solid.",
+      "rules": [
+        "Featured in research notebooks, not live capital",
+        "Requires purged / walk-forward validation before any budget",
+        "Not wired into STRATEGY_ALLOCATIONS"
+      ],
+      "note": "Interesting research track. Not deployed."
+    },
+    {
+      "id": "tsmom",
+      "name": "TSMOM ETF",
+      "status": "research",
+      "module": null,
+      "budget": null,
+      "code_url": null,
+      "notebook_url": "https://github.com/Shazil10/alpaca-paper-trader/blob/main/analysis/strategies/momentum/tsmom_etf.ipynb",
+      "thesis": "Classic time-series momentum on liquid ETFs.",
+      "rules": [
+        "Long-only and long/short variants studied in-notebook",
+        "No live adapter yet"
+      ],
+      "note": "Research sleeve."
+    },
+    {
+      "id": "bab",
+      "name": "Betting Against Beta",
+      "status": "research",
+      "module": null,
+      "budget": null,
+      "code_url": null,
+      "notebook_url": "https://github.com/Shazil10/alpaca-paper-trader/blob/main/analysis/strategies/defensive/betting_against_beta.ipynb",
+      "thesis": "Long low-beta / defensive tilt studied as a research strategy.",
+      "rules": [
+        "Notebook stress tests only",
+        "No production capital"
+      ],
+      "note": "Research sleeve."
+    }
+  ],
+  "positions": [
+    {
+      "strategy": "Clenow Trend",
+      "strategy_id": "clenow",
+      "symbol": "SEZL",
+      "qty": 24,
+      "notional": 4100,
+      "note": "illustrative EOD snapshot"
+    },
+    {
+      "strategy": "Ranked Asset Alloc",
+      "strategy_id": "ranked",
+      "symbol": "XLE",
+      "qty": 25,
+      "notional": 2200,
+      "note": "monthly sleeve"
+    },
+    {
+      "strategy": "Ranked Asset Alloc",
+      "strategy_id": "ranked",
+      "symbol": "XLF",
+      "qty": 28,
+      "notional": 1400,
+      "note": "monthly sleeve"
+    },
+    {
+      "strategy": "High Pullback Reversion",
+      "strategy_id": "mean_reversion",
+      "symbol": "FOUR",
+      "qty": 120,
+      "notional": 10400,
+      "note": "largest MR name (approx)"
+    },
+    {
+      "strategy": "High Pullback Reversion",
+      "strategy_id": "mean_reversion",
+      "symbol": "CRVL",
+      "qty": 12,
+      "notional": 3400,
+      "note": ""
+    },
+    {
+      "strategy": "Discretionary",
+      "strategy_id": "discretionary",
+      "symbol": "NFLX",
+      "qty": 30,
+      "notional": 2200,
+      "note": "manual — labeled separately"
+    },
+    {
+      "strategy": "Discretionary",
+      "strategy_id": "discretionary",
+      "symbol": "PLTR",
+      "qty": 10,
+      "notional": 1590,
+      "note": "manual — labeled separately"
+    },
+    {
+      "strategy": "Discretionary",
+      "strategy_id": "discretionary",
+      "symbol": "SPY",
+      "qty": 1,
+      "notional": 770,
+      "note": "manual — labeled separately"
+    }
+  ]
+}

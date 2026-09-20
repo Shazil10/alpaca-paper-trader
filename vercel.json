@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd microsite && npm ci && npm run build",
+  "outputDirectory": "microsite/dist/public",
+  "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false
+}

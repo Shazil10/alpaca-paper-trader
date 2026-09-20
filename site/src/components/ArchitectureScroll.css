@@ -1,0 +1,265 @@
+.arch {
+  max-width: 1100px;
+}
+
+.arch-pin {
+  margin-top: 48px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.arch-stage {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(280px, 1.05fr) minmax(260px, 0.95fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+}
+
+.arch-card {
+  padding: 32px 30px 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 24px 60px -24px var(--navy-shadow),
+    0 0 0 1px rgba(100, 255, 218, 0.08),
+    0 0 80px -40px var(--green-glow);
+}
+
+.arch-card::before {
+  content: '';
+  position: absolute;
+  inset: -40% auto auto -20%;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(100, 255, 218, 0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.arch-card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.arch-badge {
+  font-family: var(--font-mono);
+  font-size: var(--fz-xxs);
+  color: var(--green);
+  border: 1px solid rgba(100, 255, 218, 0.35);
+  background: var(--green-tint);
+  border-radius: 999px;
+  padding: 5px 12px;
+  letter-spacing: 0.04em;
+}
+
+.arch-accent-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--green), transparent);
+  opacity: 0.7;
+}
+
+.arch-card h3 {
+  font-size: clamp(26px, 3.5vw, 34px);
+  color: var(--white);
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+
+.arch-card p {
+  font-size: var(--fz-md);
+  color: var(--light-slate);
+  margin-bottom: 18px;
+  max-width: 42ch;
+}
+
+.arch-card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.arch-card li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 9px;
+  font-size: var(--fz-sm);
+  color: var(--slate);
+  line-height: 1.45;
+}
+
+.arch-card li::before {
+  content: '▹';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+}
+
+.arch-timeline {
+  position: relative;
+  padding: 12px 0 12px 28px;
+  min-height: 420px;
+}
+
+.arch-spine {
+  position: absolute;
+  left: 7px;
+  top: 18px;
+  bottom: 18px;
+  width: 2px;
+}
+
+.arch-spine-track {
+  position: absolute;
+  inset: 0;
+  background: var(--lightest-navy);
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+.arch-spine-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, var(--green), rgba(100, 255, 218, 0.25));
+  border-radius: 2px;
+  box-shadow: 0 0 12px var(--green-glow);
+  transition: height 0.05s linear;
+}
+
+.arch-packet {
+  position: absolute;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow:
+    0 0 0 3px rgba(100, 255, 218, 0.25),
+    0 0 22px var(--green-glow);
+  z-index: 2;
+}
+
+.arch-nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 420px;
+  gap: 18px;
+}
+
+.arch-node-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
+  text-align: left;
+  color: inherit;
+}
+
+.arch-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--lightest-navy);
+  border: 2px solid var(--slate);
+  flex-shrink: 0;
+  margin-left: -28px;
+  z-index: 3;
+  transition: var(--transition);
+  box-shadow: none;
+}
+
+.arch-dot.glow {
+  background: var(--green);
+  border-color: var(--green);
+  box-shadow:
+    0 0 0 4px rgba(100, 255, 218, 0.18),
+    0 0 20px var(--green-glow);
+}
+
+.arch-node-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  opacity: 0.42;
+  transform: translateX(0);
+  transition: var(--transition);
+  width: 100%;
+}
+
+.arch-node.active .arch-node-card {
+  opacity: 1;
+  border-color: rgba(100, 255, 218, 0.35);
+  box-shadow:
+    0 12px 30px -18px var(--navy-shadow),
+    0 0 24px -12px var(--green-glow);
+  transform: translateX(4px);
+}
+
+.arch-node.done .arch-node-card {
+  opacity: 0.7;
+}
+
+.arch-node-title {
+  font-size: var(--fz-md);
+  color: var(--lightest-slate);
+  font-weight: 600;
+}
+
+.arch-node-sub {
+  font-family: var(--font-mono);
+  font-size: var(--fz-xxs);
+  color: var(--green);
+  opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+  .arch-stage {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .arch-card-col {
+    order: 1;
+  }
+
+  .arch-timeline {
+    order: 2;
+    min-height: auto;
+  }
+
+  .arch-nodes {
+    min-height: auto;
+  }
+
+  .arch-pin {
+    min-height: auto;
+    align-items: stretch;
+    padding: 24px 0 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-node-btn {
+    cursor: pointer;
+  }
+
+  .arch-packet {
+    display: none;
+  }
+}

@@ -1,6 +1,6 @@
 # Alpaca Paper Trader
 
-Multi-strategy Alpaca paper-trading system with separate strategy modules, lifetime capital caps, order attribution, and scheduled GitHub Actions execution. The trading bot generates current report artifacts after each run so a portfolio microsite can display a fresh paper-trading snapshot instead of hand-maintained numbers.
+Small algo-trading sandbox using Alpaca paper trading.
 
 ## Daily run
 
@@ -12,7 +12,6 @@ Both workflows write reports into `reports/`:
 - `reports/orders_latest.md`
 - `reports/orders_latest.html`
 - `reports/orders_latest.csv`
-- `reports/microsite_snapshot.json`
 
 ## Viewing the close report in VS Code
 
@@ -39,8 +38,7 @@ This downloads the latest successful close report into:
 Then open:
 
 - `reports/downloaded/orders_latest.html` (nice table)
-- `reports/downloaded/orders_latest.md`
-- `reports/downloaded/microsite_snapshot.json` if you want the latest compact website data payload
+- or `reports/downloaded/orders_latest.md`
 
 ### Repo/workflow overrides
 

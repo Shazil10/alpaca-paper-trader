@@ -1,0 +1,44 @@
+.aurora {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  --ax: 55%;
+  --ay: 25%;
+}
+
+.aurora::before,
+.aurora::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+}
+
+.aurora::before {
+  width: min(70vw, 720px);
+  height: min(70vw, 720px);
+  left: var(--ax);
+  top: var(--ay);
+  transform: translate(-50%, -40%);
+  background: radial-gradient(
+    circle,
+    rgba(100, 255, 218, 0.16) 0%,
+    rgba(100, 255, 218, 0.04) 45%,
+    transparent 70%
+  );
+}
+
+.aurora::after {
+  width: min(50vw, 480px);
+  height: min(50vw, 480px);
+  right: -5%;
+  bottom: 10%;
+  background: radial-gradient(
+    circle,
+    rgba(87, 203, 255, 0.08) 0%,
+    transparent 70%
+  );
+}

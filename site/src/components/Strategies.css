@@ -1,0 +1,146 @@
+.status-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 28px 0 28px;
+}
+
+.status-tab {
+  font-family: var(--font-mono);
+  font-size: var(--fz-xs);
+  color: var(--slate);
+  background: rgba(17, 34, 64, 0.5);
+  border: 1px solid var(--lightest-navy);
+  border-radius: 999px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.status-tab:hover,
+.status-tab.active {
+  color: var(--green);
+  border-color: rgba(100, 255, 218, 0.45);
+  background: var(--green-tint);
+}
+
+.strategy-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.strategy-card {
+  padding: 26px 26px 22px;
+  transition: var(--transition);
+}
+
+.strategy-card:hover {
+  border-color: rgba(100, 255, 218, 0.28);
+  transform: translateY(-2px);
+  box-shadow:
+    0 22px 50px -22px var(--navy-shadow),
+    0 0 40px -28px var(--green-glow);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.card-top h3 {
+  font-size: var(--fz-xxl);
+  margin: 0;
+}
+
+.pill {
+  font-family: var(--font-mono);
+  font-size: var(--fz-xxs);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--lightest-navy);
+  color: var(--light-slate);
+  white-space: nowrap;
+}
+
+.pill.running {
+  color: var(--green);
+  border-color: rgba(100, 255, 218, 0.4);
+  background: var(--green-tint);
+}
+
+.pill.research {
+  color: #57cbff;
+  border-color: rgba(87, 203, 255, 0.35);
+  background: rgba(87, 203, 255, 0.08);
+}
+
+.pill.retired {
+  color: var(--dark-slate);
+}
+
+.thesis {
+  color: var(--light-slate);
+  font-size: var(--fz-md);
+  margin-bottom: 14px;
+}
+
+.rules {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+}
+
+.rules li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+  font-size: var(--fz-sm);
+  color: var(--slate);
+  line-height: 1.4;
+}
+
+.rules li::before {
+  content: '▹';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: var(--fz-xxs);
+  padding: 0;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.card-meta {
+  display: flex;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: var(--fz-xxs);
+  color: var(--slate);
+  margin-bottom: 10px;
+}
+
+.card-note {
+  font-size: var(--fz-xs);
+  color: var(--dark-slate);
+  font-style: italic;
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+.card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: var(--fz-xs);
+}

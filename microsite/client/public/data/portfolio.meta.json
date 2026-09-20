@@ -1,0 +1,104 @@
+{
+  "_comment": "Human-edited narrative. Safe to edit by hand. src/export_portfolio.py merges this with live Alpaca data to produce portfolio.json — never edit portfolio.json directly, CI overwrites it every weekday evening.",
+  "disclaimer": "Alpaca paper account. Realized figures cover closed trades only and are engineering proof-of-process, not a track record or investment advice.",
+  "repo": "https://github.com/Shazil10/alpaca-paper-trader",
+  "portfolio_home": "https://shazilfarukh.com",
+  "strategies": [
+    {
+      "id": "clenow-trend",
+      "module": "strategies.momentum.clenow_trend",
+      "name": "Clenow Trend Following",
+      "short": "Clenow Trend",
+      "status": "Running",
+      "featured": true,
+      "plain": "buys shares that have been climbing steadily, and steps aside when the whole market turns",
+      "chips": ["Cross-Sectional Momentum", "Inverse-Variance Sizing"],
+      "thesis": "Some shares climb steadily for months at a time. This sleeve ranks the market by how smooth a climb has been, not just how big, and buys the steadiest risers while the market overall is still healthy.",
+      "sizing": "Smaller bets on jumpier shares",
+      "rules": [
+        "A share only qualifies while it is above its long-run average price and close to its highest point of the past year",
+        "Calmer shares get more money, jumpier ones get less, so no single holding dominates the risk",
+        "If the market as a whole turns down, the sleeve stops buying and sits in cash"
+      ],
+      "mechanism": "inverse-vol",
+      "evidence": {
+        "label": "Based on Clenow's Stocks on the Move",
+        "url": "https://www.followingthetrend.com/stocks-on-the-move/"
+      }
+    },
+    {
+      "id": "ranked-asset-allocation",
+      "module": "strategies.ranks.ranked_asset_alloc",
+      "name": "Ranked Asset Allocation",
+      "short": "Ranked Asset Alloc",
+      "status": "Running",
+      "plain": "moves money between industries once a month, toward whichever ones are leading",
+      "chips": ["Vol-Targeted Sector Rotation", "All-Weather Hedges"],
+      "thesis": "Once a month it ranks broad industry funds — energy, banks, healthcare and the rest — and shifts money toward the leaders. When conditions look poor it holds defensive assets instead of forcing a bet.",
+      "sizing": "Weights shift with the ranking",
+      "mechanism": "sector-tilt",
+      "evidence": {
+        "label": "Background: Faber on tactical asset allocation",
+        "url": "https://ssrn.com/abstract=962461"
+      }
+    },
+    {
+      "id": "high-pullback-reversion",
+      "module": "strategies.mean_reversion.high_pullback_reversion",
+      "name": "High Pullback Mean Reversion",
+      "short": "High Pullback Reversion",
+      "status": "Running",
+      "plain": "buys solid companies that have fallen unusually far, once falling stops",
+      "chips": ["Mean Reversion Gate", "Regime Filter"],
+      "thesis": "Sometimes a good company is sold off far harder than its situation warrants. This sleeve looks for shares deep below their high point of the past year, checks the business still passes quality tests, and waits for the fall to stop before buying.",
+      "sizing": "Equal risk per position",
+      "mechanism": "pullback-gauge",
+      "evidence": {
+        "label": "Background: De Bondt & Thaler on overreaction",
+        "url": "https://doi.org/10.1111/j.1540-6261.1985.tb05004.x"
+      }
+    },
+    {
+      "id": "deep-momentum",
+      "name": "Deep Momentum",
+      "short": "Deep Momentum",
+      "status": "Research",
+      "budget": null,
+      "plain": "learns which past patterns tend to precede gains, instead of being told a fixed rule",
+      "chips": ["Learned Ranking"],
+      "thesis": "Learns its ranking from many measurements at once rather than following one fixed formula. Staying in research until it holds up on data it has never seen.",
+      "evidence": {
+        "label": "Based on Lim, Zohren & Roberts, Deep Momentum Networks",
+        "url": "https://arxiv.org/abs/1904.04912"
+      }
+    },
+    {
+      "id": "tsmom-etf",
+      "name": "Time-Series Momentum",
+      "short": "Time-Series Momentum",
+      "status": "Research",
+      "budget": null,
+      "plain": "asks whether each fund itself is trending up, rather than comparing it to others",
+      "chips": ["ETF Momentum"],
+      "thesis": "Judges each fund against its own recent history rather than against other funds. Long studied, and simple enough to be a useful yardstick for the more elaborate sleeves.",
+      "evidence": {
+        "label": "Based on Moskowitz, Ooi & Pedersen, Time Series Momentum",
+        "url": "https://www.aqr.com/Insights/Research/Journal-Article/Time-Series-Momentum"
+      }
+    },
+    {
+      "id": "betting-against-beta",
+      "name": "Betting Against Beta",
+      "short": "Betting Against Beta",
+      "status": "Research",
+      "budget": null,
+      "plain": "leans toward steadier shares, which historically paid more per unit of risk taken",
+      "chips": ["Low-Beta Tilt"],
+      "thesis": "Leans toward shares that move less violently than the market. The published version needs borrowing to work properly, which is why it stays in research here.",
+      "evidence": {
+        "label": "Based on Frazzini & Pedersen, Betting Against Beta",
+        "url": "https://www.nber.org/papers/w16601"
+      }
+    }
+  ]
+}
