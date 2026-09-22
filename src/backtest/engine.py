@@ -300,6 +300,7 @@ def generate_orders(
                     reason="exit:not_in_target",
                     created_date=snapshot.date,
                     order_id=f"{strategy_id}:{uuid4().hex[:12]}",
+                    close_position=True,
                 ))
 
     # Buy up / trim down toward target.

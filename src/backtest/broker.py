@@ -75,6 +75,14 @@ def adjusted_bars(
     return bars
 
 
+#: Tolerance when converting an adjusted share count back to raw shares.
+#: A position is always built from whole raw shares, so ``shares * factor``
+#: should land on an integer -- but it arrives there through a divide and a
+#: multiply, so it lands on 117.99999999998 instead. Flooring that gives 117 and
+#: strands a share. See ``_floor_whole_shares``.
+SHARE_EPSILON = 1e-6
+
+
 def _floor_whole_shares(adjusted_shares: float, factor: float) -> float:
     """Round down to a whole *raw* share, expressed back in adjusted shares.
 
@@ -84,10 +92,19 @@ def _floor_whole_shares(adjusted_shares: float, factor: float) -> float:
     space. Flooring the adjusted count instead would quietly permit fractions
     of a real share wherever ``factor < 1`` -- 2010 AAPL has a factor near
     0.03, so one "adjusted share" is ~0.03 of a share actually buyable.
+
+    The epsilon is not cosmetic. A fill stores ``raw / factor`` adjusted shares,
+    so a later full exit passes that number back and ``adjusted * factor`` misses
+    the integer by a float residue. Flooring it sold one share fewer than the
+    position held, every time, and the leftover fraction meant the position never
+    closed: the engine re-issued the same exit order the next session, and the
+    next, while the strategy logged the same exit reason for months. A Clenow run
+    over 641 sessions produced 33 fills and sat in near-cash at beta 0.04 because
+    of it.
     """
     if factor <= 0 or not np.isfinite(factor):
-        return float(math.floor(adjusted_shares))
-    raw_shares = math.floor(adjusted_shares * factor)
+        return float(math.floor(adjusted_shares + SHARE_EPSILON))
+    raw_shares = math.floor(adjusted_shares * factor + SHARE_EPSILON)
     if raw_shares <= 0:
         return 0.0
     return raw_shares / factor
@@ -158,7 +175,10 @@ class SimulatedBroker:
         else:
             return None
 
-        if not self.execution.fractional_shares:
+        # A full exit is exempt from integrality: whatever the position holds is
+        # sellable by definition, and rounding it down leaves dust that keeps the
+        # position open forever.
+        if not self.execution.fractional_shares and not order.close_position:
             target_shares = _floor_whole_shares(target_shares, bar.get("factor", 1.0))
 
         if target_shares <= 0:

@@ -118,6 +118,52 @@ class TestWholeShareRoundingIsRawSpace:
         # 4 real shares at the $204 print = $816 = 16 adjusted shares at $51.
         assert fills[0].fill_shares == pytest.approx(16.0)
 
+    def test_epsilon_recovers_a_share_lost_to_float_residue(self):
+        """`shares * factor` should be whole but arrives a hair under.
+
+        A fill stores ``raw / factor`` adjusted shares. Passing that back through
+        ``adjusted * factor`` lands on 117.99999999998, and a bare floor called
+        that 117 -- selling one share fewer than the position held.
+        """
+        factor = 0.25
+        held_adjusted = 118.0 / factor  # exactly 118 raw shares
+
+        assert _floor_whole_shares(held_adjusted, factor) == pytest.approx(held_adjusted)
+        # And the residue case explicitly.
+        assert _floor_whole_shares(
+            held_adjusted - 1e-12, factor
+        ) == pytest.approx(held_adjusted)
+
+    def test_full_exit_is_exempt_from_rounding(self):
+        """A position is sellable in full by definition.
+
+        Without the exemption the unsold fraction keeps the position open, the
+        engine re-issues the same exit next session, and the strategy logs the
+        same exit reason for months. A 641-session Clenow run produced 33 fills
+        and sat at beta 0.04 on this alone.
+        """
+        broker = SimulatedBroker(FREE, ExecutionConfig(fractional_shares=False))
+        bars = adjusted_bars(SPLIT_PANEL, FILL_DATE)
+
+        # A holding that sits between two whole raw shares, as it would after a
+        # dividend adjustment lands mid-position.
+        dusty = 17.3
+        closing = Order(
+            symbol="ACME", side=OrderSide.SELL, notional=0.0, shares=dusty,
+            strategy_id="test", created_date=pd.Timestamp("2024-01-02"),
+            close_position=True,
+        )
+        partial = Order(
+            symbol="ACME", side=OrderSide.SELL, notional=0.0, shares=dusty,
+            strategy_id="test", created_date=pd.Timestamp("2024-01-02"),
+        )
+
+        closed = broker.fill_orders([closing], FILL_DATE, bars)
+        trimmed = broker.fill_orders([partial], FILL_DATE, bars)
+
+        assert closed[0].fill_shares == pytest.approx(dusty), "must sell it all"
+        assert trimmed[0].fill_shares < dusty, "a trim still rounds"
+
     def test_fractional_mode_skips_raw_rounding(self):
         broker = SimulatedBroker(FREE, ExecutionConfig(fractional_shares=True))
         bars = adjusted_bars(SPLIT_PANEL, FILL_DATE)

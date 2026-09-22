@@ -47,6 +47,17 @@ class Order:
     created_date: Optional[pd.Timestamp] = None
     order_id: str = ""
 
+    #: "Sell the whole position", not "sell this many shares". The broker skips
+    #: whole-share rounding for these, because you can always sell exactly what
+    #: you hold. Rounding a full exit down strands a fraction of a share, the
+    #: position never closes, and the engine re-issues the same exit every
+    #: session forever -- see ``broker._floor_whole_shares``. Share counts are
+    #: held on the adjusted scale, so ``shares * factor`` is only an integer when
+    #: no corporate action has intervened; a dividend payer held across its
+    #: ex-date lands between two whole raw shares and cannot be closed by
+    #: flooring at all.
+    close_position: bool = False
+
 
 @dataclass(frozen=True)
 class Fill:
