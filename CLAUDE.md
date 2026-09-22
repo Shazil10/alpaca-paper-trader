@@ -111,24 +111,192 @@ Total deployable cap: **$40k** (a 10% cash reserve is held back at execution tim
 - `Side` enum — `BUY` / `SELL`
 - Universe is stored in a local file and refreshed daily by `universe.py` (scrapes S&P 500/400/600, filters by price ≥ $10 and dollar volume ≥ $10M)
 
+## Backtesting platform (`src/backtest/`)
+
+Reusable daily stock/ETF backtester. Write strategy logic once, select dates and
+capital, run, and receive a verdict on whether the strategy may have alpha.
+
+```bash
+# Run a backtest from YAML config
+PYTHONPATH=src python -m src.backtest.runner --config configs/backtests/example.yaml
+
+# Run a backtest by strategy module
+PYTHONPATH=src python -m src.backtest.runner --strategy strategies.ranks.ranked_asset_alloc --start 2010-01-01 --end 2025-12-31
+```
+
+**Strategy interface.** Canonical form is target weights:
+```python
+def target_weights(ctx: StrategyContext) -> dict[str, float]:
+    """Return {symbol: fraction_of_sleeve_equity}. Remainder is cash."""
+```
+
+Existing `generate_signals()` strategies work via adapter (`src/backtest/adapter.py`).
+
+**Key modules:**
+- `engine.py` — daily clock, D+1 open fills, PIT-enforced context
+- `context.py` — `StrategyContext` is the PIT firewall; requesting data past `as_of` raises `LookaheadError`
+- `portfolio.py` — FIFO lot tracking, cash, realized/unrealized PnL
+- `broker.py` — simulated fills with configurable slippage, commission, participation cap
+- `metrics.py` — consolidated Sharpe, Sortino, alpha, beta, PSR, Deflated Sharpe, regime analysis
+- `fast.py` — vectorized alpha screen for parameter sweeps
+- `fund.py` — multi-strategy fund simulation with per-sleeve attribution
+- `validation/` — parameter stability, Monte Carlo, clustering, walk-forward, PBO, verdict card
+
+**Price levels vs returns.** `adj_close` is back-adjusted to the *download* date, so
+historical levels know about splits that had not happened yet. Returns are fine;
+levels are not. Use `ctx.prices()` for returns and momentum, and
+**`ctx.raw_close(symbol)` for anything compared against an absolute dollar amount**
+— minimum-price screens, round-lot sizing, dollar-volume filters. On 2010-06-30
+adjusted AAPL reads ~$8 against a $251 print, so a `price >= 10` screen on the
+adjusted scale silently drops a name that was never cheap. `BacktestConfig.price_adjustment`
+(`"asof"` default / `"today"`) additionally re-anchors `adj_close` to `end_date`
+so a run cannot see corporate actions that postdate its own window.
+
+**Data extensions:**
+- `data_pipeline/adjust.py` — as-of-date price adjustment (research/notebook tool; the engine anchors via `runner.load_panels`)
+- `data_pipeline/membership.py` — PIT S&P 500 membership via `members_asof(date)`
+- `data_pipeline/securities.py` — security master with permanent IDs (ticker recycling guard) and `sector_map()`, which is what makes `RiskConfig.max_sector_pct` bind
+- `data_pipeline/providers/tiingo.py` — free-tier delisted stock backfill (needs an API key; not yet wired)
+
+**Data build steps** (manual, in order; see `data/universe/_schema.md`):
+```bash
+PYTHONPATH=src ./venv/bin/python scripts/build_membership.py     # PIT index tape
+PYTHONPATH=src ./venv/bin/python scripts/build_securities.py     # security master + sectors
+PYTHONPATH=src ./venv/bin/python scripts/backfill_history.py --start 2005-01-01 --dry-run
+PYTHONPATH=src ./venv/bin/python scripts/check_lake_readiness.py --backtest
+```
+`backfill_history.py` is the only way to deepen the lake — `sync_prices` clamps a
+known symbol's window to `max(LOOKBACK_START, last_stored - 5d)`, so it fetches
+nothing at all when asked for older history. Closed years land as Parquet and each
+new year needs an explicit `!data/prices/daily/<year>.parquet` line in `.gitignore`.
+
+`check_lake_readiness.py` has two modes: bare for live-trading readiness, and
+`--backtest` for history depth and point-in-time coverage. They answer different
+questions and a lake can pass one while failing the other.
+
+**Run artifacts** saved to `runs/<date>_<strategy>_<hash>/`: config, equity curve, returns,
+orders, fills, positions, metrics, summary.
+
 ## Research vs. production
 
 Backtesting and strategy research live in Jupyter notebooks under `analysis/` and `Assignment/`. The `src/` directory is production-only.
 
 Notebooks still maintain their own `.cache/*.pkl` pulls and have **not** been migrated to the price lake. They are free to opt in via `data_pipeline.store`, but nothing forces it.
 
+Performance metrics *are* shared. Four notebooks used to define their own
+`perf_metrics`, which is how `Sortino` came to mean two different things in one
+repository; they now import `backtest.metrics.summary_from_returns` (from a return
+series) or `summary_from_equity` (from an equity curve). Do not reintroduce a local
+copy. `strategies/ranks/v10_research_pipeline.py` likewise re-exports
+`compute_stats` / `compute_full_stats` / `apply_transaction_costs` / `quick_stats`
+from `backtest.metrics` rather than defining them.
+
 ## Known hazards
 
-- **`src/strategies/momentum/clenow_trend.py` is 0 bytes locally** (iCloud
-  eviction). The GitHub copy is intact and the sleeve trades fine in CI, since
-  Actions checks out from the remote. But `src/` is not gitignored, so a broad
-  `git add -A` would push the empty file over the working copy and silently kill
-  that sleeve — it would stop placing orders rather than erroring. Always stage
-  explicit paths. Restore it from `origin/main` before touching that module.
-  `tests/test_strategy_integration.py` fails locally for this reason alone.
+- **`src/strategies/momentum/clenow_trend.py`** — previously reported as 0 bytes
+  (iCloud eviction). Verified 2026-09-20: file is 15,460 bytes locally and matches
+  the GitHub copy. If iCloud evicts it again, restore from `origin/main`. A broad
+  `git add -A` with an empty file would silently kill the sleeve. Always stage
+  explicit paths.
 - `venv/bin/pip` has a stale shebang pointing at a different project on disk.
   Installs must use `./venv/bin/python -m pip`, or they land in the wrong
   environment silently.
 - Committing the lake requires `git add -f` for cold Parquet years: they are
   covered by the ignore-with-exceptions rules in `.gitignore`, and the exception
   list is maintained by hand at each January rollover.
+
+<!-- cce-block-version: 4 -->
+## Context Engine (CCE)
+
+This project uses Code Context Engine for intelligent code retrieval and
+cross-session memory.
+
+### Searching the codebase
+
+**You MUST use `context_search` instead of reading files directly** when
+exploring the codebase, answering questions about code, or understanding how
+things work. This is a hard requirement, not a suggestion. `context_search`
+returns the most relevant code chunks with confidence scores instead of whole
+files, and tracks token savings automatically.
+
+When to use `context_search`:
+- Answering questions about the codebase ("how does X work?", "where is Y?")
+- Exploring structure or architecture
+- Finding related code, functions, or patterns
+- Any time you would otherwise read a file just to understand it
+
+When to use `Read` instead:
+- You need to edit a specific file (read before editing)
+- You need the exact, complete content of a known file path
+
+Other search tools:
+- `expand_chunk` — get full source for a compressed result
+- `related_context` — find what calls/imports a function
+
+### Cross-session memory — use it actively
+
+This project has persistent memory across Claude Code sessions. **You must
+use it both ways: recall before answering, record after deciding.** Memory
+that is not recorded is lost; memory that is not recalled does nothing.
+
+**Before answering a non-trivial question, call `session_recall`.**
+Especially when:
+- The question touches architecture, design, or naming choices
+- The user asks "what / why / how did we ..."
+- You are about to recommend an approach the team may have already chosen
+  or already rejected
+
+Pass a topic phrase, not a single word — e.g. `session_recall("auth flow")`,
+not `session_recall("auth")`. Recall is vector-similarity-based, so paraphrases
+match. If recall returns relevant entries, lead with them ("Per a prior
+decision: ...") instead of re-deriving the answer.
+
+**After making a non-obvious decision, call `record_decision`.** Especially:
+- Choosing one library / pattern / approach over another
+- Resolving an ambiguity in the spec or requirements
+- Establishing a convention the project should follow going forward
+- Anything you would not want to re-litigate next session
+
+Format: `record_decision(decision="...", reason="...")`. Keep both fields
+short and specific — they are surfaced verbatim at the start of future
+sessions.
+
+**After meaningful work in a file, call `record_code_area`.** Especially when:
+- You added or substantially modified a function/class
+- You traced through a non-obvious flow and want future-you to find it fast
+
+Format: `record_code_area(file_path="...", description="...")`.
+
+Skip recording for trivial reads, formatting changes, or one-off lookups —
+the goal is durable signal, not an event log.
+
+### Drilling deeper from a recall hit
+
+`session_recall` results are tagged with the source session id, e.g.
+`[turn sid:abc123|n:5]`. To drill in:
+
+- `session_timeline(session_id="abc123")` — walk the per-turn summaries of
+  that session in order. Use this when the user asks "what was the
+  reasoning?" or "how did we get there?".
+- `session_event(event_id=N)` — fetch a specific tool event's raw input
+  and output (capped at 4 KB at read time). Use this when a turn summary
+  references a tool result you actually need to inspect.
+
+Both are read-only and cheap. Prefer them over re-running tool calls or
+asking the user to re-paste context.
+
+### Output style
+
+Respond in compressed style. Drop articles (a, an, the) in prose. Use
+sentence fragments over full sentences. Use short synonyms (fix not resolve,
+check not investigate). Pattern: [thing] [action] [reason]. [next step].
+No filler, hedging, pleasantries, trailing summaries, or restating what
+the user said. One sentence if one sentence is enough.
+
+When suggesting code changes, show only the changed lines with 3 lines of
+context. Never rewrite entire files. Multiple changes in one file: show each
+change separately. Never echo back unchanged code the user already has.
+
+Code blocks, file paths, commands, error messages: always written in full.
+Security warnings and destructive action confirmations: use full clarity.
+<!-- /cce-block -->
