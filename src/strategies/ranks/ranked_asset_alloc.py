@@ -454,16 +454,21 @@ def generate_signals(
     budget: Optional[float] = None,
     strategy_id: str = "strategies.ranks.ranked_asset_alloc",
     held_symbols: Optional[Set[str]] = None,
+    as_of: Optional[pd.Timestamp] = None,
 ) -> List[Signal]:
     """Generate BUY / SELL signals for the ranked-sector-allocation strategy.
 
     Rebalances monthly (first trading day of each month) or on first run.
     Between rebalances no signals are emitted.
+
+    ``as_of`` pins the evaluation date for replay and parity testing. Left at
+    None -- which is how ``trade.py`` calls this -- the behaviour is unchanged:
+    the real clock and the latest available bar.
     """
     if held_symbols is None:
         held_symbols = set()
 
-    today = datetime.date.today()
+    today = pd.Timestamp(as_of).date() if as_of is not None else datetime.date.today()
     first_run = len(held_symbols) == 0
     is_rebalance = today.day <= 3 or first_run
 
@@ -476,7 +481,7 @@ def generate_signals(
 
     # ── Load data ─────────────────────────────────────────────────────────
     try:
-        closes, ohlc_dict = _load_data()
+        closes, ohlc_dict = _load_data(as_of)
     except Exception:
         logger.exception("Ranked-alloc: data load failed (source=%s)",
                          price_source.active_source())

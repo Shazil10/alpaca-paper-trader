@@ -1,0 +1,54 @@
+# Ranked Sector Allocation (V10 DAF 2x) over the price lake.
+#
+# Dates are bounded by the lake, not by preference. The lake runs
+# 2023-01-03 .. 2026-08-21 (912 sessions; verify with
+# `PYTHONPATH=src ./venv/bin/python -c "from data_pipeline import store; print(store.trading_calendar()[[0,-1]])"`).
+# The sleeve pins a 730-calendar-day lookback, so the first day on which it can
+# see its full window is 2023-01-03 + 730d = 2025-01-02. Starting earlier would
+# hand `_daf_leverage`'s expanding() quantile a shorter history than the live
+# sleeve ever sees, which moves the 2x decision -- a different strategy wearing
+# the same name.
+strategy_id: ranked_asset_alloc_v10_daf
+strategy_module: strategies.ranks.ranked_target_weights
+start_date: "2025-01-02"
+end_date: "2026-08-21"
+initial_capital: 15000
+benchmark: SPY
+
+cost:
+  spread_bps: 5
+  slippage_bps: 5
+  commission_per_share: 0.0
+  participation_rate: 0.05
+
+# The sleeve is deliberately levered: DAF scales deployment to 2x base budget in
+# low-vol bull regimes, so gross exposure legitimately reaches 2.0 and the
+# per-position and per-sector caps must clear the blended weights (max single
+# name is 0.5 * 0.5 + 0.5 * 0.25 = 0.375 of base, i.e. 0.75 at 2x).
+# Every limit here is set wide on purpose: this run measures the strategy, not
+# the risk layer.
+risk:
+  max_position_pct: 1.0
+  max_sector_pct: 1.0
+  cash_reserve_pct: 0.0
+  max_leverage: 2.0
+  max_positions: 20
+
+execution:
+  fill_type: MARKET_OPEN
+  fill_delay_days: 1
+  fractional_shares: false
+  delisting_return: -0.30
+
+params: {}
+
+# Sector ETFs, not index members: PIT S&P 500 membership is meaningless here and
+# the sleeve never calls ctx.universe().
+universe_source: etf_rotation
+price_source: lake
+trial_index: 0
+random_seed: 42
+notes: >
+  Phase 7 migration run. Caveat on the leverage: the engine has no financing
+  model, so the 2x sleeve borrows at zero. Returns in the levered stretches are
+  overstated by roughly the broker call rate on the borrowed half.

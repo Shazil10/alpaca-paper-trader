@@ -8,7 +8,37 @@ from typing import Any, Dict, Optional
 import numpy as np
 import pandas as pd
 import yfinance as yf
-from scipy import stats as scipy_stats
+
+# ---------------------------------------------------------------------------
+# Performance metrics
+#
+# These used to be defined in this module. They now live in backtest.metrics --
+# one implementation shared by the research pipeline and the backtester. They are
+# re-imported here so existing callers (analysis/ranked_live_audit.ipynb) keep
+# working unchanged.
+#
+# CONVENTION CHANGE (2026-09-20): Sharpe was CAGR / annualized_vol in this module.
+# It is now mean(daily) / std(daily) * sqrt(252), the standard convention. Both
+# divide by the same annualized vol, so the delta is purely the numerator:
+# geometric vs arithmetic mean return. Measured on realistic curves the gap runs
+# roughly +-0.2 Sharpe, and the sign is not fixed -- variance drag raises the new
+# number on low-return/high-vol curves while compounding convexity lowers it on
+# high-return/low-vol ones. See scripts/compare_sharpe_conventions.py.
+#
+# Sortino changes for the same reason. Sharpe and Sortino figures saved in notebooks
+# run before this date will NOT reproduce exactly on re-run (CAGR, vol, max drawdown
+# and Calmar are unaffected). compute_full_stats also returns the richer
+# backtest.metrics key set (lowercase 'cagr', 'sharpe', 'max_drawdown', ...) instead
+# of the old 'CAGR'/'Sharpe'/'Max DD' keys. fmt_full_stats formats that new key set;
+# callers that index the dict themselves must use the new names.
+# ---------------------------------------------------------------------------
+from backtest.metrics import (  # noqa: F401
+    apply_transaction_costs,
+    compute_full_stats,
+    compute_stats,
+    fmt_full_stats,
+    quick_stats,
+)
 
 SECTOR_ETFS = ['XLK', 'XLF', 'XLV', 'XLE', 'XLI', 'XLY', 'XLP', 'XLU', 'XLB', 'XLRE', 'XLC']
 HEDGE_ETFS  = ['TLT', 'GLD', 'UUP', 'FXY', 'FXF']
@@ -254,137 +284,6 @@ def build_rank_matrices(closes_df, ohlc_dict=None, mode="original", spy_shy_clos
         "mom": mom_raw, "fwd_rets": fwd_rets,
         "cash_rets": cash_r, "bench_rets": bench_r, "valid": valid_mask,
     }
-
-def compute_stats(equity, benchmark):
-    """Compute key performance metrics."""
-    sr = equity.pct_change().dropna()
-    br = benchmark.pct_change().dropna()
-    n_yr = len(sr) / 252
-    if n_yr <= 0:
-        return pd.DataFrame()
-
-    cagr_s = (equity.iloc[-1] / equity.iloc[0]) ** (1 / n_yr) - 1
-    cagr_b = (benchmark.iloc[-1] / benchmark.iloc[0]) ** (1 / n_yr) - 1
-    vol_s, vol_b = sr.std() * np.sqrt(252), br.std() * np.sqrt(252)
-    sh_s = cagr_s / vol_s if vol_s > 0 else 0
-    sh_b = cagr_b / vol_b if vol_b > 0 else 0
-
-    def mdd(eq):
-        pk = eq.cummax()
-        return ((eq - pk) / pk).min()
-    md_s, md_b = mdd(equity), mdd(benchmark)
-    cal_s = -cagr_s / md_s if md_s < 0 else 0
-    cal_b = -cagr_b / md_b if md_b < 0 else 0
-    wr = (sr.resample("ME").sum() > 0).mean()
-
-    return pd.DataFrame({
-        "Strategy": [f"{cagr_s:.1%}", f"{vol_s:.1%}", f"{sh_s:.2f}",
-                     f"{md_s:.1%}", f"{cal_s:.2f}", f"{wr:.1%}", f"{equity.iloc[-1]:.2f}"],
-        "SPY": [f"{cagr_b:.1%}", f"{vol_b:.1%}", f"{sh_b:.2f}",
-                f"{md_b:.1%}", f"{cal_b:.2f}", "-", f"{benchmark.iloc[-1]:.2f}"],
-    }, index=["CAGR", "Volatility", "Sharpe", "Max Drawdown", "Calmar",
-             "Monthly Win Rate", "Final Value ($1)"])
-
-
-def compute_full_stats(equity, benchmark):
-    """Extended stats including Sortino, Skew, Kurtosis, PSR."""
-    sr = equity.pct_change().dropna()
-    br = benchmark.pct_change().dropna()
-    n_yr = len(sr) / 252
-
-    cagr = (equity.iloc[-1] / equity.iloc[0]) ** (1 / n_yr) - 1
-    cagr_b = (benchmark.iloc[-1] / benchmark.iloc[0]) ** (1 / n_yr) - 1
-    vol = sr.std() * np.sqrt(252)
-    vol_b = br.std() * np.sqrt(252)
-    sharpe = cagr / vol if vol > 0 else 0
-    sharpe_b = cagr_b / vol_b if vol_b > 0 else 0
-
-    pk = equity.cummax()
-    dd = ((equity - pk) / pk).min()
-    pk_b = benchmark.cummax()
-    dd_b = ((benchmark - pk_b) / pk_b).min()
-    calmar = -cagr / dd if dd < 0 else 0
-
-    down = sr[sr < 0]
-    down_std = down.std() * np.sqrt(252)
-    sortino = cagr / down_std if down_std > 0 else 0
-
-    wr = (sr.resample("ME").sum() > 0).mean()
-    skew = float(scipy_stats.skew(sr))
-    kurt = float(scipy_stats.kurtosis(sr))
-
-    # PSR: probability true Sharpe > 0
-    n = len(sr)
-    sr_hat = sharpe / np.sqrt(252)  # daily Sharpe
-    denom = np.sqrt(1 - skew * sr_hat + (kurt - 1) / 4 * sr_hat ** 2)
-    psr = float(scipy_stats.norm.cdf(sr_hat * np.sqrt(n - 1) / denom)) if denom > 0 else 0.5
-
-    return {
-        "CAGR": cagr, "Vol": vol, "Sharpe": sharpe, "Max DD": dd,
-        "Calmar": calmar, "Sortino": sortino, "Win Rate": wr,
-        "Skew": skew, "Kurtosis": kurt, "PSR": psr, "Final": equity.iloc[-1],
-    }
-
-
-# Rebuild adaptive results
-
-
-def apply_transaction_costs(equity, allocations, cost_bps=10):
-    """Apply round-trip transaction costs at each rebalance."""
-    eq = equity.copy()
-    cost = cost_bps / 10000
-    prev_alloc = {}
-    for date, alloc in allocations:
-        if date not in eq.index:
-            continue
-        all_tickers = set(list(prev_alloc.keys()) + list(alloc.keys()))
-        turnover = sum(abs(alloc.get(t, 0) - prev_alloc.get(t, 0)) for t in all_tickers) / 2
-        cost_drag = 1 - cost * turnover * 2
-        idx = eq.index.get_loc(date)
-        eq.iloc[idx:] *= cost_drag
-        prev_alloc = alloc
-    return eq
-
-
-def quick_stats(r, cost_bps=10):
-    """Return (sharpe_10bp, cagr_10bp, maxdd, beat_spy_count, total_years, vol)."""
-    if r is None:
-        return (-999, 0, 0, 0, 0, 0)
-    eq, bm = r["equity"], r["benchmark"]
-    allocs = r.get("allocations", [])
-    eq_c = apply_transaction_costs(eq, allocs, cost_bps=cost_bps)
-    sr = eq_c.pct_change().dropna()
-    n_yr = len(sr) / 252
-    if n_yr <= 0:
-        return (-999, 0, 0, 0, 0, 0)
-    cagr = (eq_c.iloc[-1] / eq_c.iloc[0]) ** (1 / n_yr) - 1
-    vol = sr.std() * np.sqrt(252)
-    sh = cagr / vol if vol > 0 else 0
-    pk = eq_c.cummax(); dd = ((eq_c - pk) / pk).min()
-    strat_yr = eq_c.resample("YE").last().pct_change().dropna()
-    spy_yr   = bm.resample("YE").last().pct_change().dropna()
-    common = strat_yr.index.intersection(spy_yr.index)
-    beats = int((strat_yr[common] > spy_yr[common]).sum())
-    return (sh, cagr, dd, beats, len(common), vol)
-
-
-def fmt_full_stats(stats, label='Strategy'):
-    """Format a compute_full_stats dict into a display-ready DataFrame."""
-    d = {}
-    for k, v in stats.items():
-        if k in ('CAGR', 'Vol', 'Win Rate'):
-            d[k] = f'{v:.1%}'
-        elif k == 'Max DD':
-            d[k] = f'{v:.1%}'
-        elif k in ('Sharpe', 'Calmar', 'Sortino'):
-            d[k] = f'{v:.3f}'
-        elif k == 'PSR':
-            d[k] = f'{v:.1%}'
-        elif k == 'Final':
-            d[k] = f'${v:.2f}'
-        else:
-            d[k] = f'{v:.2f}'
-    return pd.Series(d, name=label)
 
 
 def adaptive_backtest_v4(mat, closes, weights=(0.25, 0.25, 0.25, 0.25),

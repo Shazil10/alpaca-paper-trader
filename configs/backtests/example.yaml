@@ -1,0 +1,42 @@
+# Example backtest configuration.
+#
+# Points at a *migrated* strategy: one exposing target_weights(ctx), which
+# reads prices only through the point-in-time context. Unmigrated live
+# strategies (clenow_trend, high_pullback_reversion) still expose only
+# generate_signals(); to run one anyway, prefix the module with "legacy:",
+# and read the look-ahead warning it prints.
+strategy_id: ranked_asset_alloc_v10
+strategy_module: strategies.ranks.ranked_target_weights
+start_date: "2023-01-01"
+end_date: "2025-12-31"
+initial_capital: 100000
+benchmark: SPY
+
+cost:
+  spread_bps: 5
+  slippage_bps: 5
+  commission_per_share: 0.0
+  participation_rate: 0.05
+
+risk:
+  max_position_pct: 0.40
+  max_sector_pct: 0.60
+  cash_reserve_pct: 0.10
+  # V10 DAF levers to 2x in low-vol bull regimes. A 1.0 cap here would clamp
+  # that decision away and quietly backtest a different, unleveraged strategy.
+  max_leverage: 2.0
+  max_positions: 50
+
+execution:
+  fill_type: MARKET_OPEN
+  fill_delay_days: 1
+  fractional_shares: false
+  delisting_return: -0.30
+
+params: {}
+
+universe_source: pit_sp500
+price_source: lake
+trial_index: 0
+random_seed: 42
+notes: "Example backtest configuration"

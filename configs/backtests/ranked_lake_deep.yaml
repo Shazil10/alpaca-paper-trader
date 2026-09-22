@@ -1,0 +1,60 @@
+# Ranked Sector Allocation (V10 DAF 2x) over the deepened price lake.
+#
+# Companion to ranked_lake.yaml, which is pinned to the shallow 2023+ lake.
+# scripts/backfill_history.py extended the ETF history to 2005-01-03, so this
+# run covers the COVID crash and the 2022 bear market -- the regimes the sleeve
+# has never been tested against.
+#
+# The start date is set by the sleeve's own universe, not by the lake. XLC listed
+# 2018-06-19 and the sleeve requires all 11 sector ETFs with ra.MIN_SESSIONS=200
+# sessions of history, so the first session on which it can legitimately act is
+# roughly 2019-04. Starting earlier does not fail loudly -- it ranks all-NaN
+# columns -- so the guard in ranked_target_weights.decide() skips those days and
+# the equity curve would simply sit flat. 2019-06-02 buys a margin.
+#
+# XLRE (listed 2015-10-08) is the next constraint after XLC; everything else in
+# ALL_TICKERS reaches back to 2005-2007.
+strategy_id: ranked_asset_alloc_v10_daf_deep
+strategy_module: strategies.ranks.ranked_target_weights
+start_date: "2019-06-03"
+end_date: "2026-08-21"
+initial_capital: 15000
+benchmark: SPY
+
+cost:
+  spread_bps: 5
+  slippage_bps: 5
+  commission_per_share: 0.0
+  participation_rate: 0.05
+
+# Wide on purpose: this run measures the strategy, not the risk layer. See the
+# note in ranked_lake.yaml -- DAF legitimately reaches 2x gross.
+risk:
+  max_position_pct: 1.0
+  max_sector_pct: 1.0
+  cash_reserve_pct: 0.0
+  max_leverage: 2.0
+  max_positions: 20
+
+execution:
+  fill_type: MARKET_OPEN
+  fill_delay_days: 1
+  fractional_shares: false
+  delisting_return: -0.30
+
+params: {}
+
+# Sector ETFs, not index members: PIT S&P 500 membership is meaningless here and
+# the sleeve never calls ctx.universe().
+universe_source: etf_rotation
+price_source: lake
+price_adjustment: asof
+trial_index: 0
+random_seed: 42
+notes: >
+  Deep-history run on the 2005+ ETF backfill. Two caveats carry over from
+  ranked_lake.yaml: the engine has no financing model, so the 2x sleeve borrows
+  at zero and levered stretches are overstated by roughly the broker call rate
+  on the borrowed half; and ETF history before 2023 comes from yfinance in a
+  single backfill pass, not from the daily incremental path, so it has not been
+  cross-checked against a second provider.
