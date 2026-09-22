@@ -1,0 +1,59 @@
+# Clenow Momentum (Enhanced v2) over the price lake.
+#
+# Bounded by the *equity* side of the lake, not the ETF side. The rotation ETFs
+# reach back to 2005 but individual stocks still start 2023-01-03, and this sleeve
+# ranks stocks. The entry gates need 252 sessions (200-day SMA plus the 52-week
+# high), so the first session on which the sleeve can legitimately act is roughly
+# 2023-01-03 + 252 sessions = 2024-01-03. 2024-02-01 buys a margin.
+#
+# To run this over 2010-2025, finish the equity backfill:
+#   PYTHONPATH=src ./venv/bin/python scripts/backfill_history.py --start 2010-01-01
+# then move start_date back and re-run. Nothing else here needs to change.
+strategy_id: clenow_momentum_v2
+strategy_module: strategies.momentum.clenow_target_weights
+start_date: "2024-02-01"
+end_date: "2026-08-21"
+initial_capital: 40000
+benchmark: SPY
+
+cost:
+  spread_bps: 5
+  slippage_bps: 5
+  commission_per_share: 0.0
+  participation_rate: 0.05
+
+# The sleeve sizes to 1/top_n per name (see clenow_target_weights: the clamp and
+# renormalization in _inverse_vol_weights cancel, so seven names come out at
+# 14.3% each). max_position_pct is therefore the only cap that actually binds,
+# and it is set just above 1/7 so the risk layer does not silently reshape the
+# strategy being measured.
+risk:
+  max_position_pct: 0.15
+  max_sector_pct: 1.0
+  cash_reserve_pct: 0.10
+  max_leverage: 1.0
+  max_positions: 10
+
+execution:
+  fill_type: MARKET_OPEN
+  fill_delay_days: 1
+  fractional_shares: false
+  delisting_return: -0.30
+
+params:
+  top_n: 7
+
+# Point-in-time S&P 500 membership. The sleeve reads ctx.universe(), so this is
+# load-bearing here in a way it is not for the ETF sleeves.
+universe_source: pit_sp500
+price_source: lake
+price_adjustment: asof
+trial_index: 0
+random_seed: 42
+notes: >
+  Phase 7 migration run. Three caveats. The equity lake starts 2023-01-03, so
+  this window contains no bear market and the regime filter is never tested
+  risk-off for long. Membership names the lake cannot price are silently absent,
+  which reintroduces some survivorship bias -- see data/universe/_schema.md
+  contract 2. And sizing is equal-weight rather than inverse-vol, which is the
+  live behaviour, not a backtest artifact.

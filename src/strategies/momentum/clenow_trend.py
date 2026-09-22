@@ -109,6 +109,39 @@ def _realized_vol(series: pd.Series, period: int = VOL_LOOKBACK) -> float:
 # 1. Regime filter
 # ---------------------------------------------------------------------------
 
+def regime_from_closes(
+    closes_by_symbol: Dict[str, pd.Series],
+    etfs: Tuple[str, ...] = REGIME_ETFS,
+    sma_period: int = REGIME_SMA_PERIOD,
+) -> bool:
+    """Risk-on when at least 2 of 3 regime ETFs close above their 200-day SMA.
+
+    The decision, separated from where the prices came from. ``check_regime``
+    downloads and delegates here; the backtest adapter slices a context panel and
+    delegates here. One implementation, so the two paths cannot disagree.
+
+    An ETF with fewer than ``sma_period`` bars abstains rather than voting
+    against, which matches the original loop's ``continue``.
+    """
+    above = 0
+    for etf in etfs:
+        close = closes_by_symbol.get(etf)
+        if close is None:
+            continue
+        close = close.dropna()
+        if len(close) < sma_period:
+            continue
+        if float(close.iloc[-1]) > _sma(close, sma_period):
+            above += 1
+
+    risk_on = above >= 2
+    logger.info(
+        "Regime check: %d / %d ETFs above %d-SMA → %s",
+        above, len(etfs), sma_period, "RISK-ON" if risk_on else "RISK-OFF",
+    )
+    return risk_on
+
+
 def check_regime(etfs: Tuple[str, ...] = REGIME_ETFS, sma_period: int = REGIME_SMA_PERIOD) -> bool:
     """Return True (risk-on) if ≥2 of 3 ETFs close above their 200-day SMA."""
     try:
@@ -118,20 +151,14 @@ def check_regime(etfs: Tuple[str, ...] = REGIME_ETFS, sma_period: int = REGIME_S
         logger.warning("Regime check failed (download error). Defaulting to risk-ON.")
         return True
 
-    above = 0
+    closes: Dict[str, pd.Series] = {}
     for etf in etfs:
         try:
-            close = data[etf]["Close"].dropna()
-            if len(close) < sma_period:
-                continue
-            if float(close.iloc[-1]) > _sma(close, sma_period):
-                above += 1
+            closes[etf] = data[etf]["Close"].dropna()
         except (KeyError, IndexError):
             continue
 
-    risk_on = above >= 2
-    logger.info("Regime check: %d / %d ETFs above %d-SMA → %s", above, len(etfs), sma_period, "RISK-ON" if risk_on else "RISK-OFF")
-    return risk_on
+    return regime_from_closes(closes, etfs, sma_period)
 
 
 # ---------------------------------------------------------------------------
@@ -144,6 +171,75 @@ def _high_52w(series: pd.Series) -> float:
         return float("nan")
     n = min(252, len(series))
     return float(series.iloc[-n:].max())
+
+
+def score_symbol(
+    symbol: str,
+    close: pd.Series,
+    *,
+    lookback: int = LOOKBACK_DAYS,
+    entry_sma: int = ENTRY_SMA_PERIOD,
+    decel_lookback: int = DECEL_LOOKBACK,
+    decel_min_ratio: float = DECEL_MIN_RATIO,
+    high_prox_pct: float = HIGH_PROX_PCT,
+) -> Optional[Dict[str, object]]:
+    """Score one symbol and apply the three entry gates.
+
+    Returns the record, or None when any gate rejects it. This is the whole
+    per-symbol decision: ``score_universe`` wraps it in a yfinance download loop
+    and the backtest adapter wraps it in a context slice.
+
+    Gates, in the original order -- which matters, because gate 2 is only
+    evaluated on names that already cleared gates 1 and 3:
+      1. Price above the 200-day SMA.
+      2. Deceleration guard: the 30-day score is at least half the 60-day score.
+      3. 52-week proximity: price within 25% of the 52-week high.
+    """
+    close = close.dropna()
+    if len(close) < max(lookback, entry_sma):
+        return None
+
+    current_price = float(close.iloc[-1])
+    sma200 = _sma(close, entry_sma)
+    sma50 = _sma(close, EXIT_SMA_PERIOD)
+    vol20 = _realized_vol(close, VOL_LOOKBACK)
+    high52 = _high_52w(close)
+
+    # Gate 1: price > 200-day SMA
+    if current_price <= sma200:
+        return None
+
+    # Gate 3: 52-week high proximity
+    if not np.isnan(high52) and high52 > 0:
+        if current_price < (1.0 - high_prox_pct) * high52:
+            return None
+
+    score = get_momentum_score(close.iloc[-lookback:].values)
+
+    # Gate 2: deceleration guard (short-term momentum not collapsing)
+    if len(close) >= decel_lookback and score > 0:
+        score_short = get_momentum_score(close.iloc[-decel_lookback:].values)
+        if score_short < decel_min_ratio * score:
+            return None
+
+    return {
+        "Symbol": symbol,
+        "Score": score,
+        "Close": current_price,
+        "Vol20": vol20,
+        "SMA200": sma200,
+        "SMA50": sma50,
+    }
+
+
+def rank_records(records: List[Dict[str, object]]) -> pd.DataFrame:
+    """Sort scored records by score and attach a 1-based rank."""
+    df = pd.DataFrame(records)
+    if df.empty:
+        return df
+    df = df.sort_values("Score", ascending=False).reset_index(drop=True)
+    df["Rank"] = df.index + 1  # 1-based rank
+    return df
 
 
 def score_universe(
@@ -181,54 +277,24 @@ def score_universe(
 
             for symbol in batch:
                 try:
-                    close = data[symbol]["Close"].dropna()
-                    if len(close) < max(lookback, entry_sma):
-                        continue
-
-                    current_price = float(close.iloc[-1])
-                    sma200 = _sma(close, ENTRY_SMA_PERIOD)
-                    sma50  = _sma(close, EXIT_SMA_PERIOD)
-                    vol20  = _realized_vol(close, VOL_LOOKBACK)
-                    high52 = _high_52w(close)
-
-                    # Gate 1: price > 200-day SMA
-                    if current_price <= sma200:
-                        continue
-
-                    # Gate 3: 52-week high proximity
-                    if not np.isnan(high52) and high52 > 0:
-                        if current_price < (1.0 - high_prox_pct) * high52:
-                            continue
-
-                    score = get_momentum_score(close.iloc[-lookback:].values)
-
-                    # Gate 2: deceleration guard (short-term momentum not collapsing)
-                    if len(close) >= decel_lookback and score > 0:
-                        score_short = get_momentum_score(close.iloc[-decel_lookback:].values)
-                        if score_short < decel_min_ratio * score:
-                            continue
-
-                    records.append(
-                        {
-                            "Symbol": symbol,
-                            "Score": score,
-                            "Close": current_price,
-                            "Vol20": vol20,
-                            "SMA200": sma200,
-                            "SMA50": sma50,
-                        }
-                    )
+                    close = data[symbol]["Close"]
                 except (KeyError, IndexError):
                     continue
+
+                record = score_symbol(
+                    symbol, close,
+                    lookback=lookback,
+                    entry_sma=entry_sma,
+                    decel_lookback=decel_lookback,
+                    decel_min_ratio=decel_min_ratio,
+                    high_prox_pct=high_prox_pct,
+                )
+                if record is not None:
+                    records.append(record)
         except Exception:
             continue
 
-    df = pd.DataFrame(records)
-    if df.empty:
-        return df
-    df = df.sort_values("Score", ascending=False).reset_index(drop=True)
-    df["Rank"] = df.index + 1  # 1-based rank
-    return df
+    return rank_records(records)
 
 
 def _col_exit_sma(df: pd.DataFrame) -> str:
