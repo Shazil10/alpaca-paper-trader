@@ -41,6 +41,26 @@ MIN_EQUITY_COVERAGE = 0.98
 #: has no history to give for those names.
 MIN_EQUITY_PRESENCE = 0.95
 
+# --- Backtest-readiness thresholds (--backtest only) -----------------------
+#
+# The live gate and the backtest gate ask different questions. Live asks "is
+# yesterday's bar here"; backtest asks "is there enough history to draw a
+# conclusion from". A lake can pass either and fail the other, so they are
+# reported separately and only the requested one decides the exit code.
+
+#: History target for the backfill. Deep enough to include 2008, 2011, 2015-16,
+#: 2018Q4 and 2022 -- the drawdowns that decide whether a long-only sleeve is
+#: tradable. 2023-2026 contains none of them.
+BACKTEST_START_TARGET = pd.Timestamp("2007-01-01")
+
+#: Roughly twelve years of sessions. Below this, walk-forward folds are too
+#: short to mean anything and the out-of-sample holdout is a rounding error.
+MIN_BACKTEST_SESSIONS = 3_000
+
+#: A reconstructed S&P 500 snapshot should hold close to 500 names. Well under
+#: that means the membership parse dropped rows.
+MIN_PIT_MEMBERS = 450
+
 
 class Check:
     def __init__(self):
@@ -69,7 +89,158 @@ class Check:
         return 1 if self.failed else 0
 
 
-def main() -> int:
+def backtest_checks(frame: "pd.DataFrame", check: "Check") -> None:
+    """Depth and point-in-time checks. Only these decide ``--backtest``.
+
+    Three things have to hold before a backtest result deserves to be believed:
+    enough history to contain a bear market, an index membership tape so the
+    universe is not today's survivors projected backwards, and a security master
+    so a recycled ticker is not silently two companies in one price series.
+    """
+    from strategies.ranks import ranked_asset_alloc as ra
+
+    sessions = pd.DatetimeIndex(sorted(frame["date"].unique()))
+    earliest = pd.Timestamp(sessions[0])
+
+    check.add(
+        earliest <= BACKTEST_START_TARGET,
+        "history reaches target",
+        f"earliest session {earliest.date()} "
+        f"(target on or before {BACKTEST_START_TARGET.date()})",
+        "without 2008 and 2022 in the sample, every drawdown and bear-regime "
+        "number is extrapolation. Run scripts/backfill_history.py",
+    )
+
+    check.add(
+        len(sessions) >= MIN_BACKTEST_SESSIONS,
+        "enough sessions",
+        f"{len(sessions):,} sessions (needs {MIN_BACKTEST_SESSIONS:,})",
+        "walk-forward folds and a locked holdout both need years, not months",
+    )
+
+    # Depth is per symbol, and the ETF sleeves are the only set deep enough so
+    # far. Report both so a partial backfill is visible rather than averaged
+    # away.
+    cov = store.coverage()
+    if len(cov) > 0:
+        cov = cov.copy()
+        cov["first_date"] = pd.to_datetime(cov["first_date"])
+        deep = cov[cov["first_date"] <= BACKTEST_START_TARGET]
+        etf_cov = store.coverage(sorted(ra.ALL_TICKERS))
+        etf_cov["first_date"] = pd.to_datetime(etf_cov["first_date"])
+        # XLC (2018) and XLRE (2015) postdate the target by listing, not by
+        # any failure of the backfill, so they cannot be required.
+        etf_deep = int((etf_cov["first_date"] <= BACKTEST_START_TARGET).sum())
+
+        print(
+            f"\n  note: {len(deep)}/{len(cov)} symbol(s) reach "
+            f"{BACKTEST_START_TARGET.date()}; {etf_deep}/{len(etf_cov)} rotation "
+            f"ETFs do (XLC listed 2018-06-19, XLRE 2015-10-08 — inception, not a gap)"
+        )
+
+        check.add(
+            etf_deep >= len(etf_cov) - 4,
+            "rotation ETFs deep",
+            f"{etf_deep}/{len(etf_cov)} reach {BACKTEST_START_TARGET.date()}",
+            "the ETF sleeves are the only strategies that can be backtested "
+            "deeply today; if these are shallow, nothing can",
+        )
+
+    # --- Point-in-time membership ---
+    from data_pipeline import membership, securities
+
+    check.add(
+        membership.has_pit_membership(),
+        "PIT membership present",
+        "data/universe/membership.parquet"
+        + (" present" if membership.has_pit_membership() else " MISSING"),
+        "without it the universe is today's index projected backwards, which "
+        "inflates returns by 1-3% annually. Run scripts/build_membership.py",
+    )
+
+    if membership.has_pit_membership():
+        sample_date = max(earliest, pd.Timestamp("2010-06-30"))
+        members = membership.members_asof(sample_date)
+        check.add(
+            len(members) >= MIN_PIT_MEMBERS,
+            "PIT membership plausible",
+            f"{len(members)} members on {sample_date.date()} "
+            f"(needs >={MIN_PIT_MEMBERS})",
+            "a short snapshot means the interval parse dropped rows, which "
+            "would quietly shrink the tradable universe",
+        )
+
+        # The membership tape and the price lake have to overlap, or the PIT
+        # universe filters everything out and the strategy holds nothing.
+        lake_symbols = set(frame["symbol"].unique())
+        overlap = len(members & lake_symbols)
+        check.add(
+            overlap >= MIN_PIT_MEMBERS * 0.8,
+            "membership joins the lake",
+            f"{overlap}/{len(members)} members on {sample_date.date()} have bars",
+            "membership names that the lake cannot price are unusable. The "
+            "source records final tickers (LEHMQ, not LEH), so some never join",
+        )
+
+    check.add(
+        (REPO_ROOT / "data" / "universe" / "securities.parquet").exists(),
+        "security master present",
+        "data/universe/securities.parquet"
+        + (" present" if (REPO_ROOT / "data" / "universe" / "securities.parquet").exists()
+           else " MISSING"),
+        "a recycled ticker splices two unrelated companies into one price "
+        "series. Run scripts/build_securities.py",
+    )
+
+    actions = REPO_ROOT / "data" / "corporate_actions" / "actions.parquet"
+    if not actions.exists():
+        print(
+            "\n  note: no data/corporate_actions/actions.parquet — delisting "
+            "returns are the configured haircut (default -30%), not real data"
+        )
+
+
+def main(argv: "list[str] | None" = None) -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser.add_argument(
+        "--backtest",
+        action="store_true",
+        help="Check backtest readiness (history depth, PIT membership) instead "
+             "of live-trading readiness.",
+    )
+    args = parser.parse_args(argv)
+
+    if args.backtest:
+        return _run_backtest_gate()
+    return _run_live_gate()
+
+
+def _run_backtest_gate() -> int:
+    check = Check()
+    frame = store.load_prices()
+    if len(frame) == 0:
+        print("Price lake is empty. Run: PYTHONPATH=src python src/data_pipeline/sync_prices.py")
+        return 1
+
+    backtest_checks(frame, check)
+
+    width = max(len(n) for _, n, _, _ in check.results)
+    print()
+    for ok, name, detail, why in check.results:
+        print(f"  [{'PASS' if ok else 'FAIL'}] {name:<{width}}  {detail}")
+        if not ok and why:
+            print(f"         why it matters: {why}")
+    print()
+    if check.failed:
+        print(f"NOT BACKTEST-READY — {check.failed} check(s) failed.")
+        return 1
+    print("BACKTEST-READY — history depth and point-in-time data are in place.")
+    return 0
+
+
+def _run_live_gate() -> int:
     check = Check()
 
     frame = store.load_prices()
@@ -128,14 +299,26 @@ def main() -> int:
         "the sleeve declines to act if any sector ETF is absent",
     )
 
-    bar_counts = sorted(set(etf_cov["bars"])) if len(etf_cov) else []
-    check.add(
-        len(bar_counts) == 1,
-        "rotation ETFs aligned",
-        f"bar counts: {bar_counts}",
-        "unequal counts mean NaNs in the panel; this is exactly what flipped "
-        "the regime from bull to neutral during migration",
-    )
+    # Alignment is checked inside the sleeve's own decision window, not across
+    # the whole lake. Lake-wide equality held only while the lake started after
+    # every ETF's inception; once history reaches back past XLC (listed
+    # 2018-06-19) and XLRE (2015-10-08), unequal lake-wide counts are the
+    # correct answer and the old check failed on healthy data. What actually
+    # breaks the sleeve is a NaN inside the window it reads.
+    decision_start = pd.Timestamp(newest) - pd.Timedelta(days=ra.LOOKBACK_DAYS)
+    window = store.load_close_matrix(ra.ALL_TICKERS, start=decision_start, end=newest)
+    if not window.empty:
+        window_counts = window.notna().sum()
+        ragged = sorted(window_counts[window_counts < len(window)].index)
+        check.add(
+            not ragged,
+            "rotation ETFs aligned",
+            f"{len(window)} sessions in the {ra.LOOKBACK_DAYS}-day window, "
+            f"{len(ragged)} ETF(s) ragged" + (f": {ragged}" if ragged else ""),
+            "a NaN inside the decision window drops that ETF from breadth and "
+            "threshold comparisons; this is exactly what flipped the regime "
+            "from bull to neutral during migration",
+        )
 
     matrix = store.load_close_matrix(ra.ALL_TICKERS)
     if not matrix.empty:

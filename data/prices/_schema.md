@@ -77,6 +77,9 @@ traded", which is a different and false claim.
 ## Storage layout
 
 ```
+data/prices/daily/2005.parquet   cold — backfilled, ETFs only (see Coverage)
+...                              cold
+data/prices/daily/2022.parquet   cold
 data/prices/daily/2023.parquet   cold — committed, only rebuild rewrites it
 data/prices/daily/2024.parquet   cold
 data/prices/daily/2025.parquet   cold
@@ -112,8 +115,26 @@ stays readable mid-rollover.
 
 ## Coverage
 
-- Start: `2023-01-01` (whole calendar years only — no partial-year edge cases,
-  and comfortably above the ~2 years live strategies need).
+Two different depths, for two different purposes. The daily path only ever needed
+about two years; the backtester needs a bear market in the sample.
+
+- **Daily path start: `2023-01-01`** (`sync_prices.LOOKBACK_START`). Whole
+  calendar years only — no partial-year edge cases.
+- **Backfilled start: `2005-01-03`**, ETFs and `SPY`/`SHY` only, written by
+  `scripts/backfill_history.py`. 5,443 sessions. Equities are still 2023+, so a
+  deep backtest today can only run the ETF sleeves.
+
+`sync_prices` cannot deepen history: a known symbol's window is
+`max(LOOKBACK_START, last_stored - 5d)`, which collapses to last week for
+anything already in the lake. That is correct for the daily path, which is why
+deepening is a separate script.
+
+Depth is not uniform even among the ETFs, and the shortfalls are inceptions
+rather than gaps: `XLC` listed 2018-06-19, `XLRE` 2015-10-08, `UUP` 2007-03-01,
+`FXY` 2007-02-13, `FXF` 2006-06-26. Anything reading these must check for data,
+not just for a column — a symbol before its inception is present as an all-`NaN`
+column, which passes a naive membership test and then sorts `NaN`s.
+
 - Equities: union of today's `universe.csv` and every symbol already in
   `master_tickers.csv`, so a name that fails today's liquidity screen does not
   develop a hole in its history.
