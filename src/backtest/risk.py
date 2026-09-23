@@ -44,13 +44,36 @@ def apply_risk_limits(
         logger.debug("Risk: dropped %d positions exceeding max_positions=%d", dropped, config.max_positions)
         adjusted = keep
 
+    # 2b. Cap the short book as a whole.
+    #
+    # Separate from gross leverage because the two constrain different risks. A
+    # 2x gross book that is 1x long and 1x short has bounded downside on the long
+    # leg and unbounded on the short, so a fund can reasonably want more gross
+    # than it wants short.
+    if config.max_short_pct is not None:
+        short_exposure = sum(-w for w in adjusted.values() if w < 0)
+        if short_exposure > config.max_short_pct > 0:
+            scale = config.max_short_pct / short_exposure
+            adjusted = {
+                sym: (w * scale if w < 0 else w) for sym, w in adjusted.items()
+            }
+            logger.debug(
+                "Risk: scaled the short book by %.3f (was %.1f%%, cap %.1f%%)",
+                scale, short_exposure * 100, config.max_short_pct * 100,
+            )
+
     # 3. Enforce cash reserve.
     # Measured against max_leverage, not against 1.0. Hard-coding 1.0 here made
     # max_leverage unreachable: a deliberately levered sleeve (the ranked
     # sleeve's DAF 2x) was scaled back to gross 1.0 before the leverage check
     # ever ran, so the backtest quietly simulated an unlevered strategy. At the
     # default max_leverage=1.0 this expression is identical to the old one.
-    total_weight = sum(adjusted.values())
+    #
+    # Measured on *gross* weight, not net. A market-neutral book nets to roughly
+    # zero while still consuming every dollar of capital, so the net form would
+    # never scale it and the cash reserve would not exist. For a long-only book
+    # gross and net are the same number, so this changes nothing there.
+    total_weight = sum(abs(w) for w in adjusted.values())
     max_invested = config.max_leverage - config.cash_reserve_pct
     if total_weight > max_invested:
         scale = max_invested / total_weight

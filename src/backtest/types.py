@@ -74,7 +74,13 @@ class Fill:
 
 @dataclass(frozen=True)
 class Lot:
-    """A FIFO lot for position tracking."""
+    """A FIFO lot for position tracking.
+
+    ``shares`` is signed: negative is a short. One field rather than a separate
+    side, because every piece of arithmetic downstream -- market value, unrealized
+    PnL, gross exposure -- then works for both directions without branching, and a
+    branch that exists in five places is a branch that will be forgotten in one.
+    """
     symbol: str
     shares: float
     entry_price: float
@@ -82,10 +88,20 @@ class Lot:
     strategy_id: str = ""
     lot_id: str = ""
 
+    @property
+    def is_short(self) -> bool:
+        return self.shares < 0
+
 
 @dataclass(frozen=True)
 class Position:
-    """Aggregate position in a symbol (sum of lots)."""
+    """Aggregate position in a symbol (sum of lots).
+
+    ``shares`` and ``market_value`` are signed. A short shows negative for both,
+    which is what makes equity add up: shorting $5,000 credits $5,000 of cash and
+    books -$5,000 of market value, so equity is unchanged at the moment of sale
+    and moves only as the price does.
+    """
     symbol: str
     shares: float
     avg_entry_price: float
@@ -94,6 +110,15 @@ class Position:
     unrealized_pnl: float
     entry_date: pd.Timestamp  # earliest lot entry
     lots: Tuple[Lot, ...] = ()
+
+    @property
+    def is_short(self) -> bool:
+        return self.shares < 0
+
+    @property
+    def exposure(self) -> float:
+        """Absolute market value, which is what a risk limit cares about."""
+        return abs(self.market_value)
 
 
 @dataclass(frozen=True)
@@ -109,7 +134,24 @@ class PortfolioSnapshot:
 
     @property
     def market_value(self) -> float:
+        """Net market value: longs minus shorts."""
         return sum(p.market_value for p in self.positions.values())
+
+    @property
+    def long_value(self) -> float:
+        return sum(p.market_value for p in self.positions.values() if p.market_value > 0)
+
+    @property
+    def short_value(self) -> float:
+        """Absolute value of the short book, as a positive number."""
+        return sum(
+            -p.market_value for p in self.positions.values() if p.market_value < 0
+        )
+
+    @property
+    def gross_value(self) -> float:
+        """Longs plus shorts. What leverage and borrow fees are measured on."""
+        return self.long_value + self.short_value
 
     @property
     def position_count(self) -> int:
@@ -120,10 +162,30 @@ class PortfolioSnapshot:
         return frozenset(self.positions.keys())
 
     @property
+    def short_symbols(self) -> FrozenSet[str]:
+        return frozenset(
+            s for s, p in self.positions.items() if p.market_value < 0
+        )
+
+    @property
     def weights(self) -> Dict[str, float]:
+        """Signed weights: a short is negative.
+
+        Note that these sum to *net* exposure, not gross. A market-neutral book
+        sums to roughly zero while carrying 2x gross, so a caller checking
+        leverage must use ``gross_value`` or take absolute values -- summing these
+        would report a fully levered long/short fund as flat.
+        """
         if self.equity <= 0:
             return {}
         return {sym: pos.market_value / self.equity for sym, pos in self.positions.items()}
+
+    def margin_requirement(self, config: "ShortConfig") -> float:
+        """Equity the broker requires against this book, at maintenance rates."""
+        return (
+            self.long_value * config.maintenance_margin_long
+            + self.short_value * config.maintenance_margin_short
+        )
 
 
 @dataclass(frozen=True)
@@ -151,6 +213,72 @@ class RiskConfig:
     max_positions: int = 50
     fractional_shares: bool = False     # whole shares by default
 
+    #: Cap on the short book as a share of equity. None means only the gross
+    #: leverage limit applies. Kept separate from ``max_leverage`` because the two
+    #: constrain different risks: a long leg can lose its capital, a short leg has
+    #: no such floor, so a fund can reasonably permit more gross than short.
+    max_short_pct: Optional[float] = None
+
+
+@dataclass(frozen=True)
+class ShortConfig:
+    """Short-side assumptions.
+
+    Off by default. Every long-only strategy in this repository behaves exactly as
+    before unless ``allow_shorts`` is set, because a negative target weight is
+    otherwise dropped rather than silently reinterpreted.
+
+    The borrow model is the honest weak point. Real borrow rates are a daily,
+    per-name, broker-specific quote and no free source publishes history for them,
+    so what is modelled here is a *policy*: a flat rate for general collateral, a
+    higher flat rate for a named hard-to-borrow set, and an unborrowable set that
+    cannot be shorted at all. That is a fiction with the right shape, not a
+    reconstruction, and any short backtest has to be read with that in mind --
+    which is why every run records it and ``BacktestResult.limitations`` says so.
+    """
+    allow_shorts: bool = False
+
+    #: Annualized borrow fee on general collateral. 1% is a reasonable stand-in
+    #: for a liquid large-cap; the number that matters is that it is not zero.
+    borrow_rate_annual: float = 0.01
+
+    #: Annualized borrow fee for names in ``hard_to_borrow``. Real HTB names run
+    #: anywhere from 5% to over 100%; 20% is a deliberately uncomfortable default,
+    #: because a short thesis that only works at general-collateral rates is not a
+    #: short thesis.
+    hard_to_borrow_rate_annual: float = 0.20
+    hard_to_borrow: FrozenSet[str] = frozenset()
+
+    #: Cannot be shorted at all. An existing short in one of these is bought in.
+    unborrowable: FrozenSet[str] = frozenset()
+
+    #: Reg T initial margin. A long needs 50% of its value in equity; a short
+    #: needs 150% of the proceeds on deposit, which is the proceeds themselves
+    #: plus 50% -- so the *additional* equity required is 50%.
+    initial_margin_long: float = 0.50
+    initial_margin_short: float = 0.50
+
+    #: Maintenance margin, below which the broker liquidates. Typical house
+    #: requirements, stricter on the short side because losses are unbounded.
+    maintenance_margin_long: float = 0.25
+    maintenance_margin_short: float = 0.30
+
+    #: Whether short-sale proceeds earn interest. Retail accounts get nothing, so
+    #: the default is False; a prime-brokered fund would set a rebate rate.
+    short_proceeds_earn_interest: bool = False
+    short_rebate_annual: float = 0.0
+
+    def borrow_rate(self, symbol: str) -> float:
+        """Annualized borrow fee for one symbol."""
+        return (
+            self.hard_to_borrow_rate_annual
+            if symbol.upper() in self.hard_to_borrow
+            else self.borrow_rate_annual
+        )
+
+    def borrowable(self, symbol: str) -> bool:
+        return symbol.upper() not in self.unborrowable
+
 
 @dataclass(frozen=True)
 class ExecutionConfig:
@@ -174,6 +302,7 @@ class BacktestConfig:
     cost: CostConfig = field(default_factory=CostConfig)
     risk: RiskConfig = field(default_factory=RiskConfig)
     execution: ExecutionConfig = field(default_factory=ExecutionConfig)
+    short: ShortConfig = field(default_factory=ShortConfig)
 
     params: Dict[str, Any] = field(default_factory=dict)
     universe_source: str = "pit_sp500"  # or "current", "etf_rotation", custom

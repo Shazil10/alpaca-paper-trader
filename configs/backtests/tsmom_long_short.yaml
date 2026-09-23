@@ -1,0 +1,131 @@
+# TSMOM with the short leg enabled — the reason the short side was built.
+#
+#   PYTHONPATH=src python -m src.backtest.runner --config configs/backtests/tsmom_long_short.yaml
+#
+# configs/backtests/tsmom_etf.yaml runs the same strategy long-only, which is what
+# the engine could honour before shorts existed. That variant understates 2008 and
+# 2022 badly: the short leg is what makes time-series momentum a crisis hedge, and
+# removing it leaves a long-only trend follower that simply goes to cash.
+#
+# Compare the two directly:
+#   PYTHONPATH=src python scripts/build_report.py \
+#     --runs runs/<long_only_run> runs/<this_run>
+strategy_id: tsmom_etf_long_short
+strategy_module: strategies.momentum.tsmom_etf
+start_date: "2007-06-01"
+end_date: "2026-08-21"
+initial_capital: 100000
+benchmark: SPY
+
+cost:
+  spread_bps: 5
+  slippage_bps: 5
+  commission_per_share: 0.0
+  participation_rate: 0.05
+
+risk:
+  max_position_pct: 1.00
+  max_sector_pct: 1.0
+  cash_reserve_pct: 0.0
+
+  # 3.0x, and the number is forced rather than chosen.
+  #
+  # The strategy's unconstrained book runs a median 3.12x gross (2.26 long, 0.68
+  # short) and reaches 4.93x. At the observed 73/27 long/short split, maintenance
+  # margin costs 0.2633 per unit of gross, so the account is in breach above
+  # 3.80x — and the raw book's requirement reaches 1.13x equity at the 95th
+  # percentile and 1.28x at its worst.
+  #
+  # So TSMOM at a 40% volatility target is not fundable in a Reg T account. Left
+  # at 5x the run produced 141 margin calls, which is the model correctly
+  # refusing to simulate a book no broker would carry. 3.0x sits under the breach
+  # point with headroom for the vol target to expand into.
+  max_leverage: 3.00
+
+  # Tighter than gross on purpose: a long leg can only lose its capital, a short
+  # leg has no such floor. 1.0x comfortably clears the 0.68x median short book.
+  max_short_pct: 1.00
+  max_positions: 24
+
+execution:
+  fill_type: MARKET_OPEN
+  fill_delay_days: 1
+  fractional_shares: false
+  delisting_return: -0.30
+
+# The weakest assumptions in this config, and the ones to change first when
+# judging the result. Every one is recorded in the run's config.json and
+# summarised in BacktestResult.limitations.
+short:
+  allow_shorts: true
+
+  # 1% general collateral. Broad ETFs genuinely are cheap to borrow, so this is
+  # closer to reality here than it would be for single stocks -- which is part of
+  # why an ETF book is the right place to switch the short side on first.
+  borrow_rate_annual: 0.01
+
+  # No ETF in this universe is hard to borrow or unborrowable in practice. Both
+  # lists are empty rather than invented, so no forced buy-in will fire in this
+  # run. That is honest for ETFs and would be wishful thinking for single stocks.
+  hard_to_borrow: []
+  hard_to_borrow_rate_annual: 0.20
+  unborrowable: []
+
+  # Reg T maintenance, stricter on the short side.
+  maintenance_margin_long: 0.25
+  maintenance_margin_short: 0.30
+
+  # Retail accounts earn nothing on short proceeds. A prime-brokered fund would
+  # set a rebate here, and at 3x gross that rebate is not a rounding error.
+  short_proceeds_earn_interest: false
+
+params:
+  lookback_months: 12
+  vol_halflife: 60
+  sigma_target: 0.40
+  long_only: false
+
+universe_source: etf_rotation
+price_source: lake
+price_adjustment: asof
+trial_index: 0
+random_seed: 42
+notes: >
+  WHAT THE SHORT LEG ACTUALLY DID, measured against the identical config with
+  long_only: true so the leverage cap is the same and the only difference is the
+  short leg:
+
+                CAGR  Sharpe   maxDD   beta   alpha
+    long-only   12.0%   0.756  -40.7%   0.53   6.3%
+    long-short   7.8%   0.537  -30.8%   0.22   6.1%
+
+  Calendar years say it more plainly. 2008: long-only -8.0%, long-short +11.1%,
+  SPY -36.2%. 2022: -8.3% against +2.5%, SPY -18.6%. 2015 and 2011 lean the same
+  way. The short leg does exactly what the literature claims in a crisis.
+
+  It also loses money everywhere else, and loses most in the sharp reversal off a
+  bottom: 2009 +6.0% against -11.4%, 2016 +3.4% against -12.3%, 2023 +8.0%
+  against -1.5%.
+
+  Alpha is effectively unchanged, 6.3% against 6.1%. So over this sample the short
+  leg is a hedge, not a second source of edge: it buys crisis protection and
+  halves beta, and pays for both in return. Whether that trade is worth making is
+  a mandate question, not a backtest question -- which is the point of measuring it
+  rather than assuming either way.
+
+  Caveats beyond the borrow model. There is still no financing model, so the
+  levered book borrows at zero and levered stretches are overstated by roughly the
+  call rate on the borrowed portion -- which bites harder here than in the
+  long-only variant because gross is higher. Short availability is a static empty
+  list, so a crowded short never becomes unborrowable exactly when it is
+  squeezing. And the margin model liquidates proportionally at maintenance, which
+  is gentler than a real broker would be.
+
+research:
+  holdout_years: 2
+  walk_forward_train_years: 4
+  walk_forward_test_years: 1
+  param_grid:
+    lookback_months: [3, 6, 9, 12, 15, 18]
+    vol_halflife: [20, 40, 60, 90, 120]
+  n_simulations: 500

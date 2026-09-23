@@ -64,7 +64,7 @@ from backtest.engine import generate_orders
 from backtest.portfolio import Portfolio
 from backtest.types import (
     BacktestConfig, CostConfig, ExecutionConfig, Fill, FillType, Order,
-    OrderSide, PortfolioSnapshot, RiskConfig,
+    OrderSide, PortfolioSnapshot, RiskConfig, ShortConfig,
 )
 
 logger = logging.getLogger(__name__)
@@ -171,6 +171,7 @@ class FundEngine:
         cost_config: Optional[CostConfig] = None,
         risk_config: Optional[RiskConfig] = None,
         execution_config: Optional[ExecutionConfig] = None,
+        short_config: Optional[ShortConfig] = None,
         *,
         reallocate: str = "none",
         reallocate_every_months: int = 12,
@@ -191,6 +192,7 @@ class FundEngine:
         self.cost = cost_config or CostConfig()
         self.risk = risk_config or RiskConfig()
         self.execution = execution_config or ExecutionConfig()
+        self.short = short_config or ShortConfig()
         self.reallocate = reallocate
         self.reallocate_every_months = max(int(reallocate_every_months), 1)
 
@@ -612,6 +614,14 @@ class FundEngine:
 
             # 2. Mark to market. Cash lives in the sub-ledgers plus the buffer.
             prices = self._get_close_prices(close_matrix, session)
+
+            # Borrow is charged on the fund's shorts, then split across the
+            # sleeves that hold them -- a sleeve must carry the cost of its own
+            # short, or the cheapest way to look good is to be the short sleeve.
+            if self.short.allow_shorts:
+                self._charge_borrow(
+                    ledger, session, prices, sleeve_cash
+                )
             sleeve_snapshots: Dict[str, PortfolioSnapshot] = {}
             sleeve_equity: Dict[str, float] = {}
 
@@ -681,7 +691,8 @@ class FundEngine:
             )
             for sid, targets in sleeve_targets.items():
                 pending[sid] = generate_orders(
-                    targets, sleeve_snapshots[sid], prices, sid
+                    targets, sleeve_snapshots[sid], prices, sid,
+                    short_config=self.short,
                 )
 
         return self._finalize(
@@ -693,6 +704,46 @@ class FundEngine:
     # -----------------------------------------------------------------------
     # Helpers
     # -----------------------------------------------------------------------
+
+    def _charge_borrow(
+        self,
+        ledger: Portfolio,
+        session: pd.Timestamp,
+        prices: Dict[str, float],
+        sleeve_cash: Dict[str, float],
+    ) -> float:
+        """Charge the fund's borrow, then bill each sleeve for its own shorts.
+
+        The fee is levied once on the shared ledger -- the fund holds one position
+        per ticker, so it borrows once -- and then attributed in proportion to each
+        sleeve's short market value. Leaving it at the fund level would let the
+        sleeve running the shorts look costless while the others paid for it, which
+        makes the per-sleeve attribution useless for deciding what to keep.
+        """
+        charged = ledger.accrue_borrow_fees(session, prices, self.short)
+        if abs(charged) <= 0:
+            return 0.0
+
+        exposures: Dict[str, float] = {}
+        for lot in ledger.lots:
+            if lot.shares >= 0:
+                continue
+            price = prices.get(lot.symbol)
+            if price is None or price <= 0:
+                continue
+            exposures[lot.strategy_id] = (
+                exposures.get(lot.strategy_id, 0.0) + abs(lot.shares) * price
+            )
+
+        total = sum(exposures.values())
+        if total <= 0:
+            return charged
+
+        for sleeve_id, exposure in exposures.items():
+            if sleeve_id in sleeve_cash:
+                sleeve_cash[sleeve_id] -= charged * (exposure / total)
+
+        return charged
 
     @staticmethod
     def _held(ledger: Portfolio, strategy_id: str) -> set:

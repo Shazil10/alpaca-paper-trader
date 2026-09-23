@@ -21,7 +21,7 @@ import pandas as pd
 
 from backtest.types import (
     BacktestConfig, BacktestResult, CostConfig, ExecutionConfig,
-    FillType, RiskConfig,
+    FillType, RiskConfig, ShortConfig,
 )
 from backtest.engine import BacktestEngine
 from backtest.strategy import get_strategy
@@ -330,6 +330,25 @@ def run_research_from_config(
     )
 
 
+def _short_from_raw(block: Optional[Dict[str, Any]]) -> ShortConfig:
+    """Build a ShortConfig from a YAML `short:` block.
+
+    The two set-valued fields arrive as YAML lists and have to become frozensets,
+    and symbols are upper-cased here so a config written as `hard_to_borrow: [gme]`
+    still matches. Absent block means shorts stay off.
+    """
+    if not block:
+        return ShortConfig()
+
+    parsed = dict(block)
+    for key in ("hard_to_borrow", "unborrowable"):
+        if key in parsed and parsed[key] is not None:
+            parsed[key] = frozenset(
+                str(symbol).strip().upper() for symbol in parsed[key]
+            )
+    return ShortConfig(**parsed)
+
+
 def fund_from_yaml(path: str):
     """Build a FundEngine from a fund config.
 
@@ -372,6 +391,7 @@ def fund_from_yaml(path: str):
         cost_config=CostConfig(**(raw.get("cost") or {})),
         risk_config=RiskConfig(**(raw.get("risk") or {})),
         execution_config=ExecutionConfig(**exec_raw),
+        short_config=_short_from_raw(raw.get("short")),
         reallocate=str(raw.get("reallocate", "none")),
         reallocate_every_months=int(raw.get("reallocate_every_months", 12)),
     )
@@ -414,6 +434,7 @@ def config_from_yaml(path: str) -> BacktestConfig:
     if "fill_type" in exec_raw:
         exec_raw["fill_type"] = FillType(exec_raw["fill_type"])
     exec_cfg = ExecutionConfig(**exec_raw) if exec_raw else ExecutionConfig()
+    short_cfg = _short_from_raw(raw.get("short"))
 
     return BacktestConfig(
         strategy_id=raw.get("strategy_id", raw.get("strategy_module", "unknown")),
@@ -425,6 +446,7 @@ def config_from_yaml(path: str) -> BacktestConfig:
         cost=cost_cfg,
         risk=risk_cfg,
         execution=exec_cfg,
+        short=short_cfg,
         params=raw.get("params", {}),
         universe_source=raw.get("universe_source", "pit_sp500"),
         price_source=raw.get("price_source", "lake"),

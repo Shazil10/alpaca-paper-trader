@@ -173,6 +173,22 @@ Existing `generate_signals()` strategies work via adapter (`src/backtest/adapter
 `strategies.momentum.triple_trigger`. Each has a parity gate under `tests/backtest/`
 asserting it makes the same decisions as the implementation it was extracted from.
 
+**Shorts.** Off by default: `ShortConfig.allow_shorts` is False and a negative
+target weight is dropped rather than reinterpreted, so every long-only strategy
+behaves exactly as it did before the short side existed. Turn it on with a
+`short:` block (see `configs/backtests/tsmom_long_short.yaml`) and you get signed
+positions, short-sale proceeds credited to cash, daily borrow accrued on calendar
+days, Reg T maintenance margin with proportional liquidation on a breach, and
+forced buy-ins for names on the `unborrowable` list.
+
+Two things to know before trusting a short backtest. The borrow model is a
+*policy*, not a reconstruction — a flat general-collateral rate plus a named
+hard-to-borrow set — because real borrow is a daily per-name broker quote with no
+free history; every run states this in `BacktestResult.limitations`. And a
+volatility-targeted strategy will often ask for more leverage than maintenance
+margin permits: TSMOM at a 40% target runs 3.1x gross and breaches above 3.80x, so
+a 5x cap produced 141 margin calls before the config was set to a fundable 3.0x.
+
 **Price levels vs returns.** `adj_close` is back-adjusted to the *download* date, so
 historical levels know about splits that had not happened yet. Returns are fine;
 levels are not. Use `ctx.prices()` for returns and momentum, and

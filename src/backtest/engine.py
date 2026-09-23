@@ -20,6 +20,7 @@ import numpy as np
 from backtest.types import (
     BacktestConfig, BacktestResult, CostConfig, ExecutionConfig,
     Fill, FillType, Order, OrderSide, PortfolioSnapshot, RiskConfig,
+    ShortConfig,
 )
 from backtest.context import StrategyContext
 from backtest.portfolio import Portfolio
@@ -123,9 +124,28 @@ class BacktestEngine:
                 all_orders.extend(pending_orders)
                 pending_orders = []
 
-            # Step 2: Mark-to-market at close
+            # Step 1b: Short-side carry and constraints, before marking.
             current_prices = self._get_close_prices(close_matrix, session)
+            if cfg.short.allow_shorts:
+                portfolio.accrue_borrow_fees(session, current_prices, cfg.short)
+                forced = self._force_buy_ins(
+                    portfolio, session, current_prices, cfg, broker, all_fills,
+                    all_orders,
+                )
+                for symbol in forced:
+                    warnings.append(
+                        f"{session:%Y-%m-%d}: bought in {symbol} (unborrowable)"
+                    )
+
+            # Step 2: Mark-to-market at close
             snap = portfolio.snapshot(session, current_prices)
+
+            if cfg.short.allow_shorts:
+                breach = self._margin_call(portfolio, snap, cfg, session)
+                if breach:
+                    warnings.append(breach)
+                    snap = portfolio.snapshot(session, current_prices)
+
             snapshots.append(snap)
             equity_dates.append(session)
             equity_values.append(snap.equity)
@@ -187,6 +207,29 @@ class BacktestEngine:
         if universe_fn is None:
             limitations.append("No PIT universe — results carry survivorship bias")
 
+        if cfg.short.allow_shorts:
+            # Stated on every short run, because the borrow model is the weakest
+            # assumption in the whole engine and it is invisible in the returns.
+            limitations.append(
+                f"Borrow modelled as a flat "
+                f"{cfg.short.borrow_rate_annual:.1%} annual rate "
+                f"({cfg.short.hard_to_borrow_rate_annual:.0%} for "
+                f"{len(cfg.short.hard_to_borrow)} named hard-to-borrow symbol(s)). "
+                "Real borrow is a daily per-name broker quote with no free "
+                "history, so this is a policy with the right shape, not a "
+                "reconstruction."
+            )
+            limitations.append(
+                "Short availability is a static list. In reality a crowded short "
+                "becomes unborrowable exactly when it is squeezing, so forced "
+                "buy-ins here are rarer and cheaper than they would have been."
+            )
+            if portfolio.borrow_paid:
+                limitations.append(
+                    f"Borrow cost charged over the run: "
+                    f"${portfolio.borrow_paid:,.0f}"
+                )
+
         result = BacktestResult(
             config=cfg,
             equity_curve=equity_curve,
@@ -225,6 +268,146 @@ class BacktestEngine:
         row = matrix.loc[date]
         return {sym: float(p) for sym, p in row.items() if pd.notna(p)}
 
+    def _force_buy_ins(
+        self,
+        portfolio: Portfolio,
+        session: pd.Timestamp,
+        prices: Dict[str, float],
+        cfg: BacktestConfig,
+        broker: SimulatedBroker,
+        all_fills: List[Fill],
+        all_orders: List[Order],
+    ) -> List[str]:
+        """Cover any short in a name that is no longer borrowable.
+
+        A real buy-in is not optional and not scheduled: the lender recalls, and
+        the position is closed at whatever the market is, immediately. So this
+        fills at the *current session's* price rather than waiting for the next
+        open, which is the one place the D+1 convention is deliberately broken --
+        pretending a forced cover gets tomorrow's open would be the optimistic
+        error, since buy-ins cluster exactly when a crowded short is squeezing.
+        """
+        recalled = [
+            symbol for symbol in portfolio.short_symbols()
+            if not cfg.short.borrowable(symbol)
+        ]
+        if not recalled:
+            return []
+
+        covered: List[str] = []
+        for symbol in recalled:
+            shares = abs(portfolio.position_shares(symbol))
+            price = prices.get(symbol)
+            if shares <= 0 or price is None or price <= 0:
+                continue
+
+            order = Order(
+                symbol=symbol,
+                side=OrderSide.BUY,
+                notional=0.0,
+                shares=shares,
+                strategy_id=cfg.strategy_id,
+                reason="forced_buy_in:unborrowable",
+                created_date=session,
+                order_id=f"{cfg.strategy_id}:{uuid4().hex[:12]}",
+                close_position=True,
+            )
+            fill_price = costs.compute_fill_price(price, OrderSide.BUY, cfg.cost)
+            fill = Fill(
+                order=order,
+                fill_price=fill_price,
+                fill_shares=shares,
+                fill_date=session,
+                commission=costs.compute_commission(shares, cfg.cost),
+                slippage_bps=cfg.cost.total_one_way_bps,
+                fill_type=FillType.MARKET_CLOSE,
+                fill_id=uuid4().hex[:12],
+            )
+            portfolio.apply_fill(fill)
+            all_fills.append(fill)
+            all_orders.append(order)
+            covered.append(symbol)
+            logger.warning(
+                "Forced buy-in: %s %.0f shares at %.2f on %s",
+                symbol, shares, fill_price, session.date(),
+            )
+
+        return covered
+
+    def _margin_call(
+        self,
+        portfolio: Portfolio,
+        snapshot: PortfolioSnapshot,
+        cfg: BacktestConfig,
+        session: pd.Timestamp,
+    ) -> Optional[str]:
+        """Liquidate proportionally when equity falls under maintenance margin.
+
+        Scaled down uniformly rather than closing the largest position, for the
+        same reason the risk layer scales rather than clips: a forced liquidation
+        that re-ranks the book changes the strategy being measured. A real broker
+        would not be so considerate, but modelling its arbitrary choice would add
+        noise rather than realism.
+
+        Only a *breach* triggers this. Sitting one dollar above maintenance is
+        legal and uncomfortable, which is exactly the state a levered short book
+        lives in.
+        """
+        required = snapshot.margin_requirement(cfg.short)
+        equity = snapshot.equity
+        if required <= 0 or equity >= required:
+            return None
+
+        if equity <= 0:
+            # Past insolvency: nothing to scale, close everything.
+            scale = 0.0
+        else:
+            scale = max(min(equity / required, 1.0), 0.0)
+
+        reduction = 1.0 - scale
+        closed_value = 0.0
+
+        for symbol, position in list(snapshot.positions.items()):
+            price = position.market_price
+            if price <= 0:
+                continue
+            shares = abs(position.shares) * reduction
+            if shares <= 0:
+                continue
+
+            side = OrderSide.SELL if position.shares > 0 else OrderSide.BUY
+            order = Order(
+                symbol=symbol,
+                side=side,
+                notional=0.0,
+                shares=shares,
+                strategy_id=cfg.strategy_id,
+                reason="margin_call",
+                created_date=session,
+                order_id=f"{cfg.strategy_id}:{uuid4().hex[:12]}",
+                close_position=reduction >= 1.0,
+            )
+            fill_price = costs.compute_fill_price(price, side, cfg.cost)
+            portfolio.apply_fill(Fill(
+                order=order,
+                fill_price=fill_price,
+                fill_shares=shares,
+                fill_date=session,
+                commission=costs.compute_commission(shares, cfg.cost),
+                slippage_bps=cfg.cost.total_one_way_bps,
+                fill_type=FillType.MARKET_CLOSE,
+                fill_id=uuid4().hex[:12],
+            ))
+            closed_value += shares * fill_price
+
+        message = (
+            f"{session:%Y-%m-%d}: margin call — equity ${equity:,.0f} below "
+            f"${required:,.0f} required; liquidated {reduction:.0%} "
+            f"(${closed_value:,.0f})"
+        )
+        logger.warning(message)
+        return message
+
     def _generate_orders(
         self,
         target_weights: Dict[str, float],
@@ -234,7 +417,8 @@ class BacktestEngine:
     ) -> List[Order]:
         """Convert target weights into orders for this run's strategy."""
         return generate_orders(
-            target_weights, snapshot, current_prices, config.strategy_id
+            target_weights, snapshot, current_prices, config.strategy_id,
+            short_config=config.short,
         )
 
     def _compute_benchmark(
@@ -266,6 +450,7 @@ def generate_orders(
     snapshot: PortfolioSnapshot,
     current_prices: Dict[str, float],
     strategy_id: str,
+    short_config: Optional[ShortConfig] = None,
 ) -> List[Order]:
     """Convert target weights into buy/sell orders.
 
@@ -273,11 +458,20 @@ def generate_orders(
     It lives in one place deliberately: this logic was duplicated once, and the
     copy silently missed the trim case below for every run made against it.
 
-    Three cases, and the third is the one that gets forgotten:
+    Weights are signed. A negative target is a short, and is honoured only when
+    ``short_config.allow_shorts`` is set -- otherwise it is dropped, so every
+    long-only strategy behaves exactly as it did before the short side existed.
 
-    1. Held but absent from the target -- full exit.
-    2. Under target by more than the band -- buy the difference.
-    3. **Over** target by more than the band -- sell the difference.
+    Five cases, and the ones that get forgotten are the third and the fifth:
+
+    1. Held but absent from the target -- full exit, in whichever direction closes
+       it. A short is closed by buying.
+    2. Under target in the target's own direction -- trade the difference.
+    3. **Over** target -- trade back the difference.
+    4. Target on the opposite side of the current position -- close it outright and
+       let the next session open the other side from flat.
+    5. Shorts, which every one of the above has to handle with a sign rather than
+       an assumption.
 
     Without case 3 this does not implement target weights at all; it implements
     "buy toward target, never sell down", so gross exposure ratchets. A winner
@@ -285,6 +479,11 @@ def generate_orders(
     target (de-levering, or rotating to a smaller position) keeps the old size.
     Observed before case 3 existed: the DAF sleeve reached 2.59x realized gross
     against a 2.0x cap, and sat at 2.22x through a month targeting 1.00x.
+
+    Case 4 is split across two sessions on purpose. Sizing a flip as one order
+    means handing the broker a notional that has to carry the position through
+    zero, and a gap between decision and fill then overshoots into an unintended
+    position on the far side.
     """
     orders: List[Order] = []
     equity = snapshot.equity
@@ -292,36 +491,50 @@ def generate_orders(
     if equity <= 0:
         return orders
 
+    allow_shorts = short_config is not None and short_config.allow_shorts
     current_weights = snapshot.weights
-    target_symbols = set(target_weights.keys())
     held_symbols = set(current_weights.keys())
 
-    # Full exit: held but not wanted.
+    def wanted(symbol: str) -> float:
+        """The target weight, with shorts suppressed unless enabled.
+
+        A negative target is dropped rather than reinterpreted when shorts are
+        off. Clipping it to zero would be the same thing here -- absent from the
+        target means exit -- but being explicit keeps the intent visible.
+        """
+        weight = float(target_weights.get(symbol, 0.0))
+        if weight < 0 and not allow_shorts:
+            return 0.0
+        return weight
+
+    target_symbols = {s for s in target_weights if abs(wanted(s)) > 0}
+
+    # Full exit: held but not wanted. Signed, so a short is closed by buying.
     for sym in held_symbols:
-        if sym not in target_symbols or target_weights.get(sym, 0) <= 0:
-            pos = snapshot.positions.get(sym)
-            if pos and pos.shares > 0:
-                orders.append(Order(
-                    symbol=sym,
-                    side=OrderSide.SELL,
-                    notional=0.0,
-                    shares=pos.shares,
-                    strategy_id=strategy_id,
-                    reason="exit:not_in_target",
-                    created_date=snapshot.date,
-                    order_id=f"{strategy_id}:{uuid4().hex[:12]}",
-                    close_position=True,
-                ))
-
-    # Buy up / trim down toward target.
-    for sym, target_w in target_weights.items():
-        if target_w <= 0:
+        if sym in target_symbols:
             continue
+        pos = snapshot.positions.get(sym)
+        if pos is None or abs(pos.shares) <= 0:
+            continue
+        orders.append(Order(
+            symbol=sym,
+            side=OrderSide.SELL if pos.shares > 0 else OrderSide.BUY,
+            notional=0.0,
+            shares=abs(pos.shares),
+            strategy_id=strategy_id,
+            reason="exit:not_in_target",
+            created_date=snapshot.date,
+            order_id=f"{strategy_id}:{uuid4().hex[:12]}",
+            close_position=True,
+        ))
 
+    # Move each wanted symbol toward its target.
+    for sym in target_symbols:
+        target_w = wanted(sym)
         current_w = current_weights.get(sym, 0.0)
         delta_w = target_w - current_w
 
-        # Dead band, applied symmetrically so trims and buys share one rule.
+        # Dead band, applied symmetrically so every direction shares one rule.
         if abs(delta_w) < REBALANCE_BAND:
             continue
 
@@ -329,11 +542,36 @@ def generate_orders(
         if price is None or price <= 0:
             continue
 
-        if delta_w > 0:
+        pos = snapshot.positions.get(sym)
+        crossing_zero = pos is not None and target_w * pos.shares < 0
+
+        if crossing_zero:
+            # Flipping side is two decisions, not one, and sizing it as a single
+            # notional would leave the broker to re-derive shares across the flip.
+            # Close the existing position outright; the next session opens the
+            # other side from flat, which is also how a real desk would do it.
             orders.append(Order(
                 symbol=sym,
-                side=OrderSide.BUY,
-                notional=equity * delta_w,
+                side=OrderSide.SELL if pos.shares > 0 else OrderSide.BUY,
+                notional=0.0,
+                shares=abs(pos.shares),
+                strategy_id=strategy_id,
+                reason=f"flip_side:target={target_w:.3f}",
+                created_date=snapshot.date,
+                order_id=f"{strategy_id}:{uuid4().hex[:12]}",
+                close_position=True,
+            ))
+            continue
+
+        # Growing the position -- further long, or further short.
+        growing = (
+            (target_w > 0 and delta_w > 0) or (target_w < 0 and delta_w < 0)
+        )
+        if growing:
+            orders.append(Order(
+                symbol=sym,
+                side=OrderSide.BUY if delta_w > 0 else OrderSide.SELL,
+                notional=equity * abs(delta_w),
                 shares=0.0,
                 strategy_id=strategy_id,
                 reason=f"target_weight={target_w:.3f}",
@@ -342,20 +580,22 @@ def generate_orders(
             ))
             continue
 
-        pos = snapshot.positions.get(sym)
-        if pos is None or pos.shares <= 0 or current_w <= 0:
+        # Shrinking toward the target without crossing it.
+        if pos is None or abs(pos.shares) <= 0 or abs(current_w) <= 0:
             continue
 
         # Size the trim in shares, not notional. Handing the broker a notional
         # makes it re-derive shares from its own fill price, which on a gap can
-        # exceed the position and drive it negative -- an accidental short.
-        excess_shares = min(pos.shares * (-delta_w) / current_w, pos.shares)
+        # exceed the position and drive it through zero -- an accidental short.
+        excess_shares = min(
+            abs(pos.shares) * abs(delta_w) / abs(current_w), abs(pos.shares)
+        )
         if excess_shares <= 0:
             continue
 
         orders.append(Order(
             symbol=sym,
-            side=OrderSide.SELL,
+            side=OrderSide.SELL if pos.shares > 0 else OrderSide.BUY,
             notional=0.0,
             shares=excess_shares,
             strategy_id=strategy_id,
