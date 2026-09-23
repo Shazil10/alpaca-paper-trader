@@ -213,6 +213,16 @@ class SimulatedBroker:
             fill_id=uuid4().hex[:12],
         )
 
+    def execution_price(self, bar: Dict[str, float]) -> Optional[float]:
+        """The pre-cost price this order would transact at.
+
+        Public because the fund engine needs it before it can net: offsetting
+        orders from two sleeves cross at this price with no spread, and only the
+        residual reaches the market. Deriving it a second time in fund.py would
+        put the fill convention in two places.
+        """
+        return self._execution_price(bar)
+
     def _execution_price(self, bar: Dict[str, float]) -> Optional[float]:
         """Extract the execution price from a bar based on fill_type."""
         if self.execution.fill_type == FillType.MARKET_OPEN:

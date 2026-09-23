@@ -1,0 +1,94 @@
+# Three-sleeve fund over one balance sheet.
+#
+#   PYTHONPATH=src python -m src.backtest.runner --fund configs/funds/three_sleeve.yaml
+#
+# Not three backtests added together. One cash balance, one position per ticker,
+# orders netted across sleeves before anything reaches the market, and exposure
+# limits applied to the combined book rather than per sleeve.
+#
+# The window is set by the *shallowest* sleeve. TSMOM could run from 2007 and the
+# ETF rotation from 2019, but Clenow and the stock sleeves need 252 sessions of
+# equity history and the lake's equities start 2023-01-03. A fund backtest is only
+# as long as its shortest sleeve, so this starts 2024-06-01 -- the date every
+# sleeve here can legitimately act on.
+fund_id: three_sleeve_fund
+start_date: "2024-06-01"
+end_date: "2026-08-21"
+initial_capital: 100000
+benchmark: SPY
+
+# Fund-level frictions and limits. These apply to the netted flow and the
+# combined book, which is the point: two sleeves each at 90% gross are a fund at
+# 180%, and no per-sleeve check can see that.
+cost:
+  spread_bps: 5
+  slippage_bps: 5
+  commission_per_share: 0.0
+  participation_rate: 0.05
+
+risk:
+  # Deliberately binding. TSMOM alone asks for 2-3x from its volatility target,
+  # so a 1.5x fund cap will scale every sleeve back -- which is the behaviour
+  # under test, not an accident. Raise it to see the unconstrained book.
+  max_position_pct: 0.15
+  max_sector_pct: 1.0
+  cash_reserve_pct: 0.05
+  max_leverage: 1.5
+  max_positions: 40
+
+execution:
+  fill_type: MARKET_OPEN
+  fill_delay_days: 1
+  fractional_shares: false
+  delisting_return: -0.30
+
+# Return each sleeve to its target share of fund equity once a year. With "none",
+# a sleeve that drew down keeps trading at its reduced size and a winner
+# compounds unchecked -- which is a different fund, and worth comparing.
+reallocate: fixed
+reallocate_every_months: 12
+
+sleeves:
+  # Cross-asset trend following. Sized to a 40% volatility target, so it is the
+  # sleeve most likely to be scaled back by the fund leverage cap.
+  - strategy_id: tsmom
+    strategy_module: strategies.momentum.tsmom_etf
+    allocation_pct: 0.40
+    params:
+      lookback_months: 12
+      vol_halflife: 60
+      sigma_target: 0.40
+      long_only: true
+    risk:
+      max_position_pct: 0.25
+      max_sector_pct: 1.0
+      cash_reserve_pct: 0.0
+      max_leverage: 3.0
+      max_positions: 24
+
+  # Single-stock momentum. Overlaps with triple_trigger on the long side, which is
+  # where netting earns its keep.
+  - strategy_id: clenow
+    strategy_module: strategies.momentum.clenow_target_weights
+    allocation_pct: 0.35
+    params:
+      top_n: 7
+
+  # Deep-pullback mean reversion. Buys what the momentum sleeves are selling, so
+  # it is the most likely source of an internal cross.
+  - strategy_id: pullback
+    strategy_module: strategies.mean_reversion.pullback_target_weights
+    allocation_pct: 0.25
+    params:
+      top_n: 5
+      cooldown_days: 20
+
+# Point-in-time membership, unioned with the fixed ETFs so the TSMOM sleeve can
+# see the instruments it trades.
+universe_source: pit_sp500
+price_source: lake
+price_adjustment: asof
+notes: >
+  Allocations sum to 100%, so no unallocated buffer. The sleeves disagree by
+  construction -- momentum buys strength, pullback buys weakness -- which is the
+  point of running them together and the reason netting matters here.

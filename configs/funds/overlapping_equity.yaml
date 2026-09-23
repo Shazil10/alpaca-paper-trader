@@ -1,0 +1,76 @@
+# Two stock sleeves that fish the same pond, so netting has something to do.
+#
+#   PYTHONPATH=src python -m src.backtest.runner --fund configs/funds/overlapping_equity.yaml
+#
+# The three_sleeve fund nets nothing, and that is correct rather than broken: an
+# ETF trend follower and a single-stock screen never hold the same instrument, so
+# there is nothing to cross. This config is the other case. Clenow momentum and
+# triple-trigger momentum both rank S&P 500 names on trend, and the pullback
+# sleeve buys the drawdowns momentum is exiting -- so the same symbol shows up on
+# opposite sides of the book on the same session, which is exactly when netting
+# saves money.
+fund_id: overlapping_equity_fund
+start_date: "2024-06-01"
+end_date: "2026-08-21"
+initial_capital: 100000
+benchmark: SPY
+
+cost:
+  # Wide on purpose. The saving from netting is proportional to spread, so a
+  # realistic 5 bps makes the effect true but invisible; 30 bps makes it legible.
+  spread_bps: 30
+  slippage_bps: 30
+  commission_per_share: 0.0
+  participation_rate: 0.05
+
+risk:
+  max_position_pct: 0.12
+  max_sector_pct: 1.0
+  cash_reserve_pct: 0.05
+  max_leverage: 1.0
+  max_positions: 40
+
+execution:
+  fill_type: MARKET_OPEN
+  fill_delay_days: 1
+  fractional_shares: false
+  delisting_return: -0.30
+
+reallocate: none
+
+sleeves:
+  - strategy_id: clenow
+    strategy_module: strategies.momentum.clenow_target_weights
+    allocation_pct: 0.40
+    params:
+      top_n: 7
+
+  - strategy_id: triple_trigger
+    strategy_module: strategies.momentum.triple_trigger
+    allocation_pct: 0.35
+    params:
+      top_n: 15
+      rebalance_days: 5
+
+  - strategy_id: pullback
+    strategy_module: strategies.mean_reversion.pullback_target_weights
+    allocation_pct: 0.25
+    params:
+      top_n: 5
+      cooldown_days: 20
+
+universe_source: pit_sp500
+price_source: lake
+price_adjustment: asof
+notes: >
+  All three sleeves draw from the point-in-time S&P 500, so overlap is expected
+  and the netting line should be non-zero. Compare the reported saving against
+  three separate runs of the same sleeves to see what running them as one account
+  is worth.
+
+  Do not read the sleeve rows against their standalone runs: the 30 bps here is
+  six times the 5 bps those used, and triple_trigger rebalances a 15-name book
+  weekly, so it is by far the most turnover-exposed sleeve and takes the largest
+  hit. That is the cost assumption talking, not a regression. Set spread_bps and
+  slippage_bps to 5 to compare like with like -- at which point the netting saving
+  shrinks proportionally, because it is a fraction of spread.

@@ -330,6 +330,78 @@ def run_research_from_config(
     )
 
 
+def fund_from_yaml(path: str):
+    """Build a FundEngine from a fund config.
+
+    A fund config is deliberately not a BacktestConfig with a list bolted on: the
+    sleeves each carry their own params and optional risk limits, and the
+    fund-level cost, risk and execution blocks apply to the *combined* book.
+    """
+    from backtest.fund import FundEngine, SleeveConfig
+
+    with open(path) as handle:
+        raw = yaml.safe_load(handle) or {}
+
+    sleeve_specs = raw.get("sleeves") or []
+    if not sleeve_specs:
+        raise ValueError(f"{path}: a fund config needs a `sleeves:` list")
+
+    sleeves = []
+    for spec in sleeve_specs:
+        module = spec.get("strategy_module")
+        if not module:
+            raise ValueError(f"{path}: every sleeve needs a strategy_module")
+        sleeves.append(SleeveConfig(
+            strategy_id=str(spec.get("strategy_id", module)),
+            strategy_fn=get_strategy(module),
+            allocation_pct=float(spec.get("allocation_pct", 0.0)),
+            params=dict(spec.get("params") or {}),
+            risk=RiskConfig(**spec["risk"]) if spec.get("risk") else None,
+        ))
+
+    exec_raw = dict(raw.get("execution") or {})
+    if "fill_type" in exec_raw:
+        exec_raw["fill_type"] = FillType(exec_raw["fill_type"])
+
+    engine = FundEngine(
+        sleeves=sleeves,
+        start_date=str(raw.get("start_date", "2010-01-01")),
+        end_date=str(raw.get("end_date", "2025-12-31")),
+        initial_capital=float(raw.get("initial_capital", 100_000)),
+        benchmark=raw.get("benchmark", "SPY"),
+        cost_config=CostConfig(**(raw.get("cost") or {})),
+        risk_config=RiskConfig(**(raw.get("risk") or {})),
+        execution_config=ExecutionConfig(**exec_raw),
+        reallocate=str(raw.get("reallocate", "none")),
+        reallocate_every_months=int(raw.get("reallocate_every_months", 12)),
+    )
+    return engine, raw
+
+
+def run_fund_from_config(path: str):
+    """Load data once and run every sleeve over one balance sheet."""
+    engine, raw = fund_from_yaml(path)
+
+    warmup_start = (
+        pd.Timestamp(engine.start_date) - pd.Timedelta(days=900)
+    ).strftime("%Y-%m-%d")
+    price_panel, close_matrix, ohlc_adjusted = load_panels(
+        warmup_start, engine.end_date, str(raw.get("price_adjustment", "asof"))
+    )
+
+    sector_map = (
+        default_sector_map() if engine.risk.max_sector_pct < 1.0 else None
+    )
+
+    return engine.run(
+        price_panel=price_panel,
+        close_matrix=close_matrix,
+        ohlc_adjusted=ohlc_adjusted,
+        universe_fn=default_universe_fn(raw.get("universe_source", "pit_sp500")),
+        sector_map=sector_map,
+    )
+
+
 def config_from_yaml(path: str) -> BacktestConfig:
     """Load a BacktestConfig from a YAML file."""
     with open(path) as f:
@@ -363,6 +435,55 @@ def config_from_yaml(path: str) -> BacktestConfig:
     )
 
 
+def _print_fund_summary(fund) -> None:
+    """Fund line first, then the sleeves that produced it."""
+    if len(fund.fund_equity) == 0:
+        print("No sessions in range.")
+        for warning in fund.warnings[:5]:
+            print(f"  - {warning}")
+        return
+
+    m = fund.fund_metrics or {}
+    print(f"\n{'=' * 72}")
+    print(f"FUND  {len(fund.sleeve_equity)} sleeve(s)")
+    print(f"{'=' * 72}")
+    print(f"Final equity   ${fund.fund_equity.iloc[-1]:,.0f}")
+    print(f"CAGR           {m.get('cagr', 0):.1%}")
+    print(f"Sharpe         {m.get('sharpe', 0):.3f}")
+    print(f"Max drawdown   {m.get('max_drawdown', 0):.1%}")
+    print(f"Beta           {m.get('beta', 0):.3f}")
+    print(f"Alpha          {m.get('alpha_jensen', 0):.1%}")
+    print(f"Peak gross     {fund.gross_exposure.max():.2f}x")
+
+    crosses = len([r for r in fund.netting if r.crossed_shares > 0])
+    shared = fund.shared_symbols
+    print(
+        f"Netting saved  ${fund.netting_saved_notional:,.0f} of flow "
+        f"({crosses} internal cross(es))"
+    )
+    # A zero saving means one of two very different things, so say which.
+    print(
+        f"Sleeve overlap {len(shared)} symbol(s) traded by more than one sleeve"
+        + ("" if shared else " — nothing could cross")
+    )
+    if fund.reallocations:
+        print(f"Reallocations  {len(fund.reallocations)}")
+
+    print(f"\n{'sleeve':<28}{'final':>12}{'CAGR':>9}{'Sharpe':>9}{'maxDD':>9}")
+    for sid, equity in fund.sleeve_equity.items():
+        stats = fund.sleeve_metrics.get(sid, {})
+        print(
+            f"{sid:<28}{equity.iloc[-1]:>12,.0f}"
+            f"{stats.get('cagr', 0):>8.1%}{stats.get('sharpe', 0):>9.3f}"
+            f"{stats.get('max_drawdown', 0):>9.1%}"
+        )
+
+    if fund.warnings:
+        print(f"\nWarnings: {len(fund.warnings)}")
+        for warning in fund.warnings[:5]:
+            print(f"  - {warning}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run a backtest")
     parser.add_argument("--config", type=str, help="Path to YAML config file")
@@ -378,6 +499,12 @@ def main():
              "a single backtest.",
     )
     parser.add_argument(
+        "--fund",
+        type=str,
+        help="Path to a fund config: run every sleeve over one cash balance with "
+             "orders netted across them.",
+    )
+    parser.add_argument(
         "--unlock-holdout",
         action="store_true",
         help="Spend the locked out-of-sample holdout. Every unlock is appended "
@@ -391,6 +518,11 @@ def main():
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(levelname)s %(name)s: %(message)s",
     )
+
+    if args.fund:
+        fund = run_fund_from_config(args.fund)
+        _print_fund_summary(fund)
+        return
 
     if args.config:
         config = config_from_yaml(args.config)

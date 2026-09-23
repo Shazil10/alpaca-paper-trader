@@ -53,20 +53,34 @@ class Portfolio:
             proceeds = fill.fill_price * fill.fill_shares - fill.commission
             self.cash += proceeds
             realized = self._sell_fifo(
-                fill.order.symbol, fill.fill_shares, fill.fill_price
+                fill.order.symbol, fill.fill_shares, fill.fill_price,
+                strategy_id=fill.order.strategy_id or None,
             )
             self.realized_pnl += realized
 
         return realized
 
-    def _sell_fifo(self, symbol: str, shares_to_sell: float, sell_price: float) -> float:
-        """Remove shares FIFO. Returns realized PnL."""
+    def _sell_fifo(
+        self,
+        symbol: str,
+        shares_to_sell: float,
+        sell_price: float,
+        strategy_id: Optional[str] = None,
+    ) -> float:
+        """Remove shares FIFO. Returns realized PnL.
+
+        ``strategy_id`` restricts the sale to one sleeve's lots. Without it, a
+        fund sleeve selling its own position could consume another sleeve's lots
+        in the same symbol -- both would then disagree with the ledger about what
+        they hold, and the attribution would be silently wrong.
+        """
         remaining = shares_to_sell
         realized = 0.0
         new_lots = []
 
         for lot in self.lots:
-            if lot.symbol != symbol or remaining <= 0:
+            same_owner = strategy_id is None or lot.strategy_id == strategy_id
+            if lot.symbol != symbol or remaining <= 0 or not same_owner:
                 new_lots.append(lot)
                 continue
 
@@ -93,15 +107,30 @@ class Portfolio:
         self,
         date: pd.Timestamp,
         prices: Dict[str, float],
+        *,
+        strategy_id: Optional[str] = None,
+        cash_override: Optional[float] = None,
     ) -> PortfolioSnapshot:
         """Create an immutable snapshot at current market prices.
-        
+
         prices: {symbol: current_adj_close}
+
+        ``strategy_id`` and ``cash_override`` exist for the fund engine, where one
+        ledger holds every sleeve's lots over a single cash balance. A sleeve has
+        to see *its own* book to decide -- Clenow exits the names it holds, the
+        pullback sleeve stops out against the price it paid -- so the fund asks
+        for a snapshot filtered to one sleeve's lots, paired with that sleeve's
+        share of cash. Passing neither gives the whole portfolio, which is what
+        the single-strategy engine wants.
         """
         positions: Dict[str, Position] = {}
 
+        lots = self.lots
+        if strategy_id is not None:
+            lots = [l for l in lots if l.strategy_id == strategy_id]
+
         lots_by_symbol: Dict[str, List[Lot]] = {}
-        for lot in self.lots:
+        for lot in lots:
             lots_by_symbol.setdefault(lot.symbol, []).append(lot)
 
         total_unrealized = 0.0
@@ -130,16 +159,17 @@ class Portfolio:
                 lots=tuple(symbol_lots),
             )
 
-        equity = self.cash + sum(p.market_value for p in positions.values())
+        cash = self.cash if cash_override is None else float(cash_override)
+        equity = cash + sum(p.market_value for p in positions.values())
 
         return PortfolioSnapshot(
             date=date,
-            cash=self.cash,
+            cash=cash,
             equity=equity,
             positions=positions,
             realized_pnl=self.realized_pnl,
             unrealized_pnl=total_unrealized,
-            strategy_id=self.strategy_id,
+            strategy_id=strategy_id or self.strategy_id,
         )
 
     def position_shares(self, symbol: str) -> float:
