@@ -117,12 +117,35 @@ Reusable daily stock/ETF backtester. Write strategy logic once, select dates and
 capital, run, and receive a verdict on whether the strategy may have alpha.
 
 ```bash
-# Run a backtest from YAML config
-PYTHONPATH=src python -m src.backtest.runner --config configs/backtests/example.yaml
+# One backtest from a YAML config
+PYTHONPATH=src python -m src.backtest.runner --config configs/backtests/tsmom_etf.yaml
 
-# Run a backtest by strategy module
-PYTHONPATH=src python -m src.backtest.runner --strategy strategies.ranks.ranked_asset_alloc --start 2010-01-01 --end 2025-12-31
+# The full validation suite and a verdict card
+PYTHONPATH=src python -m src.backtest.runner --config configs/backtests/tsmom_etf.yaml --research
+
+# Multi-strategy fund: one cash balance, orders netted across sleeves
+PYTHONPATH=src python -m src.backtest.runner --fund configs/funds/three_sleeve.yaml
+
+# One HTML page comparing runs against SPY, equal weight, and each other
+PYTHONPATH=src python scripts/build_report.py --latest-per-strategy
+
+# What the data does and does not support
+PYTHONPATH=src python scripts/audit_data.py
 ```
+
+The workflow these compose into:
+
+```
+write target_weights()  ->  YAML config  ->  --research for a verdict
+                                          ->  --fund to see it beside the others
+                                          ->  build_report.py to compare versions
+```
+
+**Verdict discipline.** A research pass grades eight sections and any single FAIL
+caps the verdict. NOT RUN never counts as a pass, and a pass needs a quorum of five
+scored sections — both rules exist because absence of evidence had twice been
+scoring as good evidence. The out-of-sample holdout is locked: `--unlock-holdout`
+is required to read it and every unlock appends to `runs/holdout_unlocks.log`.
 
 **Strategy interface.** Canonical form is target weights:
 ```python
@@ -139,8 +162,16 @@ Existing `generate_signals()` strategies work via adapter (`src/backtest/adapter
 - `broker.py` — simulated fills with configurable slippage, commission, participation cap
 - `metrics.py` — consolidated Sharpe, Sortino, alpha, beta, PSR, Deflated Sharpe, regime analysis
 - `fast.py` — vectorized alpha screen for parameter sweeps
-- `fund.py` — multi-strategy fund simulation with per-sleeve attribution
+- `fund.py` — one cash balance across sleeves, orders netted before they reach the market, fund-level exposure limits, per-sleeve attribution retained internally
+- `research.py` — runs every validation section in one pass and grades it
+- `report.py` — self-contained HTML comparison; inline SVG, no JavaScript
 - `validation/` — parameter stability, Monte Carlo, clustering, walk-forward, PBO, verdict card
+
+**Strategies on the interface** (all five; each is decision logic only):
+`strategies.ranks.ranked_target_weights`, `strategies.momentum.clenow_target_weights`,
+`strategies.mean_reversion.pullback_target_weights`, `strategies.momentum.tsmom_etf`,
+`strategies.momentum.triple_trigger`. Each has a parity gate under `tests/backtest/`
+asserting it makes the same decisions as the implementation it was extracted from.
 
 **Price levels vs returns.** `adj_close` is back-adjusted to the *download* date, so
 historical levels know about splits that had not happened yet. Returns are fine;
