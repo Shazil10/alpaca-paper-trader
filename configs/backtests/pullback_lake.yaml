@@ -1,0 +1,54 @@
+# 52-Week High Pullback Mean Reversion (R2 v2) over the price lake.
+#
+# Bounded by the equity side of the lake. The entry gates need 252 sessions for
+# the 52-week high and 200 for the moving average, and stocks start 2023-01-03,
+# so the first session the sleeve can legitimately act on is around 2024-01-03.
+#
+# cooldown_days is the parameter that matters here. The live module declares
+# COOLDOWN_DAYS = 20 and STOP_ENTRY_COOLDOWN = 30 and enforces neither, so 0 is
+# the *running* strategy. Set it to 20 and re-run to measure what the documented
+# strategy would have done -- that comparison is the point of exposing it. The
+# 30-day stop-specific variant is not modelled; see pullback_target_weights.
+strategy_id: pullback_reversion_r2v2
+strategy_module: strategies.mean_reversion.pullback_target_weights
+start_date: "2024-02-01"
+end_date: "2026-08-21"
+initial_capital: 10000
+benchmark: SPY
+
+cost:
+  spread_bps: 5
+  slippage_bps: 5
+  commission_per_share: 0.0
+  participation_rate: 0.05
+
+# Five concurrent positions, pullback-weighted, so a single name can legitimately
+# carry more than a fifth of the book. The cap is set above an even split so the
+# risk layer does not flatten the weighting the strategy is being measured on.
+risk:
+  max_position_pct: 0.35
+  max_sector_pct: 1.0
+  cash_reserve_pct: 0.10
+  max_leverage: 1.0
+  max_positions: 5
+
+execution:
+  fill_type: MARKET_OPEN
+  fill_delay_days: 1
+  fractional_shares: false
+  delisting_return: -0.30
+
+params:
+  top_n: 5
+  cooldown_days: 0   # 0 = live behaviour. 20 = the documented behaviour.
+
+universe_source: pit_sp500
+price_source: lake
+price_adjustment: asof
+trial_index: 0
+random_seed: 42
+notes: >
+  Phase 7 migration run. The window contains no bear market, which matters more
+  for this sleeve than for the others: it buys deep drawdowns, so its risk is
+  concentrated in exactly the regime the lake cannot yet cover. Deepening the
+  equity history is the prerequisite for taking any of these numbers seriously.

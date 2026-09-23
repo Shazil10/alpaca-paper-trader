@@ -154,17 +154,17 @@ def _high_52w(series: pd.Series) -> float:
 # 1. Regime filter (R2 Trend Stack)
 # ---------------------------------------------------------------------------
 
-def check_regime(as_of: Optional[pd.Timestamp] = None) -> bool:
-    """Return True (risk-on) if >= 2 of SPY/IJH/IJR are above their 200-day SMA."""
-    try:
-        panel = _close_panel(
-            list(REGIME_ETFS), REGIME_LOOKBACK_DAYS, as_of, context="pullback_regime"
-        )
-    except Exception:
-        logger.warning("Regime check failed (data error). Defaulting to risk-ON.")
-        return True
+def regime_from_panel(panel: pd.DataFrame) -> bool:
+    """Risk-on when >= 2 of SPY/IJH/IJR close above their 200-day SMA.
 
-    if panel.empty:
+    The decision, separated from where the panel came from, so the live path and
+    the backtest adapter cannot drift apart. An empty panel defaults to risk-ON:
+    missing data is an infrastructure condition, not a market signal, and the
+    sleeve's whole asymmetry is that failing to act is recoverable while acting
+    wrongly is not. An ETF short of ``REGIME_SMA_PERIOD`` bars abstains rather
+    than voting against.
+    """
+    if panel is None or panel.empty:
         logger.warning("Regime check got no data. Defaulting to risk-ON.")
         return True
 
@@ -180,12 +180,24 @@ def check_regime(as_of: Optional[pd.Timestamp] = None) -> bool:
 
     risk_on = above >= REGIME_MIN_ABOVE
     logger.info(
-        "R2 regime: %d/%d ETFs above %d-SMA → %s (source=%s)",
+        "R2 regime: %d/%d ETFs above %d-SMA → %s",
         above, len(REGIME_ETFS), REGIME_SMA_PERIOD,
         "RISK-ON" if risk_on else "RISK-OFF",
-        price_source.active_source(),
     )
     return risk_on
+
+
+def check_regime(as_of: Optional[pd.Timestamp] = None) -> bool:
+    """Return True (risk-on) if >= 2 of SPY/IJH/IJR are above their 200-day SMA."""
+    try:
+        panel = _close_panel(
+            list(REGIME_ETFS), REGIME_LOOKBACK_DAYS, as_of, context="pullback_regime"
+        )
+    except Exception:
+        logger.warning("Regime check failed (data error). Defaulting to risk-ON.")
+        return True
+
+    return regime_from_panel(panel)
 
 
 # ---------------------------------------------------------------------------
@@ -350,6 +362,50 @@ def _get_entry_dates(
 # 4. Exit signals for held positions
 # ---------------------------------------------------------------------------
 
+def exit_reason(
+    *,
+    pullback: float,
+    price: float,
+    entry_price: Optional[float] = None,
+    entry_date: Optional[datetime] = None,
+    now: Optional[datetime] = None,
+) -> Optional[str]:
+    """Return the exit reason for one held position, or None to keep holding.
+
+    The three rules, in the order they are checked -- and the order is the
+    decision, because the first match wins and the reason string is what gets
+    recorded:
+
+    1. Target: recovered to within ``EXIT_PULLBACK`` of the 52-week high.
+    2. Stop: down ``STOP_FROM_ENTRY`` from our own entry price.
+    3. Timeout: held ``MAX_HOLD_DAYS`` trading days.
+
+    Only rule 1 needs market data. Rules 2 and 3 need to know what *we* paid and
+    when, which live reads from the Alpaca position and the order history, and a
+    backtest reads from ``ctx.portfolio``. Same arithmetic, different source --
+    which is the point of taking them as arguments here.
+
+    The timeout converts calendar days to approximate trading days with the
+    252/365 ratio the live sleeve uses. That is an approximation, and it is kept
+    rather than corrected so the two paths agree.
+    """
+    if pullback <= EXIT_PULLBACK:
+        return f"exit:target_recovery_pb{pullback:.2f}"
+
+    if entry_price is not None and float(entry_price) > 0:
+        loss_pct = (float(price) - float(entry_price)) / float(entry_price)
+        if loss_pct <= -STOP_FROM_ENTRY:
+            return f"exit:stop_entry_{-loss_pct:.1%}_below_entry"
+
+    if entry_date is not None and now is not None:
+        calendar_days = (now - entry_date).days
+        approx_trading_days = int(calendar_days * 252 / 365)
+        if approx_trading_days >= MAX_HOLD_DAYS:
+            return f"exit:timeout_{approx_trading_days}d"
+
+    return None
+
+
 def _generate_exit_signals(
     scores_df: pd.DataFrame,
     held_symbols: Set[str],
@@ -420,30 +476,22 @@ def _generate_exit_signals(
             )
             continue
         else:
-            cur_pb = info["pullback"]
-
-            # Target: recovered to within EXIT_PULLBACK of 52w high
-            if cur_pb <= EXIT_PULLBACK:
-                reason = f"exit:target_recovery_pb{cur_pb:.2f}"
-
-            # Stop-loss: -STOP_FROM_ENTRY from our entry price
-            if reason is None and sym in alpaca_positions:
+            entry_price: Optional[float] = None
+            if sym in alpaca_positions:
                 try:
-                    pos         = alpaca_positions[sym]
-                    entry_price = float(getattr(pos, "avg_entry_price", 0) or 0)
-                    if entry_price > 0:
-                        loss_pct = (info["price"] - entry_price) / entry_price
-                        if loss_pct <= -STOP_FROM_ENTRY:
-                            reason = f"exit:stop_entry_{-loss_pct:.1%}_below_entry"
+                    entry_price = float(
+                        getattr(alpaca_positions[sym], "avg_entry_price", 0) or 0
+                    )
                 except Exception:
-                    pass
+                    entry_price = None
 
-            # Timeout: held >= MAX_HOLD_DAYS trading days (≈ 90 calendar days)
-            if reason is None and sym in entry_dates:
-                calendar_days = (now - entry_dates[sym]).days
-                approx_trading_days = int(calendar_days * 252 / 365)
-                if approx_trading_days >= MAX_HOLD_DAYS:
-                    reason = f"exit:timeout_{approx_trading_days}d"
+            reason = exit_reason(
+                pullback=info["pullback"],
+                price=info["price"],
+                entry_price=entry_price,
+                entry_date=entry_dates.get(sym),
+                now=now,
+            )
 
         if reason:
             signals.append(
