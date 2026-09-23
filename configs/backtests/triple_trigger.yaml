@@ -60,3 +60,15 @@ notes: >
   zero-filled, and a session with no volume screens the name out rather than
   scoring it as quiet. Two-year window with no bear market, so treat the
   drawdown figure as a lower bound.
+
+# Research pass. The shortest window of any sleeve -- the 325-day range lookback
+# eats most of the available equity history -- so treat every section here as
+# provisional until the equity backfill deepens the lake.
+research:
+  holdout_years: 1
+  walk_forward_train_years: 1
+  walk_forward_test_years: 1
+  param_grid:
+    top_n: [10, 15, 20]
+    range_lookback: [120, 200, 325]
+  n_simulations: 400

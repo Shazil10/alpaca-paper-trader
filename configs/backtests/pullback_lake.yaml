@@ -52,3 +52,15 @@ notes: >
   for this sleeve than for the others: it buys deep drawdowns, so its risk is
   concentrated in exactly the regime the lake cannot yet cover. Deepening the
   equity history is the prerequisite for taking any of these numbers seriously.
+
+# Research pass. cooldown_days is in the grid on purpose: the live sleeve declares
+# a cooldown and enforces none, so the sweep measures what enforcing it is worth
+# rather than leaving the question open.
+research:
+  holdout_years: 1
+  walk_forward_train_years: 1
+  walk_forward_test_years: 1
+  param_grid:
+    top_n: [3, 5, 8]
+    cooldown_days: [0, 10, 20, 30]
+  n_simulations: 400

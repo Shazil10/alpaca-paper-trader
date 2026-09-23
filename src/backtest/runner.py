@@ -261,6 +261,75 @@ def run_backtest(
     return result
 
 
+def research_options_from_yaml(path: str) -> Dict[str, Any]:
+    """Read the optional ``research:`` block from a backtest config.
+
+    Kept out of ``BacktestConfig`` on purpose: these are settings for *how hard
+    to interrogate* a strategy, not part of the strategy's definition, and
+    mixing them in would make two runs with identical trading assumptions hash to
+    different configs.
+    """
+    with open(path) as handle:
+        raw = yaml.safe_load(handle) or {}
+
+    block = raw.get("research") or {}
+    options: Dict[str, Any] = {}
+
+    for key in (
+        "holdout_years", "walk_forward_train_years",
+        "walk_forward_test_years", "n_simulations",
+    ):
+        if key in block:
+            options[key] = int(block[key])
+
+    if "param_grid" in block and block["param_grid"]:
+        options["param_grid"] = {
+            str(name): list(values) for name, values in block["param_grid"].items()
+        }
+
+    return options
+
+
+def run_research_from_config(
+    config: BacktestConfig,
+    *,
+    unlock_holdout: bool = False,
+    save: bool = True,
+    **options,
+):
+    """Load the data once, then hand it to every validation section.
+
+    The data load is the expensive part and a research pass runs dozens of
+    backtests over the same window, so the panel is loaded here and threaded
+    through rather than re-read per run.
+    """
+    from backtest import research
+
+    warmup_start = (
+        pd.Timestamp(config.start_date) - pd.Timedelta(days=900)
+    ).strftime("%Y-%m-%d")
+    price_panel, close_matrix, ohlc_adjusted = load_panels(
+        warmup_start, config.end_date, config.price_adjustment
+    )
+
+    sector_map = (
+        default_sector_map() if config.risk.max_sector_pct < 1.0 else None
+    )
+
+    return research.run_research(
+        config,
+        run_backtest_fn=run_backtest,
+        price_panel=price_panel,
+        close_matrix=close_matrix,
+        ohlc_adjusted=ohlc_adjusted,
+        universe_fn=default_universe_fn(config.universe_source),
+        sector_map=sector_map,
+        unlock_holdout=unlock_holdout,
+        save=save,
+        **options,
+    )
+
+
 def config_from_yaml(path: str) -> BacktestConfig:
     """Load a BacktestConfig from a YAML file."""
     with open(path) as f:
@@ -302,6 +371,18 @@ def main():
     parser.add_argument("--end", type=str, default="2025-12-31")
     parser.add_argument("--capital", type=float, default=100_000)
     parser.add_argument("--no-save", action="store_true")
+    parser.add_argument(
+        "--research",
+        action="store_true",
+        help="Run the full validation suite and print a verdict card instead of "
+             "a single backtest.",
+    )
+    parser.add_argument(
+        "--unlock-holdout",
+        action="store_true",
+        help="Spend the locked out-of-sample holdout. Every unlock is appended "
+             "to runs/holdout_unlocks.log.",
+    )
     parser.add_argument("-v", "--verbose", action="store_true")
 
     args = parser.parse_args()
@@ -323,6 +404,18 @@ def main():
         )
     else:
         parser.error("Either --config or --strategy is required")
+        return
+
+    if args.research:
+        options = research_options_from_yaml(args.config) if args.config else {}
+        report = run_research_from_config(
+            config,
+            unlock_holdout=args.unlock_holdout,
+            save=not args.no_save,
+            **options,
+        )
+        print()
+        print(report.card)
         return
 
     result = run_backtest(config, save=not args.no_save)

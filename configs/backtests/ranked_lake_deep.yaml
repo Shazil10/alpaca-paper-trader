@@ -58,3 +58,13 @@ notes: >
   on the borrowed half; and ETF history before 2023 comes from yfinance in a
   single backfill pass, not from the daily incremental path, so it has not been
   cross-checked against a second provider.
+
+# Research pass. The sleeve takes no tunable parameters -- V10 DAF is a fixed
+# recipe -- so no param_grid is supplied and the stability, clustering and PBO
+# sections will report NOT RUN rather than a fabricated pass. That is the honest
+# outcome for a strategy with nothing to sweep.
+research:
+  holdout_years: 2
+  walk_forward_train_years: 2
+  walk_forward_test_years: 1
+  n_simulations: 500

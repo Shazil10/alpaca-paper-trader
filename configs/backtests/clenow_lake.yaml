@@ -57,3 +57,15 @@ notes: >
   which reintroduces some survivorship bias -- see data/universe/_schema.md
   contract 2. And sizing is equal-weight rather than inverse-vol, which is the
   live behaviour, not a backtest artifact.
+
+# Research pass. The window is only 2.5 years because the equity lake starts
+# 2023-01-03, so holdout_years is 1 and the walk-forward windows are short --
+# enough to be a real test of transfer, not enough to be a strong one. Both
+# numbers should grow once the equity backfill lands.
+research:
+  holdout_years: 1
+  walk_forward_train_years: 1
+  walk_forward_test_years: 1
+  param_grid:
+    top_n: [3, 5, 7, 10, 14]
+  n_simulations: 400

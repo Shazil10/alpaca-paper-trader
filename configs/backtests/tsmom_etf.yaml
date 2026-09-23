@@ -62,3 +62,33 @@ notes: >
   the borrowed portion -- material over nineteen years. And this is the long-only
   variant: the short leg is what makes time-series momentum a crisis hedge, so
   the 2008 and 2022 numbers here understate the strategy as researched.
+
+# ---------------------------------------------------------------------------
+# Research pass: PYTHONPATH=src python -m src.backtest.runner \
+#   --config configs/backtests/tsmom_etf.yaml --research
+#
+# These settings govern how hard the strategy is interrogated, not what it trades,
+# so they live outside BacktestConfig -- otherwise two runs with identical trading
+# assumptions would hash to different configs.
+# ---------------------------------------------------------------------------
+research:
+  # The last two years are never touched without --unlock-holdout, and every
+  # unlock is appended to runs/holdout_unlocks.log. Two years of the nineteen
+  # available is enough to be a real test without starving the training sample.
+  holdout_years: 2
+
+  # Four years of training and one of testing gives roughly a dozen folds over
+  # 2007-2024, each containing a different regime. Longer training windows would
+  # produce fewer, more stable folds and hide the 2008/2022 transitions that are
+  # the whole point of testing a trend follower.
+  walk_forward_train_years: 4
+  walk_forward_test_years: 1
+
+  # Two parameters, so the stability section can build a plateau map rather than
+  # only a distribution. Both are the ones a researcher would actually tune, and
+  # the grid brackets the chosen 12/60 on either side.
+  param_grid:
+    lookback_months: [3, 6, 9, 12, 15, 18]
+    vol_halflife: [20, 40, 60, 90, 120]
+
+  n_simulations: 500
