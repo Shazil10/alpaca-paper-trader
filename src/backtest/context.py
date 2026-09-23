@@ -48,6 +48,7 @@ class StrategyContext:
         params: Optional[Dict[str, Any]] = None,
         trading_sessions: Optional[pd.DatetimeIndex] = None,
         sector_map: Optional[Dict[str, str]] = None,
+        exit_dates: Optional[Dict[str, pd.Timestamp]] = None,
     ):
         self._as_of = pd.Timestamp(as_of).normalize()
         self._price_panel = price_panel
@@ -60,6 +61,7 @@ class StrategyContext:
         self._params = dict(params or {})
         self._trading_sessions = trading_sessions
         self._sector_map = sector_map or {}
+        self._exit_dates = exit_dates or {}
 
     @property
     def as_of(self) -> pd.Timestamp:
@@ -228,6 +230,28 @@ class StrategyContext:
     def sector(self, symbol: str) -> str:
         """Return sector for a symbol, or '' if unknown."""
         return self._sector_map.get(symbol.upper(), "")
+
+    def last_exit(self, symbol: str) -> Optional[pd.Timestamp]:
+        """When this strategy last closed a position in ``symbol``, or None.
+
+        Re-entry rules need this and nothing else in the context supplies it:
+        ``portfolio`` is the present, and the price panel says nothing about what
+        we did. The pullback sleeve declares a 20-day cooldown after any exit and
+        30 days after a stop, so without an exit history a backtest cannot model
+        either -- it would silently re-enter the next session.
+
+        Only closures are recorded, not trims, and only for the current run. A
+        symbol exited before the backtest window began reads as never exited.
+        """
+        stamp = self._exit_dates.get(symbol.upper())
+        return pd.Timestamp(stamp) if stamp is not None else None
+
+    def days_since_exit(self, symbol: str) -> Optional[int]:
+        """Calendar days since the last exit of ``symbol``, or None if never."""
+        stamp = self.last_exit(symbol)
+        if stamp is None:
+            return None
+        return int((self._as_of - stamp).days)
 
     def has_lookback(self, symbols: Sequence[str], sessions: int) -> bool:
         """True when every symbol has at least `sessions` bars through as_of."""

@@ -146,6 +146,26 @@ class Portfolio:
         """Total shares held in a symbol."""
         return sum(l.shares for l in self.lots if l.symbol == symbol)
 
+    def drop_dust(self, tolerance: float = 1e-9) -> List[str]:
+        """Discard lots too small to be tradable. Returns the symbols dropped.
+
+        ``snapshot`` already hides a sub-tolerance holding, so it is invisible to
+        a strategy while still sitting in ``self.lots`` -- which makes
+        ``held_symbols`` and the snapshot disagree. Anything this small cannot be
+        sold and is worth fractions of a cent; carrying it only creates that
+        inconsistency.
+        """
+        by_symbol: Dict[str, float] = {}
+        for lot in self.lots:
+            by_symbol[lot.symbol] = by_symbol.get(lot.symbol, 0.0) + lot.shares
+
+        dust = {s for s, shares in by_symbol.items() if 0 < shares <= tolerance}
+        if not dust:
+            return []
+
+        self.lots = [l for l in self.lots if l.symbol not in dust]
+        return sorted(dust)
+
     def held_symbols(self) -> set:
         """Symbols currently held."""
         return {l.symbol for l in self.lots if l.shares > 1e-9}

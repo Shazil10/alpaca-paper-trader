@@ -95,6 +95,7 @@ class BacktestEngine:
         warnings: List[str] = []
 
         pending_orders: List[Order] = []
+        exit_dates: Dict[str, pd.Timestamp] = {}
 
         logger.info(
             "Starting backtest: %s from %s to %s ($%.0f)",
@@ -107,9 +108,17 @@ class BacktestEngine:
                 bars = self._get_bars(price_panel, session)
                 fills = broker.fill_orders(pending_orders, session, bars)
 
+                held_before = portfolio.held_symbols()
                 for fill in fills:
                     portfolio.apply_fill(fill)
                     all_fills.append(fill)
+
+                # Record closures so re-entry rules have an exit history. A trim
+                # is not a closure, hence the before/after comparison rather than
+                # simply logging every sell.
+                portfolio.drop_dust()
+                for symbol in held_before - portfolio.held_symbols():
+                    exit_dates[symbol] = session
 
                 all_orders.extend(pending_orders)
                 pending_orders = []
@@ -132,6 +141,7 @@ class BacktestEngine:
                 params=cfg.params,
                 trading_sessions=all_sessions,
                 sector_map=sector_map,
+                exit_dates=exit_dates,
             )
 
             # Step 4: Call strategy -> target weights
