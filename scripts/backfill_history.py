@@ -24,6 +24,9 @@ What it does
   multi-hour run resumes instead of restarting.
 * Writes through ``writer.persist``, which upserts into year partitions, so
   re-running is safe and overlapping fetches cannot duplicate rows.
+* **Never advances the lake's newest session.** Every window is capped at the
+  frontier the lake already holds; see ``plan_windows`` for why, and
+  ``data/prices/_schema.md`` Contract 5 for the damage it avoids.
 
 Symbol sources
 --------------
@@ -148,6 +151,15 @@ def target_symbols(
     return sorted(s for s in symbols if s)
 
 
+def lake_frontier(lake_root: Optional[Path] = None) -> Optional[pd.Timestamp]:
+    """The newest session the lake already holds, across all symbols."""
+    try:
+        return store.last_bar_date(root=lake_root)
+    except Exception:
+        logger.exception("could not read the lake frontier")
+        return None
+
+
 def plan_windows(
     symbols: Sequence[str],
     start: pd.Timestamp,
@@ -157,14 +169,34 @@ def plan_windows(
     """Group symbols by the end of the window they still need.
 
     A symbol already holding data at or before ``start`` needs nothing. One that
-    starts in 2023 needs ``[start, 2023-01-03)``. Symbols absent from the lake
-    need everything up to today.
+    starts in 2023 needs ``[start, 2023-01-03)``.
+
+    **Frontier-bounded.** A symbol absent from the lake needs everything, but its
+    window still stops at the lake's newest existing session rather than at
+    today. Advancing a subset of symbols past the rest is the failure mode
+    ``data/prices/_schema.md`` documents under Contract 5: the new dates clear
+    ``MIN_SYMBOLS_FOR_SESSION`` and enter the trading calendar, so every other
+    symbol silently looks like it has a gap at the end of history, rolling
+    windows break for all of them, and ``find_gaps`` cannot see it because the
+    new dates fall outside the lagging symbols' own spans.
+
+    Observed: backfilling 16 ETFs to today while 1,385 equities stopped a month
+    earlier added 21 sessions carrying 16 symbols each, and every test anchored
+    on the newest session found zero equities with a year of history. Advancing
+    the frontier is ``sync_prices``' job, because sync covers every symbol.
     """
     cov = store.coverage(root=lake_root)
     first_seen = (
         cov.set_index("symbol")["first_date"] if len(cov) else pd.Series(dtype="datetime64[ns]")
     )
-    today = fetch.today_naive()
+
+    frontier = lake_frontier(lake_root)
+    # +1 day because fetch windows are end-exclusive and the frontier session
+    # itself is wanted for a symbol the lake does not hold at all.
+    ceiling = (
+        pd.Timestamp(frontier) + pd.Timedelta(days=1)
+        if frontier is not None else fetch.today_naive()
+    )
 
     groups: Dict[pd.Timestamp, List[str]] = defaultdict(list)
     for symbol in symbols:
@@ -172,9 +204,9 @@ def plan_windows(
             earliest = pd.Timestamp(first_seen[symbol])
             if pd.isna(earliest) or earliest <= start:
                 continue
-            groups[earliest].append(symbol)
+            groups[min(earliest, ceiling)].append(symbol)
         else:
-            groups[today].append(symbol)
+            groups[ceiling].append(symbol)
 
     return dict(groups)
 
