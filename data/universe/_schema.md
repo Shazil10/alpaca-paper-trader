@@ -144,6 +144,56 @@ without a map, which is worse — and not good enough for sector attribution.
 
 ---
 
+---
+
+## Audit: what this data currently supports
+
+Measured by `scripts/audit_data.py`. Re-run it after any backfill; these numbers
+are a snapshot, not a contract.
+
+| Question | Answer |
+|---|---|
+| Symbols complete over their own span | 1,399 of 1,404 |
+| Symbols with 15+ years | 34 (the ETFs) |
+| Median span | 3.6 years |
+| Removed-index intervals priceable *during* membership | **42 of 759 (5.5%)** |
+| Membership symbols the lake can price | 619 of 1,209 |
+| Unfetchable post-bankruptcy tickers | 29 |
+| Index coverage on 2024-06-28 | 96% |
+| Index coverage on 2008-06-30 … 2020-03-31 | **0%** |
+| Membership date precision | median 2 days, 90th pct 10, worst 91 |
+| Spans with a sector label | 663 of 1,254, all current-vintage |
+
+### The finding that governs everything else
+
+Index member coverage is **zero on every historical probe date before 2024**,
+because equities in the lake start 2023-01-03. The point-in-time membership
+machinery works and is wired into the engine, but for equities it has nothing to
+bite on yet: a stock backtest today is a backtest of names that survived into
+today's symbol list, regardless of what `members_asof` returns.
+
+Only 5.5% of removed-index intervals can be priced during the window they were
+actually members. 592 of 759 have no bars at all. So the residual survivorship
+bias is large, and results from the stock sleeves should be described accordingly.
+
+The ETF sleeves are unaffected — all 24 TSMOM tickers and all 20 rotation ETFs
+reach inception — which is why TSMOM is the only strategy here with a sample worth
+drawing conclusions from.
+
+### What would move each number
+
+- **Equity depth and delisted names**: `scripts/backfill_history.py --start
+  2010-01-01` for the full symbol set. Fixes coverage on historical dates and
+  most of the 592 absent removed names.
+- **The 29 unfetchable tickers**: nothing free fixes these. They need a
+  ticker-change table keyed on a permanent id (Tiingo `permaTicker`, FIGI, CUSIP).
+- **Sector vintage**: needs a historical GICS source; no free one is wired.
+- **Membership precision**: already better than it needs to be for monthly
+  rebalancing. Only worth improving for a strategy trading index adds on the
+  effective date.
+
+---
+
 ## `master_tickers.csv` — observation registry
 
 Covered by contract 3 of `data/prices/_schema.md`: `first_seen` / `last_seen` are

@@ -30,10 +30,36 @@ logger = logging.getLogger(__name__)
 REPO_ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_PATH = REPO_ROOT / "data" / "universe" / "membership.parquet"
 
+#: The dates the source actually observed the index, written alongside the
+#: intervals. Without them a membership date cannot be told apart from a
+#: *precise* date: the source is a series of snapshots, so a change is dated to
+#: the first snapshot that shows it and the true date lies somewhere in the gap
+#: before it. scripts/audit_data.py turns these into that uncertainty.
+SNAPSHOT_PATH = REPO_ROOT / "data" / "universe" / "membership_snapshots.csv"
+
 HISTORICAL_URL = (
     "https://raw.githubusercontent.com/fja05680/sp500/master/"
     "S%26P%20500%20Historical%20Components%20%26%20Changes%20(Updated).csv"
 )
+
+
+def write_snapshot_dates(df: pd.DataFrame) -> None:
+    """Persist the source's observation dates for the audit to read."""
+    if "date" not in df.columns:
+        return
+    dates = pd.to_datetime(df["date"], errors="coerce").dropna().sort_values()
+    if len(dates) == 0:
+        return
+
+    SNAPSHOT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame({"snapshot_date": dates.dt.strftime("%Y-%m-%d")}).to_csv(
+        SNAPSHOT_PATH, index=False
+    )
+    logger.info(
+        "Wrote %d snapshot date(s) to %s (median gap %.0f day(s))",
+        len(dates), SNAPSHOT_PATH,
+        dates.diff().dt.days.median() if len(dates) > 1 else 0,
+    )
 
 
 def build_from_historical_csv() -> pd.DataFrame:
@@ -60,6 +86,7 @@ def build_from_historical_csv() -> pd.DataFrame:
             return pd.DataFrame(columns=["symbol", "index", "start_date", "end_date"])
 
     logger.info("Parsing %d date snapshots...", len(df))
+    write_snapshot_dates(df)
 
     if "tickers" in df.columns:
         return _parse_tickers_column(df)
