@@ -1,0 +1,62 @@
+# Triple-trigger momentum: 14-day return, volume confirmation, range position.
+#
+# Bounded by the equity lake. The screen needs a 325-day range plus a 20-day
+# volume average, so 345 sessions of warm-up, and stocks start 2023-01-03 --
+# putting the first valid session around 2024-05. 2024-06-01 buys a margin.
+#
+# This is the shortest usable window of any sleeve, and the 325-day range is why.
+# Deepening the equity history helps this strategy more than any other: a range
+# lookback longer than the available history is not a strategy, it is a warm-up.
+strategy_id: triple_trigger_momentum
+strategy_module: strategies.momentum.triple_trigger
+start_date: "2024-06-01"
+end_date: "2026-08-21"
+initial_capital: 100000
+benchmark: SPY
+
+cost:
+  spread_bps: 5
+  slippage_bps: 5
+  commission_per_share: 0.0
+  # Weekly rebalancing of a 15-name book on a volume-confirmed signal means the
+  # picks are, by construction, names trading above their own average volume. The
+  # participation cap is unlikely to bind, which is worth knowing rather than
+  # assuming: if it did bind, the signal would be selecting for illiquidity.
+  participation_rate: 0.05
+
+# Fifteen equal-weight names is 6.67% each, so the position cap is set just above
+# that. Unlevered: the screen has no volatility target and no leverage rule.
+risk:
+  max_position_pct: 0.08
+  max_sector_pct: 1.0
+  cash_reserve_pct: 0.05
+  max_leverage: 1.0
+  max_positions: 15
+
+execution:
+  fill_type: MARKET_OPEN
+  fill_delay_days: 1
+  fractional_shares: false
+  delisting_return: -0.30
+
+params:
+  top_n: 15
+  rebalance_days: 5
+  mom_lookback: 14
+  vol_lookback: 20
+  range_lookback: 325
+  min_momentum: 0.0
+  min_volume_ratio: 1.0
+  min_range_position: 0.5
+
+universe_source: pit_sp500
+price_source: lake
+price_adjustment: asof
+trial_index: 0
+random_seed: 42
+notes: >
+  Phase 7 migration run. The only sleeve that reads volume, so it is the only one
+  exposed to Contract 4 of data/prices/_schema.md -- volume is nullable and never
+  zero-filled, and a session with no volume screens the name out rather than
+  scoring it as quiet. Two-year window with no bear market, so treat the
+  drawdown figure as a lower bound.
