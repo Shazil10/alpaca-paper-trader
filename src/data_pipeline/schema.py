@@ -188,6 +188,27 @@ def resolve_year_path(year: int, root: Optional[Path] = None) -> Optional[Path]:
     return None
 
 
+#: Sidecar directory name for a lake root that is not laid out as ``.../daily``.
+SIDECAR_SUBDIR = "_meta"
+
+
+def sidecar_dir(root: Optional[Path] = None) -> Path:
+    """Where a lake's metadata (manifest, anchor factors) lives.
+
+    The canonical layout is ``data/prices/daily/``, and its metadata sits one
+    level up in ``data/prices/`` beside the directory it describes. Any lake
+    root *not* named ``daily`` -- a test's temporary directory, a scratch copy --
+    keeps its metadata in ``_meta/`` inside itself instead. Without that rule
+    two unrelated lakes under the same parent (every test lake under the system
+    temp directory, say) would silently share one manifest and one set of
+    pending factors.
+    """
+    base = Path(root or DEFAULT_LAKE_ROOT)
+    if base.name == "daily":
+        return base.parent
+    return base / SIDECAR_SUBDIR
+
+
 def discover_year_files(root: Optional[Path] = None) -> List[Path]:
     """All lake files on disk, oldest year first, Parquet preferred per year."""
     base = Path(root or DEFAULT_LAKE_ROOT)

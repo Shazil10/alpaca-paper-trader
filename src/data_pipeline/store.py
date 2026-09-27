@@ -28,7 +28,7 @@ from typing import Iterable, List, Optional, Sequence, Union
 
 import pandas as pd
 
-from data_pipeline import schema
+from data_pipeline import anchor, schema
 from data_pipeline.schema import ADJ_CLOSE, DATE, KEY, SYMBOL
 
 logger = logging.getLogger(__name__)
@@ -97,6 +97,11 @@ def load_prices(
     Returns:
         DataFrame with ``schema.COLUMNS``, sorted by (date, symbol). Empty (but
         correctly typed) when the lake has nothing matching.
+
+    ``adj_close`` comes back on one anchor per symbol: pending re-anchor factors
+    for immutable cold partitions (``data/prices/anchor_factors.csv``) are
+    applied here, so a split between rebuilds never shows up as a crash at the
+    seam between old and freshly fetched rows. See ``data_pipeline.anchor``.
     """
     start_ts = _as_timestamp(start)
     end_ts = _as_timestamp(end)
@@ -109,6 +114,8 @@ def load_prices(
             Path(root or schema.DEFAULT_LAKE_ROOT),
         )
         return schema.empty_frame()
+
+    pending = anchor.load(root)
 
     seen_keys: dict = {}
     frames: List[pd.DataFrame] = []
@@ -129,6 +136,7 @@ def load_prices(
         # half-done. discover_year_files already prefers Parquet, so this can
         # only fire across different years -- still worth shouting about.
         year = int(path.stem)
+        frame = anchor.apply(frame, year, pending)
         if year in seen_keys:
             logger.warning("year %s resolved to multiple lake files", year)
         seen_keys[year] = path

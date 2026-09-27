@@ -1,0 +1,423 @@
+{
+  "partitions": {
+    "2005": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:9a1e62a22dcef46c5175b89c28c2576d9c7b1a6f943062078e99698ea7d9b249",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2005-12-30",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2005.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (25 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 6254,
+      "start_date": "2005-01-03",
+      "symbol_count": 25,
+      "year": 2005
+    },
+    "2006": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:1f0aab03fbc97d9fcbbe96afd0916b567a08404f6fbaff3939de72ecd33fb599",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2006-12-29",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2006.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (28 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 6761,
+      "start_date": "2006-01-03",
+      "symbol_count": 28,
+      "year": 2006
+    },
+    "2007": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:87e716505206bf952d108a01fac4b9c4c011a71b9e2158c315649ec134e206d3",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2007-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2007.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (34 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 8324,
+      "start_date": "2007-01-03",
+      "symbol_count": 34,
+      "year": 2007
+    },
+    "2008": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:8e5c6c8964306b7668b61dfe5e04d6b2fa0595eb728d9f1273c4df0b63187dce",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2008-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2008.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (34 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 8602,
+      "start_date": "2008-01-02",
+      "symbol_count": 34,
+      "year": 2008
+    },
+    "2009": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:9ad3546a25b7516e2022f900b643f71d5d794884f7dd878837ec06b35f55b6b3",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2009-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2009.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (34 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 8568,
+      "start_date": "2009-01-02",
+      "symbol_count": 34,
+      "year": 2009
+    },
+    "2010": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:057620044b4d8e1cc2f35171cb649bed425c55b7c866f4abd4ca584497a13b56",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2010-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2010.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (34 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 8568,
+      "start_date": "2010-01-04",
+      "symbol_count": 34,
+      "year": 2010
+    },
+    "2011": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:60d5253f00a50caa719247da1afc48139c9b53624abcf1cf262e7ff180f9da85",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2011-12-30",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2011.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (34 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 8568,
+      "start_date": "2011-01-03",
+      "symbol_count": 34,
+      "year": 2011
+    },
+    "2012": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:450fa7fddd532fdc70d7f3e84d80f793d0faedde4509554eaf406583174d8719",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2012-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2012.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (34 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 8500,
+      "start_date": "2012-01-03",
+      "symbol_count": 34,
+      "year": 2012
+    },
+    "2013": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:7e848a07f42992bcb2b2cdb868a2675d0da65b3997913760c0f458ccfe99bddf",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2013-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2013.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (34 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 8568,
+      "start_date": "2013-01-02",
+      "symbol_count": 34,
+      "year": 2013
+    },
+    "2014": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:a6d3e296b285dabed1842c7429b59c4b12013f81542dad0cbfce50c9e52b8305",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2014-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2014.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (34 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 8568,
+      "start_date": "2014-01-02",
+      "symbol_count": 34,
+      "year": 2014
+    },
+    "2015": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:c20326d7b93e6322a3de360392a9349760040f8a4c3d53ac42829e8221aa97c9",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2015-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2015.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Legacy ETF-only Yahoo backfill (35 symbols). Preserved as-is through the Alpaca migration; adj_close is spliced onto the canonical anchor via anchor_factors.csv, bytes unchanged."
+      ],
+      "provider": "yahoo",
+      "row_count": 8627,
+      "start_date": "2015-01-02",
+      "symbol_count": 35,
+      "year": 2015
+    },
+    "2016": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:a415b43a9d224d415e6839fc54388750584c93b9f9ffe83cb4612d2f96cfd551",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2016-12-30",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2016.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (35 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 8820,
+      "start_date": "2016-01-04",
+      "symbol_count": 35,
+      "year": 2016
+    },
+    "2017": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:f0b9d80e9af74dc8cab2a9af2db1f8cb2c5c89b3d34eb991a55035dd15d726ec",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2017-12-29",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2017.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (35 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 8785,
+      "start_date": "2017-01-03",
+      "symbol_count": 35,
+      "year": 2017
+    },
+    "2018": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:411bab85ffb84723d0fe680843c30c2b04de6d486f47307804e9a5cc0412e1c4",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2018-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2018.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (36 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 8920,
+      "start_date": "2018-01-02",
+      "symbol_count": 36,
+      "year": 2018
+    },
+    "2019": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:26cdfeb7dbeddda2f1078a97b357eb664817908be15976fdcca9053c8bd1b205",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2019-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2019.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (36 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 9072,
+      "start_date": "2019-01-02",
+      "symbol_count": 36,
+      "year": 2019
+    },
+    "2020": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:685acfa54c681ad1b4881df12022f192c3f6d8206f1930143b0f024ac6d13d27",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2020-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2020.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (36 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 9108,
+      "start_date": "2020-01-02",
+      "symbol_count": 36,
+      "year": 2020
+    },
+    "2021": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:cb6e89a93f7fe957515fb419d65017dccb895142964aa75f346c5bb7f482536e",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2021-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2021.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (36 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 9072,
+      "start_date": "2021-01-04",
+      "symbol_count": 36,
+      "year": 2021
+    },
+    "2022": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:6db0e579508dcaf83ae8080a90f6689848d75de81b9e9a374c60a13a595a7138",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2022-12-30",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2022.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (36 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 9036,
+      "start_date": "2022-01-03",
+      "symbol_count": 36,
+      "year": 2022
+    },
+    "2023": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:869f11a1bbee9b50ae9b7cf00eb8af745784e1925ee91260134319c59e05b6c0",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2023-12-29",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2023.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (1377 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 342394,
+      "start_date": "2023-01-03",
+      "symbol_count": 1377,
+      "year": 2023
+    },
+    "2024": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:a99cf327cda0fd91a6b02d4e6a0efd597de1225b1aa8854df023e36bfb78daf5",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2024-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2024.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (1388 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 348533,
+      "start_date": "2024-01-02",
+      "symbol_count": 1388,
+      "year": 2024
+    },
+    "2025": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:b18af4a51c44505361e4c897e06bcf4fc84532b3f38d8853fc1ec732d18552f5",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2025-12-31",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2025.parquet",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (1394 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 347690,
+      "start_date": "2025-01-02",
+      "symbol_count": 1394,
+      "year": 2025
+    },
+    "2026": {
+      "adjustment": "close=split-adjusted, adj_close=split+dividend",
+      "content_hash": "sha256:56afbad936179cd4b6fff82e25bbf875cc2d6341089496bc8e84d60cc69dfdd7",
+      "downloaded_at": "2026-09-22T22:12:06-04:00",
+      "end_date": "2026-08-21",
+      "exceptions": [],
+      "feed": "yfinance",
+      "file": "2026.csv",
+      "notes": [
+        "Yahoo auto_adjust=False: close/open/high/low are split-adjusted as of the download (NOT the raw print); adj_close is split+dividend adjusted; volume is split-adjusted.",
+        "downloaded_at is the partition's last git commit time; the true download time was not recorded.",
+        "Yahoo-era partition (1404 symbols). Scheduled for whole-year replacement by the Alpaca SIP rebuild (rebuild_prices.py)."
+      ],
+      "provider": "yahoo",
+      "row_count": 223041,
+      "start_date": "2026-01-02",
+      "symbol_count": 1404,
+      "year": 2026
+    }
+  },
+  "schema_version": 1
+}
