@@ -1,0 +1,100 @@
+==============================================================================
+DATA AUDIT
+==============================================================================
+
+1. Price history completeness
+-----------------------------
+1399/1404 symbols are complete over their own span; 34 reach 15+ years
+
+  symbols in lake         1,404
+  complete over own span  1,399
+  under 99% complete      2
+  1-2 bar stubs           9
+  span >= 15 years        34
+  median span (years)     3.63
+
+  symbol first_date  last_date  bars  expected  pct
+      EA 2026-07-17 2026-08-10     6        17 35.3
+     EQR 2023-01-03 2026-08-21   901       912 98.8
+  note: Ragged symbols are usually halts or mid-delisting names where the vendor itself has no bar; see _schema.md Contract 5.
+
+2. Delisted and removed names
+-----------------------------
+42 of 759 removed intervals can be priced during the window they were actually members
+
+  removed-from-index intervals  759
+  priced during membership      42
+  priced, but not then          125
+  no bars at all                592
+  usable share                  5.5%
+  note: The remainder is the residual survivorship bias. It is not zero and results should not be described as survivorship-free.
+  note: 125 symbol(s) have bars only outside their membership window -- a recycled ticker, or a lake that starts later
+
+3. Historical ticker changes
+----------------------------
+590 of 1209 membership symbols have no bars; 29 carry a post-bankruptcy ticker no vendor covers
+
+  membership symbols                       1,209
+  priced by the lake                       619
+  never priced                             590
+  of those, bankruptcy-suffixed            29
+  of those, left index before lake starts  216
+
+  unfetchable_ticker
+               AAMRQ
+               ABKFQ
+               ANRZQ
+               BHMSQ
+               BTUUQ
+               CCTYQ
+               CITGQ
+               CPNLQ
+               DALRQ
+               DCNAQ
+               DPHIQ
+               EKDKQ
+  note: No ticker-change table exists, so a rename is indistinguishable from a missing symbol. Resolving it needs a permanent id -- Tiingo permaTicker, FIGI or CUSIP. See data/universe/_schema.md contract 2.
+
+4. Index member coverage by date
+--------------------------------
+coverage ranges 0% (2008-06-30) to 96% (2024-06-28) on the probed dates
+
+        date  members  priced coverage
+  2008-06-30      497       0       0%
+  2009-03-31      499       0       0%
+  2012-06-29      498       0       0%
+  2016-06-30      505       0       0%
+  2020-03-31      505       0       0%
+  2024-06-28      503     485      96%
+
+5. Membership date precision
+----------------------------
+a membership date is accurate to the preceding gap: median 2 day(s), worst 91
+
+  snapshots                 2,720
+  range                     1996-01-02 .. 2026-08-18
+  median gap (days)         2.00
+  90th pct gap (days)       10.00
+  worst gap (days)          91
+  years sampled <=12 times  0
+  note: Immaterial for a monthly-rebalanced sleeve. Material for anything trading index additions on their effective date.
+
+6. Sector label vintage
+-----------------------
+663 of 1254 spans carry a sector, and every label is today's classification applied to all of history
+
+  listing spans            1,254
+  with a sector label      663
+  tickers in sector_map    628
+  distinct sectors         12
+  vintage                  current only (not point-in-time)
+  registry first observed  2026-08-20
+  note: A company that changed GICS sector mid-history carries today's label throughout, and names that left before the registry existed carry none.
+  note: Good enough for RiskConfig.max_sector_pct, which does nothing at all without a map. Not good enough for sector attribution.
+
+==============================================================================
+This is a report, not a gate. Use scripts/check_lake_readiness.py
+--backtest for pass/fail.
+==============================================================================
+
+Wrote data/audits/baseline_pre_alpaca.json

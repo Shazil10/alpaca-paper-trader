@@ -1,0 +1,174 @@
+{
+  "1. Price history completeness": {
+    "headline": "1399/1404 symbols are complete over their own span; 34 reach 15+ years",
+    "numbers": {
+      "symbols in lake": 1404,
+      "complete over own span": 1399,
+      "under 99% complete": 2,
+      "1-2 bar stubs": 9,
+      "span >= 15 years": 34,
+      "median span (years)": 3.6303901437371664
+    },
+    "notes": [
+      "Ragged symbols are usually halts or mid-delisting names where the vendor itself has no bar; see _schema.md Contract 5."
+    ],
+    "table": [
+      {
+        "symbol": "EA",
+        "first_date": "2026-07-17 00:00:00",
+        "last_date": "2026-08-10 00:00:00",
+        "bars": 6,
+        "expected": 17,
+        "pct": 35.3
+      },
+      {
+        "symbol": "EQR",
+        "first_date": "2023-01-03 00:00:00",
+        "last_date": "2026-08-21 00:00:00",
+        "bars": 901,
+        "expected": 912,
+        "pct": 98.8
+      }
+    ]
+  },
+  "2. Delisted and removed names": {
+    "headline": "42 of 759 removed intervals can be priced during the window they were actually members",
+    "numbers": {
+      "removed-from-index intervals": 759,
+      "priced during membership": 42,
+      "priced, but not then": 125,
+      "no bars at all": 592,
+      "usable share": "5.5%"
+    },
+    "notes": [
+      "The remainder is the residual survivorship bias. It is not zero and results should not be described as survivorship-free.",
+      "125 symbol(s) have bars only outside their membership window -- a recycled ticker, or a lake that starts later"
+    ],
+    "table": null
+  },
+  "3. Historical ticker changes": {
+    "headline": "590 of 1209 membership symbols have no bars; 29 carry a post-bankruptcy ticker no vendor covers",
+    "numbers": {
+      "membership symbols": 1209,
+      "priced by the lake": 619,
+      "never priced": 590,
+      "of those, bankruptcy-suffixed": 29,
+      "of those, left index before lake starts": 216
+    },
+    "notes": [
+      "No ticker-change table exists, so a rename is indistinguishable from a missing symbol. Resolving it needs a permanent id -- Tiingo permaTicker, FIGI or CUSIP. See data/universe/_schema.md contract 2."
+    ],
+    "table": [
+      {
+        "unfetchable_ticker": "AAMRQ"
+      },
+      {
+        "unfetchable_ticker": "ABKFQ"
+      },
+      {
+        "unfetchable_ticker": "ANRZQ"
+      },
+      {
+        "unfetchable_ticker": "BHMSQ"
+      },
+      {
+        "unfetchable_ticker": "BTUUQ"
+      },
+      {
+        "unfetchable_ticker": "CCTYQ"
+      },
+      {
+        "unfetchable_ticker": "CITGQ"
+      },
+      {
+        "unfetchable_ticker": "CPNLQ"
+      },
+      {
+        "unfetchable_ticker": "DALRQ"
+      },
+      {
+        "unfetchable_ticker": "DCNAQ"
+      },
+      {
+        "unfetchable_ticker": "DPHIQ"
+      },
+      {
+        "unfetchable_ticker": "EKDKQ"
+      }
+    ]
+  },
+  "4. Index member coverage by date": {
+    "headline": "coverage ranges 0% (2008-06-30) to 96% (2024-06-28) on the probed dates",
+    "numbers": {},
+    "notes": [],
+    "table": [
+      {
+        "date": "2008-06-30",
+        "members": 497,
+        "priced": 0,
+        "coverage": "0%"
+      },
+      {
+        "date": "2009-03-31",
+        "members": 499,
+        "priced": 0,
+        "coverage": "0%"
+      },
+      {
+        "date": "2012-06-29",
+        "members": 498,
+        "priced": 0,
+        "coverage": "0%"
+      },
+      {
+        "date": "2016-06-30",
+        "members": 505,
+        "priced": 0,
+        "coverage": "0%"
+      },
+      {
+        "date": "2020-03-31",
+        "members": 505,
+        "priced": 0,
+        "coverage": "0%"
+      },
+      {
+        "date": "2024-06-28",
+        "members": 503,
+        "priced": 485,
+        "coverage": "96%"
+      }
+    ]
+  },
+  "5. Membership date precision": {
+    "headline": "a membership date is accurate to the preceding gap: median 2 day(s), worst 91",
+    "numbers": {
+      "snapshots": 2720,
+      "range": "1996-01-02 .. 2026-08-18",
+      "median gap (days)": 2.0,
+      "90th pct gap (days)": 10.0,
+      "worst gap (days)": 91,
+      "years sampled <=12 times": 0
+    },
+    "notes": [
+      "Immaterial for a monthly-rebalanced sleeve. Material for anything trading index additions on their effective date."
+    ],
+    "table": null
+  },
+  "6. Sector label vintage": {
+    "headline": "663 of 1254 spans carry a sector, and every label is today's classification applied to all of history",
+    "numbers": {
+      "listing spans": 1254,
+      "with a sector label": 663,
+      "tickers in sector_map": 628,
+      "distinct sectors": 12,
+      "vintage": "current only (not point-in-time)",
+      "registry first observed": "2026-08-20"
+    },
+    "notes": [
+      "A company that changed GICS sector mid-history carries today's label throughout, and names that left before the registry existed carry none.",
+      "Good enough for RiskConfig.max_sector_pct, which does nothing at all without a map. Not good enough for sector attribution."
+    ],
+    "table": null
+  }
+}
