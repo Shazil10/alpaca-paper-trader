@@ -190,25 +190,38 @@ def target_symbols(
     universe_meta: pd.DataFrame,
     *,
     max_failures: int = MAX_CONSECUTIVE_FAILURES,
+    extra: Optional[Iterable[str]] = None,
+    protect: Optional[Iterable[str]] = None,
 ) -> List[str]:
-    """Symbols to fetch: (registry union universe union ETFs) minus dead names.
+    """Symbols to fetch: (registry | universe | extra | ETFs) minus dead names.
 
     The union with the existing registry is what stops a name that fails today's
     liquidity screen from developing a hole in its history.
+
+    ``extra`` carries the sources that must never depend on the liquidity
+    filter: today's *unfiltered* S&P 500/400/600 membership and every historical
+    member. Historical names in it are retired like any other once they fail
+    repeatedly -- a company that left the market years ago will never return a
+    bar -- but ``protect`` names (the current constituents) never are, because a
+    current member failing is a fetch problem to fix, not a delisting.
     """
     known = set(registry[SYMBOL].dropna().astype(str)) if len(registry) else set()
     fresh = set(universe_meta[SYMBOL].dropna().astype(str)) if len(universe_meta) else set()
+    additional = {normalize_symbol(s) for s in (extra or []) if str(s).strip()}
+    protected = {normalize_symbol(s) for s in (protect or []) if str(s).strip()}
     etfs = {normalize_symbol(s) for s in ALWAYS_TRACKED}
 
-    candidates = known | fresh | etfs
+    candidates = known | fresh | additional | protected | etfs
 
     if len(registry):
         dead = set(
             registry.loc[registry[FAILURES] >= max_failures, SYMBOL].dropna().astype(str)
         )
-        # Never retire an ETF we depend on, or a name back in today's universe.
+        # Never retire an ETF we depend on, a name back in today's universe, or
+        # a current index constituent.
         dead -= etfs
         dead -= fresh
+        dead -= protected
         if dead:
             logger.info(
                 "skipping %d symbol(s) at >=%d consecutive failures (rows retained): %s",

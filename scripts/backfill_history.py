@@ -2,10 +2,24 @@
 """Extend the price lake backwards in time.
 
 ``sync_prices`` cannot do this. Its window for a known symbol is
-``max(lookback_start, last_stored - 5d)``, so passing ``--start 2005-01-01`` to a
-lake that already holds 2023 onwards fetches nothing at all: every symbol is
+``max(lookback_start, last_stored - 7d)``, so passing an early ``--start`` to a
+lake that already holds later years fetches nothing at all: every symbol is
 "known" and its start collapses to last week. That is correct for the daily path
 and useless for deepening history, hence a separate entry point.
+
+Provider
+--------
+Fetches go through the canonical provider (``MARKET_DATA_PROVIDER``, Alpaca SIP)
+and are written with its provenance, so the manifest's one-provider-per-year
+rule applies here too: a backfill cannot put Alpaca rows into a Yahoo-era year,
+and there is no fallback to Yahoo for years Alpaca does not cover. Alpaca's SIP
+history begins in 2016, which is therefore the default ``--start``. The
+2005-2015 ETF partitions were written by the Yahoo-era backfill and are kept as
+they are, labelled ``yahoo`` in the manifest.
+
+For the one-time move of 2016+ onto Alpaca, use ``rebuild_prices.py`` -- it
+replaces whole partitions through a staged, validated swap, which is the only
+way a year can change provider.
 
 Why it matters: 2023-2026 is 912 sessions. That cannot support in-sample /
 out-of-sample splitting, walk-forward with meaningful folds, or any claim about
@@ -34,21 +48,21 @@ Symbol sources
 ticker registry, every historical index member in ``membership.parquet``, and the
 fixed ETFs. The membership names are the point: they are what removes
 survivorship bias, and they are also where most failures land, because the
-membership source records final tickers (``LEHMQ``, not ``LEH``) and yfinance has
-no history under a post-bankruptcy symbol. Failures are logged and listed, not
-retried forever.
+membership source records final tickers (``LEHMQ``, not ``LEH``) and a vendor
+often has no history under a post-bankruptcy symbol. Failures are logged and
+listed, not retried forever.
 
 New years land as Parquet, and ``.gitignore`` un-ignores closed years one at a
 time -- add any new year there or it will not be committed.
 
     # what would be fetched, no network
-    PYTHONPATH=src ./venv/bin/python scripts/backfill_history.py --start 2005-01-01 --dry-run
+    PYTHONPATH=src ./venv/bin/python scripts/backfill_history.py --dry-run
 
     # ETFs only, a good first pilot
-    PYTHONPATH=src ./venv/bin/python scripts/backfill_history.py --start 2005-01-01 --etfs-only
+    PYTHONPATH=src ./venv/bin/python scripts/backfill_history.py --etfs-only
 
     # the real thing (hours; resumable)
-    PYTHONPATH=src ./venv/bin/python scripts/backfill_history.py --start 2005-01-01
+    PYTHONPATH=src ./venv/bin/python scripts/backfill_history.py
 """
 
 from __future__ import annotations
@@ -66,17 +80,18 @@ import pandas as pd
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from data_pipeline import fetch, registry, schema, store, writer  # noqa: E402
+from data_pipeline import fetch, providers, registry, schema, store, writer  # noqa: E402
 from data_pipeline.membership import ALL_FIXED_ETFS  # noqa: E402
+from data_pipeline.providers.base import MarketDataProvider  # noqa: E402
+from data_pipeline.sync_prices import LOOKBACK_START, _require_canonical  # noqa: E402
 
 logger = logging.getLogger("backfill_history")
 
 CHECKPOINT_PATH = REPO_ROOT / ".cache" / "backfill_state.json"
 
-#: yfinance degrades sharply on wide symbol lists over long windows -- a 20-year
-#: request for 200 names times out often enough to be slower than smaller
-#: batches. 50 is a compromise found by trial, not a magic number.
-DEFAULT_BATCH_SIZE = 50
+#: Symbols per request. Alpaca paginates, so this bounds URL length and the
+#: blast radius of one rejected symbol rather than response size.
+DEFAULT_BATCH_SIZE = 100
 
 
 def _signature(start: pd.Timestamp, n_symbols: int) -> str:
@@ -222,8 +237,13 @@ def backfill(
     checkpoint_path: Optional[Path] = None,
     use_checkpoint: bool = True,
     dry_run: bool = False,
+    provider: Optional[MarketDataProvider] = None,
 ) -> Dict[str, object]:
-    """Fetch and persist history before each symbol's earliest stored session."""
+    """Fetch and persist history before each symbol's earliest stored session.
+
+    ``provider`` defaults to the canonical provider; a non-canonical one is
+    refused (``sync_prices._require_canonical``).
+    """
     wanted = (
         [s.strip().upper() for s in symbols if s.strip()]
         if symbols
@@ -254,6 +274,7 @@ def backfill(
         logger.info("nothing to do")
         return {"targeted": len(wanted), "pending": 0, "rows": 0, "failed": []}
 
+    source = _require_canonical(provider)
     ckpt = Path(checkpoint_path or CHECKPOINT_PATH)
     signature = _signature(start, len(pending))
     done: Set[str] = _load_checkpoint(ckpt, signature) if use_checkpoint else set()
@@ -271,7 +292,7 @@ def backfill(
                 "fetching %d symbol(s) for [%s, %s)",
                 len(batch), start.date(), end.date(),
             )
-            bars, batch_failed = fetch.fetch_batch(batch, start, end)
+            bars, batch_failed = source.fetch_batch(batch, start, end)
             failed.update(batch_failed)
 
             if len(bars) > 0:
@@ -279,7 +300,9 @@ def backfill(
                 bars = bars[bars[schema.DATE] < end]
 
             if len(bars) > 0:
-                written = writer.persist(bars, root=lake_root)
+                written = writer.persist(
+                    bars, root=lake_root, provenance=source.provenance()
+                )
                 years_touched.update(written.keys())
                 total_rows += len(bars)
                 logger.info(
@@ -307,7 +330,7 @@ def backfill(
         preview = sorted(failed)[:20]
         logger.warning(
             "no data for %d symbol(s) (first %d: %s). Delisted names often have "
-            "no yfinance history under their final ticker.",
+            "no vendor history under their final ticker.",
             len(failed), len(preview), ", ".join(preview),
         )
 
@@ -323,7 +346,11 @@ def backfill(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    parser.add_argument("--start", default="2005-01-01", help="Earliest session to fetch.")
+    parser.add_argument(
+        "--start", default=str(LOOKBACK_START.date()),
+        help=f"Earliest session to fetch (default {LOOKBACK_START.date()}, "
+             f"where Alpaca SIP history begins).",
+    )
     parser.add_argument("--symbols", nargs="*", help="Explicit symbol list.")
     parser.add_argument("--etfs-only", action="store_true", help="Fixed ETFs only (pilot).")
     parser.add_argument("--batch-size", type=int, default=DEFAULT_BATCH_SIZE)

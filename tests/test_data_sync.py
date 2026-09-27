@@ -27,6 +27,7 @@ for p in (REPO_ROOT, SRC_DIR):
 
 from data_pipeline import fetch, registry, schema, store, sync_prices, writer  # noqa: E402
 from data_pipeline.schema import ADJ_CLOSE, CLOSE, COLUMNS, DATE, SYMBOL, VOLUME  # noqa: E402
+from data_pipeline.providers.yahoo import YahooProvider  # noqa: E402
 
 
 def bars(rows) -> pd.DataFrame:
@@ -40,6 +41,32 @@ def one(date: str, symbol: str, close: float, *, adj=None, vol=1000):
 
 def sessions(start: str, periods: int) -> pd.DatetimeIndex:
     return pd.bdate_range(start=start, periods=periods)
+
+
+#: The Yahoo parser, named explicitly. Before the provider refactor these tests
+#: reached it through ``fetch.fetch_batch``'s implicit default; the default is now
+#: the canonical Alpaca provider and there is no fallback, so a test that wants
+#: Yahoo has to say so.
+YAHOO = YahooProvider()
+
+
+class CanonicalTestProvider(YahooProvider):
+    """Test-only: drives the sync loop through the yfinance fake.
+
+    ``sync`` refuses non-canonical providers, which is the production guarantee
+    that Yahoo cannot write the lake. These tests are about sync *mechanics* --
+    batching, checkpoints, upserts, registry bookkeeping -- against a temp lake,
+    so they use a subclass that declares itself canonical. It exists only here.
+
+    The cutoff is pinned to the local date so the checkpoint-signature tests stay
+    deterministic regardless of the machine's time zone.
+    """
+
+    name = "test-canonical"
+    canonical = True
+
+    def session_cutoff(self, now=None):
+        return fetch.today_naive()
 
 
 class FakeYFinance:
@@ -208,7 +235,7 @@ class FetchParsingTests(unittest.TestCase):
     def test_multi_ticker_response_is_parsed(self):
         fake = FakeYFinance()
         with mock.patch.dict(sys.modules, {"yfinance": fake}):
-            got, failed = fetch.fetch_batch(
+            got, failed = YAHOO.fetch_batch(
                 ["AAA", "BBB"], pd.Timestamp("2026-01-05"), pd.Timestamp("2026-01-09")
             )
 
@@ -219,7 +246,7 @@ class FetchParsingTests(unittest.TestCase):
     def test_raw_and_adjusted_close_are_both_captured(self):
         fake = FakeYFinance()
         with mock.patch.dict(sys.modules, {"yfinance": fake}):
-            got, _ = fetch.fetch_batch(
+            got, _ = YAHOO.fetch_batch(
                 ["AAA"], pd.Timestamp("2026-01-05"), pd.Timestamp("2026-01-07")
             )
         self.assertEqual(got[CLOSE].iloc[0], 100.5)
@@ -228,7 +255,7 @@ class FetchParsingTests(unittest.TestCase):
     def test_auto_adjust_is_false_so_adj_close_exists(self):
         fake = FakeYFinance()
         with mock.patch.dict(sys.modules, {"yfinance": fake}):
-            fetch.fetch_batch(["AAA"], pd.Timestamp("2026-01-05"), pd.Timestamp("2026-01-07"))
+            YAHOO.fetch_batch(["AAA"], pd.Timestamp("2026-01-05"), pd.Timestamp("2026-01-07"))
         self.assertFalse(fake.calls[0]["auto_adjust"])
 
     def test_current_session_is_never_stored(self):
@@ -236,7 +263,7 @@ class FetchParsingTests(unittest.TestCase):
         today = fetch.today_naive()
         fake = FakeYFinance()
         with mock.patch.dict(sys.modules, {"yfinance": fake}):
-            got, _ = fetch.fetch_batch(
+            got, _ = YAHOO.fetch_batch(
                 ["AAA"], today - pd.Timedelta(days=10), today + pd.Timedelta(days=1)
             )
         if len(got):
@@ -245,7 +272,7 @@ class FetchParsingTests(unittest.TestCase):
     def test_missing_symbols_are_reported_as_failures(self):
         fake = FakeYFinance(known={"AAA"})
         with mock.patch.dict(sys.modules, {"yfinance": fake}):
-            got, failed = fetch.fetch_batch(
+            got, failed = YAHOO.fetch_batch(
                 ["AAA", "GONE"], pd.Timestamp("2026-01-05"), pd.Timestamp("2026-01-09")
             )
         self.assertEqual(failed, ["GONE"])
@@ -254,7 +281,7 @@ class FetchParsingTests(unittest.TestCase):
     def test_whole_batch_exception_marks_all_failed(self):
         fake = FakeYFinance(raise_on_call=True)
         with mock.patch.dict(sys.modules, {"yfinance": fake}):
-            got, failed = fetch.fetch_batch(
+            got, failed = YAHOO.fetch_batch(
                 ["AAA", "BBB"], pd.Timestamp("2026-01-05"), pd.Timestamp("2026-01-09")
             )
         self.assertEqual(len(got), 0)
@@ -349,6 +376,7 @@ class SyncTests(unittest.TestCase):
             checkpoint_path=self.checkpoint,
             lookback_start=self.start,
             batch_size=50,
+            provider=CanonicalTestProvider(),
         )
         params.update(kwargs)
         with mock.patch.dict(sys.modules, {"yfinance": fake}):
