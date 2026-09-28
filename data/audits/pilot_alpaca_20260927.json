@@ -1,0 +1,774 @@
+{
+  "label": "pilot_20260927",
+  "window": {
+    "start": "2016-01-01",
+    "end_exclusive": "2026-09-28"
+  },
+  "alpaca_provenance": {
+    "provider": "alpaca",
+    "feed": "sip",
+    "adjustment": "ohlcv=raw, adj_close=all (split+dividend+spin-off)"
+  },
+  "symbols": {
+    "AAPL": {
+      "alpaca": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [],
+      "sessions_only_yahoo": [],
+      "sessions_only_alpaca_count": 0,
+      "sessions_only_yahoo_count": 0,
+      "common_sessions": 2698,
+      "raw_close_ratio_by_year": {
+        "2016": 4.0,
+        "2017": 4.0,
+        "2018": 4.0,
+        "2019": 4.0,
+        "2020": 4.0,
+        "2021": 1.0,
+        "2022": 1.0,
+        "2023": 1.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 1.0,
+      "adj_return_pairs": 2697,
+      "adj_return_disagreement_rate": 0.0,
+      "adj_return_worst": [
+        {
+          "date": "2022-02-24",
+          "alpaca": 158.94,
+          "yahoo": 159.1661
+        },
+        {
+          "date": "2022-02-25",
+          "alpaca": 161.23,
+          "yahoo": 161.2297
+        },
+        {
+          "date": "2020-04-23",
+          "alpaca": 66.34,
+          "yahoo": 66.336
+        },
+        {
+          "date": "2020-04-22",
+          "alpaca": 66.51,
+          "yahoo": 66.5941
+        },
+        {
+          "date": "2020-03-24",
+          "alpaca": 59.48,
+          "yahoo": 59.5463
+        }
+      ],
+      "adj_anchor_ratio_first": 1.000056,
+      "adj_anchor_ratio_last": 1.0,
+      "split_checks": [
+        {
+          "split": "2020-08-31",
+          "ratio": 4.0,
+          "alpaca_over_yahoo_close_before": 4.0,
+          "yahoo_close_is_split_adjusted": true,
+          "closes_agree": false
+        }
+      ],
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "KO": {
+      "alpaca": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [],
+      "sessions_only_yahoo": [],
+      "sessions_only_alpaca_count": 0,
+      "sessions_only_yahoo_count": 0,
+      "common_sessions": 2698,
+      "raw_close_ratio_by_year": {
+        "2016": 1.0,
+        "2017": 1.0,
+        "2018": 1.0,
+        "2019": 1.0,
+        "2020": 1.0,
+        "2021": 1.0,
+        "2022": 1.0,
+        "2023": 1.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 1.0912,
+      "adj_return_pairs": 2697,
+      "adj_return_disagreement_rate": 0.00074,
+      "adj_return_worst": [
+        {
+          "date": "2020-03-10",
+          "alpaca": 43.79,
+          "yahoo": 43.7882
+        },
+        {
+          "date": "2020-03-09",
+          "alpaca": 42.62,
+          "yahoo": 42.3193
+        },
+        {
+          "date": "2019-08-12",
+          "alpaca": 42.75,
+          "yahoo": 42.7782
+        },
+        {
+          "date": "2019-08-13",
+          "alpaca": 43.02,
+          "yahoo": 43.0194
+        },
+        {
+          "date": "2017-02-13",
+          "alpaca": 30.04,
+          "yahoo": 30.0447
+        }
+      ],
+      "adj_anchor_ratio_first": 0.999845,
+      "adj_anchor_ratio_last": 1.0,
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "NVDA": {
+      "alpaca": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [],
+      "sessions_only_yahoo": [],
+      "sessions_only_alpaca_count": 0,
+      "sessions_only_yahoo_count": 0,
+      "common_sessions": 2698,
+      "raw_close_ratio_by_year": {
+        "2016": 40.0,
+        "2017": 40.0,
+        "2018": 40.0,
+        "2019": 40.0,
+        "2020": 40.0,
+        "2021": 40.0,
+        "2022": 10.0,
+        "2023": 10.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 0.0281,
+      "adj_return_pairs": 2697,
+      "adj_return_disagreement_rate": 0.0,
+      "adj_return_worst": [
+        {
+          "date": "2019-12-12",
+          "alpaca": 5.57,
+          "yahoo": 5.5638
+        },
+        {
+          "date": "2016-12-21",
+          "alpaca": 2.601,
+          "yahoo": 2.6002
+        },
+        {
+          "date": "2019-12-13",
+          "alpaca": 5.562,
+          "yahoo": 5.5618
+        },
+        {
+          "date": "2018-01-16",
+          "alpaca": 5.429,
+          "yahoo": 5.4291
+        },
+        {
+          "date": "2016-12-20",
+          "alpaca": 2.582,
+          "yahoo": 2.584
+        }
+      ],
+      "adj_anchor_ratio_first": 0.999944,
+      "adj_anchor_ratio_last": 1.0,
+      "split_checks": [
+        {
+          "split": "2021-07-20",
+          "ratio": 4.0,
+          "alpaca_over_yahoo_close_before": 40.0,
+          "yahoo_close_is_split_adjusted": false,
+          "closes_agree": false
+        },
+        {
+          "split": "2024-06-10",
+          "ratio": 10.0,
+          "alpaca_over_yahoo_close_before": 10.0,
+          "yahoo_close_is_split_adjusted": true,
+          "closes_agree": false
+        }
+      ],
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "META": {
+      "alpaca": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [],
+      "sessions_only_yahoo": [],
+      "sessions_only_alpaca_count": 0,
+      "sessions_only_yahoo_count": 0,
+      "common_sessions": 2698,
+      "raw_close_ratio_by_year": {
+        "2016": 1.0,
+        "2017": 1.0,
+        "2018": 1.0,
+        "2019": 1.0,
+        "2020": 1.0,
+        "2021": 1.0,
+        "2022": 1.0,
+        "2023": 1.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 1.0497,
+      "adj_return_pairs": 2697,
+      "adj_return_disagreement_rate": 0.0,
+      "adj_return_worst": [
+        {
+          "date": "2020-03-04",
+          "alpaca": 189.94,
+          "yahoo": 189.9408
+        },
+        {
+          "date": "2020-03-03",
+          "alpaca": 183.76,
+          "yahoo": 184.1265
+        },
+        {
+          "date": "2020-04-30",
+          "alpaca": 202.41,
+          "yahoo": 202.768
+        },
+        {
+          "date": "2020-05-01",
+          "alpaca": 200.35,
+          "yahoo": 200.3511
+        },
+        {
+          "date": "2018-12-26",
+          "alpaca": 132.91,
+          "yahoo": 132.907
+        }
+      ],
+      "adj_anchor_ratio_first": 0.999997,
+      "adj_anchor_ratio_last": 1.0,
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "FB": {
+      "alpaca": {
+        "rows": 1935,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 315,
+        "first": "2025-06-26",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [
+        "2016-01-04",
+        "2016-01-05",
+        "2016-01-06",
+        "2016-01-07",
+        "2016-01-08",
+        "2016-01-11",
+        "2016-01-12",
+        "2016-01-13",
+        "2016-01-14",
+        "2016-01-15",
+        "2016-01-19",
+        "2016-01-20",
+        "2016-01-21",
+        "2016-01-22",
+        "2016-01-25",
+        "2016-01-26",
+        "2016-01-27",
+        "2016-01-28",
+        "2016-01-29",
+        "2016-02-01"
+      ],
+      "sessions_only_yahoo": [],
+      "sessions_only_alpaca_count": 1620,
+      "sessions_only_yahoo_count": 0,
+      "common_sessions": 315,
+      "raw_close_ratio_by_year": {
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 0.9966,
+      "adj_return_pairs": 314,
+      "adj_return_disagreement_rate": 0.0,
+      "adj_return_worst": [
+        {
+          "date": "2025-07-21",
+          "alpaca": 39.5,
+          "yahoo": 39.5048
+        },
+        {
+          "date": "2026-07-01",
+          "alpaca": 44.29,
+          "yahoo": 44.2945
+        },
+        {
+          "date": "2025-09-15",
+          "alpaca": 40.38,
+          "yahoo": 40.3846
+        },
+        {
+          "date": "2026-03-19",
+          "alpaca": 41.77,
+          "yahoo": 41.7748
+        },
+        {
+          "date": "2025-08-14",
+          "alpaca": 39.88,
+          "yahoo": 39.8762
+        }
+      ],
+      "adj_anchor_ratio_first": 1.000104,
+      "adj_anchor_ratio_last": 0.999998,
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "SPY": {
+      "alpaca": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [],
+      "sessions_only_yahoo": [],
+      "sessions_only_alpaca_count": 0,
+      "sessions_only_yahoo_count": 0,
+      "common_sessions": 2698,
+      "raw_close_ratio_by_year": {
+        "2016": 1.0,
+        "2017": 1.0,
+        "2018": 1.0,
+        "2019": 1.0,
+        "2020": 1.0,
+        "2021": 1.0,
+        "2022": 1.0,
+        "2023": 1.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 1.0142,
+      "adj_return_pairs": 2697,
+      "adj_return_disagreement_rate": 0.0026,
+      "adj_return_worst": [
+        {
+          "date": "2020-03-13",
+          "alpaca": 245.67,
+          "yahoo": 244.8823
+        },
+        {
+          "date": "2020-03-12",
+          "alpaca": 232.07,
+          "yahoo": 225.5969
+        },
+        {
+          "date": "2020-03-18",
+          "alpaca": 214.29,
+          "yahoo": 218.2228
+        },
+        {
+          "date": "2020-03-19",
+          "alpaca": 218.71,
+          "yahoo": 218.6865
+        },
+        {
+          "date": "2020-03-10",
+          "alpaca": 262.23,
+          "yahoo": 262.2493
+        }
+      ],
+      "adj_anchor_ratio_first": 1.009631,
+      "adj_anchor_ratio_last": 1.0,
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "ARM": {
+      "alpaca": {
+        "rows": 761,
+        "first": "2023-09-14",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 761,
+        "first": "2023-09-14",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [],
+      "sessions_only_yahoo": [],
+      "sessions_only_alpaca_count": 0,
+      "sessions_only_yahoo_count": 0,
+      "common_sessions": 761,
+      "raw_close_ratio_by_year": {
+        "2023": 1.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 1.0,
+      "adj_return_pairs": 760,
+      "adj_return_disagreement_rate": 0.0,
+      "adj_return_worst": [
+        {
+          "date": "2025-09-11",
+          "alpaca": 154.67,
+          "yahoo": 154.7
+        },
+        {
+          "date": "2025-09-12",
+          "alpaca": 150.64,
+          "yahoo": 150.64
+        },
+        {
+          "date": "2024-01-08",
+          "alpaca": 72.84,
+          "yahoo": 72.84
+        },
+        {
+          "date": "2024-09-12",
+          "alpaca": 139.18,
+          "yahoo": 139.18
+        },
+        {
+          "date": "2025-05-28",
+          "alpaca": 135.54,
+          "yahoo": 135.54
+        }
+      ],
+      "adj_anchor_ratio_first": 1.0,
+      "adj_anchor_ratio_last": 1.0,
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "ATVI": {
+      "alpaca": {
+        "rows": 1959,
+        "first": "2016-01-04",
+        "last": "2023-10-13"
+      },
+      "yahoo": {
+        "rows": 0,
+        "first": null,
+        "last": null
+      },
+      "verdict": "one vendor returned nothing",
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "BRK-B": {
+      "alpaca": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [],
+      "sessions_only_yahoo": [],
+      "sessions_only_alpaca_count": 0,
+      "sessions_only_yahoo_count": 0,
+      "common_sessions": 2698,
+      "raw_close_ratio_by_year": {
+        "2016": 1.0,
+        "2017": 1.0,
+        "2018": 1.0,
+        "2019": 1.0,
+        "2020": 1.0,
+        "2021": 1.0,
+        "2022": 1.0,
+        "2023": 1.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 1.1078,
+      "adj_return_pairs": 2697,
+      "adj_return_disagreement_rate": 0.00074,
+      "adj_return_worst": [
+        {
+          "date": "2020-03-10",
+          "alpaca": 202.73,
+          "yahoo": 202.73
+        },
+        {
+          "date": "2020-03-09",
+          "alpaca": 194.75,
+          "yahoo": 193.13
+        },
+        {
+          "date": "2019-08-13",
+          "alpaca": 198.78,
+          "yahoo": 198.78
+        },
+        {
+          "date": "2019-08-12",
+          "alpaca": 197.4,
+          "yahoo": 197.18
+        },
+        {
+          "date": "2021-04-16",
+          "alpaca": 272.11,
+          "yahoo": 272.11
+        }
+      ],
+      "adj_anchor_ratio_first": 1.0,
+      "adj_anchor_ratio_last": 1.0,
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "KRC": {
+      "alpaca": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 2698,
+        "first": "2016-01-04",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [],
+      "sessions_only_yahoo": [],
+      "sessions_only_alpaca_count": 0,
+      "sessions_only_yahoo_count": 0,
+      "common_sessions": 2698,
+      "raw_close_ratio_by_year": {
+        "2016": 1.0,
+        "2017": 1.0,
+        "2018": 1.0,
+        "2019": 1.0,
+        "2020": 1.0,
+        "2021": 1.0,
+        "2022": 1.0,
+        "2023": 1.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 1.0684,
+      "adj_return_pairs": 2697,
+      "adj_return_disagreement_rate": 0.0,
+      "adj_return_worst": [
+        {
+          "date": "2019-08-13",
+          "alpaca": 55.09,
+          "yahoo": 55.1052
+        },
+        {
+          "date": "2019-08-12",
+          "alpaca": 55.08,
+          "yahoo": 55.148
+        },
+        {
+          "date": "2023-06-01",
+          "alpaca": 21.87,
+          "yahoo": 21.8708
+        },
+        {
+          "date": "2023-11-02",
+          "alpaca": 25.72,
+          "yahoo": 25.7218
+        },
+        {
+          "date": "2023-06-29",
+          "alpaca": 25.04,
+          "yahoo": 25.0512
+        }
+      ],
+      "adj_anchor_ratio_first": 0.999711,
+      "adj_anchor_ratio_last": 1.0,
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    },
+    "LBRT": {
+      "alpaca": {
+        "rows": 2187,
+        "first": "2018-01-12",
+        "last": "2026-09-25"
+      },
+      "yahoo": {
+        "rows": 2188,
+        "first": "2018-01-11",
+        "last": "2026-09-25"
+      },
+      "sessions_only_alpaca": [],
+      "sessions_only_yahoo": [
+        "2018-01-11"
+      ],
+      "sessions_only_alpaca_count": 0,
+      "sessions_only_yahoo_count": 1,
+      "common_sessions": 2187,
+      "raw_close_ratio_by_year": {
+        "2018": 1.0,
+        "2019": 1.0,
+        "2020": 1.0,
+        "2021": 1.0,
+        "2022": 1.0,
+        "2023": 1.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 1.0
+      },
+      "volume_ratio_median": 1.0205,
+      "adj_return_pairs": 2186,
+      "adj_return_disagreement_rate": 0.00183,
+      "adj_return_worst": [
+        {
+          "date": "2020-03-13",
+          "alpaca": 2.791,
+          "yahoo": 2.7906
+        },
+        {
+          "date": "2020-03-12",
+          "alpaca": 2.875,
+          "yahoo": 2.6782
+        },
+        {
+          "date": "2019-08-13",
+          "alpaca": 10.92,
+          "yahoo": 10.9177
+        },
+        {
+          "date": "2019-08-12",
+          "alpaca": 10.95,
+          "yahoo": 10.8626
+        },
+        {
+          "date": "2021-02-23",
+          "alpaca": 10.53,
+          "yahoo": 10.5255
+        }
+      ],
+      "adj_anchor_ratio_first": 1.000162,
+      "adj_anchor_ratio_last": 1.0,
+      "alpaca_diagnostics": {
+        "failed": [],
+        "missing_adjusted": {},
+        "missing_raw": {},
+        "pages": 2,
+        "retries": 0
+      }
+    }
+  },
+  "corporate_actions": {
+    "name_changes_meta_fb": [
+      {
+        "old_symbol": "META",
+        "new_symbol": "METV",
+        "effective_date": "2022-01-31",
+        "source": "alpaca:corporate-actions:name_change"
+      },
+      {
+        "old_symbol": "FB",
+        "new_symbol": "META",
+        "effective_date": "2022-06-09",
+        "source": "alpaca:corporate-actions:name_change"
+      }
+    ],
+    "splits": {
+      "forward_splits": 3
+    }
+  },
+  "canonical_lake_written": false
+}

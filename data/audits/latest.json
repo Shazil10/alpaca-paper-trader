@@ -1,0 +1,679 @@
+{
+  "1. Price history completeness": {
+    "headline": "1722/1732 symbols are complete over their own span; 34 reach 15+ years",
+    "numbers": {
+      "symbols in lake": 1732,
+      "complete over own span": 1722,
+      "under 99% complete": 9,
+      "1-2 bar stubs": 0,
+      "span >= 15 years": 34,
+      "median span (years)": 10.72416153319644
+    },
+    "notes": [
+      "Ragged symbols are usually halts or mid-delisting names where the vendor itself has no bar; see _schema.md Contract 5."
+    ],
+    "table": [
+      {
+        "symbol": "POM",
+        "first_date": "2016-01-04 00:00:00",
+        "last_date": "2026-09-25 00:00:00",
+        "bars": 299,
+        "expected": 2698,
+        "pct": 11.1
+      },
+      {
+        "symbol": "CAM",
+        "first_date": "2016-01-04 00:00:00",
+        "last_date": "2026-09-25 00:00:00",
+        "bars": 307,
+        "expected": 2698,
+        "pct": 11.4
+      },
+      {
+        "symbol": "PCL",
+        "first_date": "2016-01-04 00:00:00",
+        "last_date": "2026-09-25 00:00:00",
+        "bars": 323,
+        "expected": 2698,
+        "pct": 12.0
+      },
+      {
+        "symbol": "CSRA",
+        "first_date": "2016-01-04 00:00:00",
+        "last_date": "2026-09-25 00:00:00",
+        "bars": 598,
+        "expected": 2698,
+        "pct": 22.2
+      },
+      {
+        "symbol": "SPLS",
+        "first_date": "2016-01-04 00:00:00",
+        "last_date": "2026-09-25 00:00:00",
+        "bars": 601,
+        "expected": 2698,
+        "pct": 22.3
+      },
+      {
+        "symbol": "NFX",
+        "first_date": "2016-01-04 00:00:00",
+        "last_date": "2026-09-25 00:00:00",
+        "bars": 842,
+        "expected": 2698,
+        "pct": 31.2
+      },
+      {
+        "symbol": "APC",
+        "first_date": "2016-01-04 00:00:00",
+        "last_date": "2026-09-25 00:00:00",
+        "bars": 1062,
+        "expected": 2698,
+        "pct": 39.4
+      },
+      {
+        "symbol": "FB",
+        "first_date": "2016-01-04 00:00:00",
+        "last_date": "2026-09-25 00:00:00",
+        "bars": 1935,
+        "expected": 2698,
+        "pct": 71.7
+      },
+      {
+        "symbol": "BBBY",
+        "first_date": "2016-01-04 00:00:00",
+        "last_date": "2026-08-14 00:00:00",
+        "bars": 2086,
+        "expected": 2669,
+        "pct": 78.2
+      }
+    ]
+  },
+  "2. Delisted and removed names": {
+    "headline": "237 of 759 removed intervals can be priced during the window they were actually members",
+    "numbers": {
+      "removed-from-index intervals": 759,
+      "priced during membership": 237,
+      "priced, but not then": 99,
+      "no bars at all": 423,
+      "usable share": "31.2%"
+    },
+    "notes": [
+      "The remainder is the residual survivorship bias. It is not zero and results should not be described as survivorship-free.",
+      "99 symbol(s) have bars only outside their membership window -- a recycled ticker, or a lake that starts later"
+    ],
+    "table": null
+  },
+  "3. Historical ticker changes": {
+    "headline": "419 of 1209 membership symbols have no bars; 29 carry a post-bankruptcy ticker no vendor covers",
+    "numbers": {
+      "membership symbols": 1209,
+      "priced by the lake": 790,
+      "never priced": 419,
+      "of those, bankruptcy-suffixed": 29,
+      "of those, left index before lake starts": 208
+    },
+    "notes": [
+      "No ticker-change table exists, so a rename is indistinguishable from a missing symbol. Resolving it needs a permanent id -- Tiingo permaTicker, FIGI or CUSIP. See data/universe/_schema.md contract 2."
+    ],
+    "table": [
+      {
+        "unfetchable_ticker": "AAMRQ"
+      },
+      {
+        "unfetchable_ticker": "ABKFQ"
+      },
+      {
+        "unfetchable_ticker": "ANRZQ"
+      },
+      {
+        "unfetchable_ticker": "BHMSQ"
+      },
+      {
+        "unfetchable_ticker": "BTUUQ"
+      },
+      {
+        "unfetchable_ticker": "CCTYQ"
+      },
+      {
+        "unfetchable_ticker": "CITGQ"
+      },
+      {
+        "unfetchable_ticker": "CPNLQ"
+      },
+      {
+        "unfetchable_ticker": "DALRQ"
+      },
+      {
+        "unfetchable_ticker": "DCNAQ"
+      },
+      {
+        "unfetchable_ticker": "DPHIQ"
+      },
+      {
+        "unfetchable_ticker": "EKDKQ"
+      }
+    ]
+  },
+  "4. Index member coverage by date": {
+    "headline": "coverage ranges 0% (2008-06-30) to 100% (2020-03-31) on the probed dates",
+    "numbers": {},
+    "notes": [],
+    "table": [
+      {
+        "index": "SP500",
+        "date": "2008-06-30",
+        "members": 497,
+        "priced": 0,
+        "via_alias": 0,
+        "coverage": "0%"
+      },
+      {
+        "index": "SP500",
+        "date": "2009-03-31",
+        "members": 499,
+        "priced": 0,
+        "via_alias": 0,
+        "coverage": "0%"
+      },
+      {
+        "index": "SP500",
+        "date": "2012-06-29",
+        "members": 498,
+        "priced": 0,
+        "via_alias": 0,
+        "coverage": "0%"
+      },
+      {
+        "index": "SP500",
+        "date": "2016-06-30",
+        "members": 505,
+        "priced": 496,
+        "via_alias": 6,
+        "coverage": "98%"
+      },
+      {
+        "index": "SP500",
+        "date": "2020-03-31",
+        "members": 505,
+        "priced": 504,
+        "via_alias": 3,
+        "coverage": "100%"
+      },
+      {
+        "index": "SP500",
+        "date": "2024-06-28",
+        "members": 503,
+        "priced": 501,
+        "via_alias": 2,
+        "coverage": "100%"
+      }
+    ]
+  },
+  "5. Membership date precision": {
+    "headline": "a membership date is accurate to the preceding gap: median 2 day(s), worst 91",
+    "numbers": {
+      "snapshots": 2720,
+      "range": "1996-01-02 .. 2026-08-18",
+      "median gap (days)": 2.0,
+      "90th pct gap (days)": 10.0,
+      "worst gap (days)": 91,
+      "years sampled <=12 times": 0
+    },
+    "notes": [
+      "Immaterial for a monthly-rebalanced sleeve. Material for anything trading index additions on their effective date."
+    ],
+    "table": null
+  },
+  "6. Sector label vintage": {
+    "headline": "663 of 1254 spans carry a sector, and every label is today's classification applied to all of history",
+    "numbers": {
+      "listing spans": 1254,
+      "with a sector label": 663,
+      "tickers in sector_map": 628,
+      "distinct sectors": 12,
+      "vintage": "current only (not point-in-time)",
+      "registry first observed": "2026-08-20"
+    },
+    "notes": [
+      "A company that changed GICS sector mid-history carries today's label throughout, and names that left before the registry existed carry none.",
+      "Good enough for RiskConfig.max_sector_pct, which does nothing at all without a map. Not good enough for sector attribution."
+    ],
+    "table": null
+  },
+  "7. Provenance (data/prices/manifest.json)": {
+    "headline": "partition providers: 2005-2015 yahoo; 2016-2026 alpaca",
+    "numbers": {
+      "partitions": 22,
+      "providers": "2005-2015 yahoo; 2016-2026 alpaca",
+      "on a canonical provider": 11,
+      "manifest vs disk problems": 0,
+      "secondary-source exceptions": 0,
+      "pending anchor factors": 193,
+      "symbols with pending factors": 19
+    },
+    "notes": [
+      "Years on a cross-check provider (yahoo) carry Yahoo's semantics: close split-adjusted, not the raw print. See each partition's notes."
+    ],
+    "table": [
+      {
+        "year": 2005,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 6254,
+        "symbols": 25,
+        "first": "2005-01-03",
+        "last": "2005-12-30"
+      },
+      {
+        "year": 2006,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 6761,
+        "symbols": 28,
+        "first": "2006-01-03",
+        "last": "2006-12-29"
+      },
+      {
+        "year": 2007,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 8324,
+        "symbols": 34,
+        "first": "2007-01-03",
+        "last": "2007-12-31"
+      },
+      {
+        "year": 2008,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 8602,
+        "symbols": 34,
+        "first": "2008-01-02",
+        "last": "2008-12-31"
+      },
+      {
+        "year": 2009,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 8568,
+        "symbols": 34,
+        "first": "2009-01-02",
+        "last": "2009-12-31"
+      },
+      {
+        "year": 2010,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 8568,
+        "symbols": 34,
+        "first": "2010-01-04",
+        "last": "2010-12-31"
+      },
+      {
+        "year": 2011,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 8568,
+        "symbols": 34,
+        "first": "2011-01-03",
+        "last": "2011-12-30"
+      },
+      {
+        "year": 2012,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 8500,
+        "symbols": 34,
+        "first": "2012-01-03",
+        "last": "2012-12-31"
+      },
+      {
+        "year": 2013,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 8568,
+        "symbols": 34,
+        "first": "2013-01-02",
+        "last": "2013-12-31"
+      },
+      {
+        "year": 2014,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 8568,
+        "symbols": 34,
+        "first": "2014-01-02",
+        "last": "2014-12-31"
+      },
+      {
+        "year": 2015,
+        "provider": "yahoo",
+        "feed": "yfinance",
+        "rows": 8627,
+        "symbols": 35,
+        "first": "2015-01-02",
+        "last": "2015-12-31"
+      },
+      {
+        "year": 2016,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 364743,
+        "symbols": 1478,
+        "first": "2016-01-04",
+        "last": "2016-12-30"
+      },
+      {
+        "year": 2017,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 372384,
+        "symbols": 1509,
+        "first": "2017-01-03",
+        "last": "2017-12-29"
+      },
+      {
+        "year": 2018,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 380994,
+        "symbols": 1542,
+        "first": "2018-01-02",
+        "last": "2018-12-31"
+      },
+      {
+        "year": 2019,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 387855,
+        "symbols": 1559,
+        "first": "2019-01-02",
+        "last": "2019-12-31"
+      },
+      {
+        "year": 2020,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 394021,
+        "symbols": 1584,
+        "first": "2020-01-02",
+        "last": "2020-12-31"
+      },
+      {
+        "year": 2021,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 400807,
+        "symbols": 1619,
+        "first": "2021-01-04",
+        "last": "2021-12-31"
+      },
+      {
+        "year": 2022,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 402640,
+        "symbols": 1621,
+        "first": "2022-01-03",
+        "last": "2022-12-30"
+      },
+      {
+        "year": 2023,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 400908,
+        "symbols": 1616,
+        "first": "2023-01-03",
+        "last": "2023-12-29"
+      },
+      {
+        "year": 2024,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 405615,
+        "symbols": 1621,
+        "first": "2024-01-02",
+        "last": "2024-12-31"
+      },
+      {
+        "year": 2025,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 402124,
+        "symbols": 1622,
+        "first": "2025-01-02",
+        "last": "2025-12-31"
+      },
+      {
+        "year": 2026,
+        "provider": "alpaca",
+        "feed": "sip",
+        "rows": 292838,
+        "symbols": 1618,
+        "first": "2026-01-02",
+        "last": "2026-09-25"
+      }
+    ]
+  },
+  "8. Current constituent coverage (unfiltered)": {
+    "headline": "on 2026-09-25: SP500 99.8%; SP400 100.0%; SP600 99.7%; SP1500 99.8%",
+    "numbers": {
+      "latest lake session": "2026-09-25",
+      "unpriced current members": 3
+    },
+    "notes": [],
+    "table": [
+      {
+        "index": "SP500",
+        "members": 503,
+        "priced": 502,
+        "coverage": "99.8%",
+        "missing_sample": "DOW"
+      },
+      {
+        "index": "SP400",
+        "members": 400,
+        "priced": 400,
+        "coverage": "100.0%",
+        "missing_sample": ""
+      },
+      {
+        "index": "SP600",
+        "members": 603,
+        "priced": 601,
+        "coverage": "99.7%",
+        "missing_sample": "HLX, LEG"
+      },
+      {
+        "index": "SP1500",
+        "members": 1504,
+        "priced": 1501,
+        "coverage": "99.8%",
+        "missing_sample": "DOW, HLX, LEG"
+      }
+    ]
+  },
+  "9. Latest completed session": {
+    "headline": "the lake holds the latest completed session",
+    "numbers": {
+      "latest completed weekday (NY)": "2026-09-25",
+      "lake frontier": "2026-09-25",
+      "weekdays behind (holidays not excluded)": 0
+    },
+    "notes": [],
+    "table": null
+  },
+  "10. Missing symbol-sessions": {
+    "headline": "10 symbol(s) have 16203 missing session(s) inside their own span",
+    "numbers": {
+      "symbols with internal holes": 10,
+      "missing symbol-sessions": 16203,
+      "distinct sessions affected": 2633,
+      "thin sessions, last 12m (<90% of median breadth)": 0
+    },
+    "notes": [],
+    "table": [
+      {
+        "symbol": "POM",
+        "missing": 2399,
+        "first": "2016-03-24",
+        "last": "2025-10-07"
+      },
+      {
+        "symbol": "CAM",
+        "missing": 2391,
+        "first": "2016-04-04",
+        "last": "2025-10-03"
+      },
+      {
+        "symbol": "PCL",
+        "missing": 2375,
+        "first": "2016-02-22",
+        "last": "2025-07-31"
+      },
+      {
+        "symbol": "CSRA",
+        "missing": 2100,
+        "first": "2018-04-04",
+        "last": "2026-08-11"
+      },
+      {
+        "symbol": "SPLS",
+        "missing": 2097,
+        "first": "2017-09-13",
+        "last": "2026-01-15"
+      },
+      {
+        "symbol": "NFX",
+        "missing": 1856,
+        "first": "2019-02-14",
+        "last": "2026-07-06"
+      },
+      {
+        "symbol": "APC",
+        "missing": 1636,
+        "first": "2019-08-09",
+        "last": "2026-02-11"
+      },
+      {
+        "symbol": "FB",
+        "missing": 763,
+        "first": "2022-06-09",
+        "last": "2025-06-25"
+      },
+      {
+        "symbol": "BBBY",
+        "missing": 583,
+        "first": "2023-05-03",
+        "last": "2025-08-28"
+      },
+      {
+        "symbol": "CNXC",
+        "missing": 3,
+        "first": "2020-11-25",
+        "last": "2020-11-30"
+      }
+    ]
+  },
+  "11. Corporate-action mismatches and aliases": {
+    "headline": "476 adj_close move(s) beyond 40% in a day; 3444 rename(s) recorded",
+    "numbers": {
+      "adj_close one-day moves > 40%": 476,
+      "symbols affected": 249,
+      "pending anchor factors": 193,
+      "recorded renames (symbol_aliases.csv)": 3444
+    },
+    "notes": [
+      "adj and raw moving together by a split ratio means the split was not applied to adj_close; adj moving alone means an anchor seam. Either is fixed by a symbol refresh: rebuild_prices.py --symbols <S>."
+    ],
+    "table": [
+      {
+        "symbol": "GPOR",
+        "date": "2021-05-18 00:00:00",
+        "adj_return": 526.4765,
+        "raw_return": 526.4765
+      },
+      {
+        "symbol": "BBBY",
+        "date": "2025-08-29 00:00:00",
+        "adj_return": 118.9734,
+        "raw_return": 118.9734
+      },
+      {
+        "symbol": "SN",
+        "date": "2023-07-31 00:00:00",
+        "adj_return": 116.3148,
+        "raw_return": 116.2997
+      },
+      {
+        "symbol": "DBD",
+        "date": "2023-08-14 00:00:00",
+        "adj_return": 81.28,
+        "raw_return": 81.28
+      },
+      {
+        "symbol": "VAL",
+        "date": "2021-05-03 00:00:00",
+        "adj_return": 70.8182,
+        "raw_return": 70.8182
+      },
+      {
+        "symbol": "PARA",
+        "date": "2021-02-12 00:00:00",
+        "adj_return": 48.2718,
+        "raw_return": 48.2718
+      },
+      {
+        "symbol": "MNK",
+        "date": "2022-10-27 00:00:00",
+        "adj_return": 20.2,
+        "raw_return": 20.2
+      },
+      {
+        "symbol": "BTU",
+        "date": "2017-04-04 00:00:00",
+        "adj_return": 12.1653,
+        "raw_return": 12.1643
+      },
+      {
+        "symbol": "CRC",
+        "date": "2020-10-28 00:00:00",
+        "adj_return": 11.7194,
+        "raw_return": 11.7119
+      },
+      {
+        "symbol": "DO",
+        "date": "2022-03-30 00:00:00",
+        "adj_return": 6.9923,
+        "raw_return": 6.9923
+      },
+      {
+        "symbol": "GPOR",
+        "date": "2020-03-13 00:00:00",
+        "adj_return": 5.85,
+        "raw_return": 5.85
+      },
+      {
+        "symbol": "MNK",
+        "date": "2023-05-19 00:00:00",
+        "adj_return": 4.5752,
+        "raw_return": 4.5752
+      }
+    ]
+  },
+  "12. Survivorship statement": {
+    "headline": "S&P 1500 is point-in-time only from 2026-09-27",
+    "numbers": {
+      "SP500 membership known from": "1996-01-02",
+      "SP400 membership known from": "2026-09-27",
+      "SP600 membership known from": "2026-09-27",
+      "SP1500 membership known from": "2026-09-27",
+      "canonical price history from": "2016-01-01"
+    },
+    "notes": [
+      "S&P 500 point-in-time membership is reconstructed from dated snapshots (fja05680), accurate to the snapshot gap (section 5), with final rather than point-in-time tickers for some names (section 3).",
+      "S&P 400/600 membership exists only from 2026-09-27 (the first capture); intervals are left-censored there. An S&P 1500 backtest over earlier dates uses today's mid/small caps and is NOT survivorship-free.",
+      "Even inside covered dates, a member counts only if the lake can price it (sections 2, 4, 8 and scripts/classify_gaps.py); unpriced members are the residual bias. Describe results as survivorship-reduced, never survivorship-free, unless both the membership and the pricing gaps are zero over the tested window."
+    ],
+    "table": null
+  }
+}

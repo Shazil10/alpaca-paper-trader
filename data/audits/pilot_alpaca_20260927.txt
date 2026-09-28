@@ -1,0 +1,71 @@
+Alpaca SIP pilot pilot_20260927  window {'start': '2016-01-01', 'end_exclusive': '2026-09-28'}
+
+AAPL
+  alpaca  2698 rows 2016-01-04..2026-09-25
+  yahoo   2698 rows 2016-01-04..2026-09-25
+  adj returns disagree >0.5% on 0.00% of 2697 pairs; anchor ratio 1.000056 -> 1.0
+  raw close ratio by year {'2016': 4.0, '2017': 4.0, '2018': 4.0, '2019': 4.0, '2020': 4.0, '2021': 1.0, '2022': 1.0, '2023': 1.0, '2024': 1.0, '2025': 1.0, '2026': 1.0}
+  split 2020-08-31 4.0:1 -> alpaca/yahoo close before = 4.0 (yahoo split-adjusted: True)
+
+KO
+  alpaca  2698 rows 2016-01-04..2026-09-25
+  yahoo   2698 rows 2016-01-04..2026-09-25
+  adj returns disagree >0.5% on 0.07% of 2697 pairs; anchor ratio 0.999845 -> 1.0
+  raw close ratio by year {'2016': 1.0, '2017': 1.0, '2018': 1.0, '2019': 1.0, '2020': 1.0, '2021': 1.0, '2022': 1.0, '2023': 1.0, '2024': 1.0, '2025': 1.0, '2026': 1.0}
+
+NVDA
+  alpaca  2698 rows 2016-01-04..2026-09-25
+  yahoo   2698 rows 2016-01-04..2026-09-25
+  adj returns disagree >0.5% on 0.00% of 2697 pairs; anchor ratio 0.999944 -> 1.0
+  raw close ratio by year {'2016': 40.0, '2017': 40.0, '2018': 40.0, '2019': 40.0, '2020': 40.0, '2021': 40.0, '2022': 10.0, '2023': 10.0, '2024': 1.0, '2025': 1.0, '2026': 1.0}
+  split 2021-07-20 4.0:1 -> alpaca/yahoo close before = 40.0 (yahoo split-adjusted: False)
+  split 2024-06-10 10.0:1 -> alpaca/yahoo close before = 10.0 (yahoo split-adjusted: True)
+
+META
+  alpaca  2698 rows 2016-01-04..2026-09-25
+  yahoo   2698 rows 2016-01-04..2026-09-25
+  adj returns disagree >0.5% on 0.00% of 2697 pairs; anchor ratio 0.999997 -> 1.0
+  raw close ratio by year {'2016': 1.0, '2017': 1.0, '2018': 1.0, '2019': 1.0, '2020': 1.0, '2021': 1.0, '2022': 1.0, '2023': 1.0, '2024': 1.0, '2025': 1.0, '2026': 1.0}
+
+FB
+  alpaca  1935 rows 2016-01-04..2026-09-25
+  yahoo    315 rows 2025-06-26..2026-09-25
+  adj returns disagree >0.5% on 0.00% of 314 pairs; anchor ratio 1.000104 -> 0.999998
+  raw close ratio by year {'2025': 1.0, '2026': 1.0}
+
+SPY
+  alpaca  2698 rows 2016-01-04..2026-09-25
+  yahoo   2698 rows 2016-01-04..2026-09-25
+  adj returns disagree >0.5% on 0.26% of 2697 pairs; anchor ratio 1.009631 -> 1.0
+  raw close ratio by year {'2016': 1.0, '2017': 1.0, '2018': 1.0, '2019': 1.0, '2020': 1.0, '2021': 1.0, '2022': 1.0, '2023': 1.0, '2024': 1.0, '2025': 1.0, '2026': 1.0}
+
+ARM
+  alpaca   761 rows 2023-09-14..2026-09-25
+  yahoo    761 rows 2023-09-14..2026-09-25
+  adj returns disagree >0.5% on 0.00% of 760 pairs; anchor ratio 1.0 -> 1.0
+  raw close ratio by year {'2023': 1.0, '2024': 1.0, '2025': 1.0, '2026': 1.0}
+
+ATVI
+  alpaca  1959 rows 2016-01-04..2023-10-13
+  yahoo      0 rows None..None
+
+BRK-B
+  alpaca  2698 rows 2016-01-04..2026-09-25
+  yahoo   2698 rows 2016-01-04..2026-09-25
+  adj returns disagree >0.5% on 0.07% of 2697 pairs; anchor ratio 1.0 -> 1.0
+  raw close ratio by year {'2016': 1.0, '2017': 1.0, '2018': 1.0, '2019': 1.0, '2020': 1.0, '2021': 1.0, '2022': 1.0, '2023': 1.0, '2024': 1.0, '2025': 1.0, '2026': 1.0}
+
+KRC
+  alpaca  2698 rows 2016-01-04..2026-09-25
+  yahoo   2698 rows 2016-01-04..2026-09-25
+  adj returns disagree >0.5% on 0.00% of 2697 pairs; anchor ratio 0.999711 -> 1.0
+  raw close ratio by year {'2016': 1.0, '2017': 1.0, '2018': 1.0, '2019': 1.0, '2020': 1.0, '2021': 1.0, '2022': 1.0, '2023': 1.0, '2024': 1.0, '2025': 1.0, '2026': 1.0}
+
+LBRT
+  alpaca  2187 rows 2018-01-12..2026-09-25
+  yahoo   2188 rows 2018-01-11..2026-09-25
+  adj returns disagree >0.5% on 0.18% of 2186 pairs; anchor ratio 1.000162 -> 1.0
+  raw close ratio by year {'2018': 1.0, '2019': 1.0, '2020': 1.0, '2021': 1.0, '2022': 1.0, '2023': 1.0, '2024': 1.0, '2025': 1.0, '2026': 1.0}
+
+corporate actions: {'name_changes_meta_fb': [{'old_symbol': 'META', 'new_symbol': 'METV', 'effective_date': '2022-01-31', 'source': 'alpaca:corporate-actions:name_change'}, {'old_symbol': 'FB', 'new_symbol': 'META', 'effective_date': '2022-06-09', 'source': 'alpaca:corporate-actions:name_change'}], 'splits': {'forward_splits': 3}}
+canonical lake written: no
