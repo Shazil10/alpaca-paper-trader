@@ -7,14 +7,26 @@
 ``check_lake_readiness.py`` answers a yes/no question -- is the lake good enough
 to trade or to backtest. This answers the *shape* of what is there, because the
 limitations are not going away and a number attached to each one is worth more
-than a warning. Six questions, one section each:
+than a warning. Twelve questions, one section each:
 
 1. Which symbols have complete price history, and complete over what span?
 2. Are delisted names actually present, or only survivors?
 3. Are historical ticker changes mapped, or silently dropped?
 4. Can every historical index member be priced on the dates it was a member?
+   (S&P 500 on fixed probes; S&P 1500 from the capture baseline on; renamed
+   members counted through ``symbol_aliases.csv``.)
 5. Which membership dates are exact, and how wrong can the rest be?
 6. Are sector labels historical or current?
+7. Which provider produced each year, and do the bytes still match the manifest?
+8. Of today's *unfiltered* S&P 500/400/600, how many does the lake price?
+9. Does the lake hold the latest completed session?
+10. How many symbol-sessions are missing inside symbols' own spans?
+11. Which adj_close moves look like unapplied corporate actions?
+12. What may a backtest claim about survivorship, given all of the above?
+
+``scripts/classify_gaps.py`` goes one step further for every membership
+interval that is not fully priced: it assigns a cause (classes A-F) and makes
+the Tiingo decision.
 
 Nothing here fails a build. It is a report, and its job is to make the size of
 each gap explicit so a result can be discounted by the right amount rather than
@@ -37,7 +49,12 @@ import pandas as pd
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from data_pipeline import membership, securities, store  # noqa: E402
+from data_pipeline import (  # noqa: E402
+    aliases, anchor, manifest, membership, membership_capture, securities, store,
+)
+from data_pipeline.providers import available as provider_roles  # noqa: E402
+from data_pipeline.providers.base import completed_session_cutoff  # noqa: E402
+from data_pipeline.sync_prices import LOOKBACK_START  # noqa: E402
 
 logger = logging.getLogger("audit_data")
 
@@ -315,25 +332,41 @@ def audit_member_coverage(calendar: pd.DatetimeIndex) -> Finding:
 
     lake_start, lake_end = calendar[0], calendar[-1]
     rows = []
+    alias_table = aliases.load()
 
-    for probe in PROBE_DATES:
+    probes = [("SP500", p) for p in PROBE_DATES]
+    union_start = membership.coverage_start("SP1500")
+    if union_start is not None:
+        # The S&P 1500 is only known from the capture baseline on; probing it
+        # earlier would measure the S&P 500 and call it the 1500.
+        probes += [("SP1500", str(d.date())) for d in _sp1500_probes(union_start, lake_end)]
+
+    for index, probe in probes:
         date = pd.Timestamp(probe)
-        members = membership.members_asof(date)
+        members = membership.members_asof(date, index)
         if not members:
             continue
 
         if date < lake_start or date > lake_end:
             rows.append({
-                "date": probe, "members": len(members),
-                "priced": 0, "coverage": "outside lake",
+                "index": index, "date": probe, "members": len(members),
+                "priced": 0, "via_alias": 0, "coverage": "outside lake",
             })
             continue
 
-        panel = store.load_close_matrix(sorted(members), start=date, end=date)
-        priced = 0 if panel.empty else int(panel.iloc[0].notna().sum())
+        # A renamed member counts as priced if the lake holds its successor:
+        # Alpaca's asof mapping stores FB's history under META.
+        lookup = {s: aliases.successor(s, alias_table) for s in members}
+        panel = store.load_close_matrix(
+            sorted(set(lookup) | set(lookup.values())), start=date, end=date
+        )
+        have = set() if panel.empty else set(panel.columns[panel.iloc[0].notna()])
+        direct = {s for s in members if s in have}
+        renamed = {s for s in members - direct if lookup[s] in have}
+        priced = len(direct) + len(renamed)
         rows.append({
-            "date": probe, "members": len(members), "priced": priced,
-            "coverage": f"{priced / len(members):.0%}",
+            "index": index, "date": probe, "members": len(members), "priced": priced,
+            "via_alias": len(renamed), "coverage": f"{priced / len(members):.0%}",
         })
 
     finding.table = pd.DataFrame(rows)
@@ -466,6 +499,282 @@ def audit_sector_vintage() -> Finding:
     return finding
 
 
+def _sp1500_probes(start: pd.Timestamp, end: pd.Timestamp) -> List[pd.Timestamp]:
+    """Month-end probes for the captured S&P 1500, newest last, at most six."""
+    if start > end:
+        return []
+    month_ends = pd.date_range(start, end, freq="BM")
+    picks = list(month_ends[-5:]) + [pd.Timestamp(end)]
+    return sorted(set(pd.Timestamp(p).normalize() for p in picks))
+
+
+# ---------------------------------------------------------------------------
+# 7. Provenance
+# ---------------------------------------------------------------------------
+
+def _year_ranges(by_year: Dict[int, str]) -> str:
+    """{2005: yahoo, 2006: yahoo, 2016: alpaca} -> '2005-2006 yahoo; 2016 alpaca'."""
+    parts, run = [], []
+    for year in sorted(by_year):
+        if run and by_year[year] == by_year[run[-1]] and year == run[-1] + 1:
+            run.append(year)
+            continue
+        if run:
+            parts.append((run[0], run[-1], by_year[run[0]]))
+        run = [year]
+    if run:
+        parts.append((run[0], run[-1], by_year[run[0]]))
+    return "; ".join(
+        f"{a} {p}" if a == b else f"{a}-{b} {p}" for a, b, p in parts
+    )
+
+
+def audit_provenance() -> Finding:
+    """Who produced each year, whether the bytes still match, and what is pending."""
+    finding = Finding(name="7. Provenance (data/prices/manifest.json)")
+    data = manifest.load()
+    partitions = data.get("partitions", {})
+    if not partitions:
+        finding.headline = "no manifest: provenance of every partition is unknown"
+        finding.notes.append("Run scripts/bootstrap_manifest.py.")
+        return finding
+
+    by_year = {int(y): str(e.get("provider")) for y, e in partitions.items()}
+    roles = provider_roles()
+    problems = manifest.verify()
+    exceptions = sum(len(e.get("exceptions", [])) for e in partitions.values())
+    pending = anchor.load()
+
+    finding.numbers = {
+        "partitions": len(partitions),
+        "providers": _year_ranges(by_year),
+        "on a canonical provider": sum(1 for p in by_year.values() if roles.get(p)),
+        "manifest vs disk problems": len(problems),
+        "secondary-source exceptions": exceptions,
+        "pending anchor factors": int(len(pending)),
+        "symbols with pending factors": int(pending[anchor.SYMBOL].nunique()) if len(pending) else 0,
+    }
+    finding.headline = f"partition providers: {_year_ranges(by_year)}"
+    finding.table = pd.DataFrame([
+        {"year": int(y), "provider": e.get("provider"), "feed": e.get("feed"),
+         "rows": e.get("row_count"), "symbols": e.get("symbol_count"),
+         "first": e.get("start_date"), "last": e.get("end_date")}
+        for y, e in sorted(partitions.items(), key=lambda kv: int(kv[0]))
+    ])
+    for problem in problems[:10]:
+        finding.notes.append(f"verify: {problem}")
+    if any(not roles.get(p) for p in by_year.values()):
+        finding.notes.append(
+            "Years on a cross-check provider (yahoo) carry Yahoo's semantics: close "
+            "split-adjusted, not the raw print. See each partition's notes."
+        )
+    return finding
+
+
+# ---------------------------------------------------------------------------
+# 8. Current constituents
+# ---------------------------------------------------------------------------
+
+def audit_current_coverage(prices: pd.DataFrame, calendar: pd.DatetimeIndex) -> Finding:
+    """Of today's unfiltered S&P 500/400/600, how many does the lake price?"""
+    finding = Finding(name="8. Current constituent coverage (unfiltered)")
+    if len(calendar) == 0:
+        finding.headline = "empty lake"
+        return finding
+    latest = pd.Timestamp(calendar[-1])
+    have = set(prices.loc[prices["date"] == latest, "symbol"])
+    alias_table = aliases.load()
+
+    current = membership_capture.load_current()
+    if len(current) == 0:
+        members = {"SP500": membership.members_asof(latest, "SP500")}
+        finding.notes.append(
+            "No membership capture yet (run src/universe.py --capture-only); "
+            "S&P 400/600 cannot be measured and the S&P 500 comes from the "
+            "reconstructed history."
+        )
+    else:
+        members = {
+            index: set(current.loc[current["index"] == index, "symbol"])
+            for index in membership_capture.INDICES
+        }
+        members["SP1500"] = set().union(*members.values())
+
+    rows, missing_all = [], set()
+    for index, names in members.items():
+        priced = {s for s in names if s in have or aliases.successor(s, alias_table) in have}
+        missing = sorted(names - priced)
+        missing_all |= set(missing)
+        rows.append({"index": index, "members": len(names), "priced": len(priced),
+                     "coverage": f"{len(priced) / len(names):.1%}" if names else "n/a",
+                     "missing_sample": ", ".join(missing[:8])})
+    finding.table = pd.DataFrame(rows)
+    finding.numbers = {"latest lake session": str(latest.date()),
+                       "unpriced current members": len(missing_all)}
+    finding.headline = (
+        f"on {latest.date()}: " + "; ".join(f"{r['index']} {r['coverage']}" for r in rows)
+    )
+    return finding
+
+
+# ---------------------------------------------------------------------------
+# 9. Latest completed session
+# ---------------------------------------------------------------------------
+
+def audit_latest_session(calendar: pd.DatetimeIndex) -> Finding:
+    """Is the lake current with the last session that has actually closed?"""
+    finding = Finding(name="9. Latest completed session")
+    cutoff = completed_session_cutoff()
+    expected = pd.bdate_range(end=cutoff - pd.Timedelta(days=1), periods=1)[0]
+    frontier = pd.Timestamp(calendar[-1]) if len(calendar) else None
+    behind = (
+        len(pd.bdate_range(frontier + pd.Timedelta(days=1), expected)) if frontier is not None else None
+    )
+    finding.numbers = {
+        "latest completed weekday (NY)": str(expected.date()),
+        "lake frontier": str(frontier.date()) if frontier is not None else "empty",
+        "weekdays behind (holidays not excluded)": behind if behind is not None else "n/a",
+    }
+    if behind == 0:
+        finding.headline = "the lake holds the latest completed session"
+    else:
+        finding.headline = (
+            f"the lake is {behind} weekday(s) behind the latest completed session "
+            f"(at most; exchange holidays are not subtracted)"
+        )
+    return finding
+
+
+# ---------------------------------------------------------------------------
+# 10. Missing sessions
+# ---------------------------------------------------------------------------
+
+def audit_missing_sessions(prices: pd.DataFrame, calendar: pd.DatetimeIndex) -> Finding:
+    """Holes inside symbols' own spans, and sessions with thin breadth."""
+    finding = Finding(name="10. Missing symbol-sessions")
+    gaps = store.find_gaps()
+    missing = sum(len(v) for v in gaps.values())
+    sessions = sorted({d for v in gaps.values() for d in v})
+
+    breadth = prices.groupby("date")["symbol"].nunique()
+    recent = breadth[breadth.index >= breadth.index.max() - pd.Timedelta(days=365)]
+    thin = recent[recent < 0.9 * recent.median()] if len(recent) else recent
+
+    finding.numbers = {
+        "symbols with internal holes": len(gaps),
+        "missing symbol-sessions": int(missing),
+        "distinct sessions affected": len(sessions),
+        "thin sessions, last 12m (<90% of median breadth)": int(len(thin)),
+    }
+    finding.headline = (
+        f"{len(gaps)} symbol(s) have {missing} missing session(s) inside their own span"
+    )
+    if gaps:
+        worst = sorted(gaps.items(), key=lambda kv: -len(kv[1]))[:10]
+        finding.table = pd.DataFrame([
+            {"symbol": s, "missing": len(d), "first": min(d).date(), "last": max(d).date()}
+            for s, d in worst
+        ])
+    if len(thin):
+        finding.notes.append(
+            "thin sessions: " + ", ".join(f"{d.date()} ({n})" for d, n in thin.head(8).items())
+        )
+    return finding
+
+
+# ---------------------------------------------------------------------------
+# 11. Corporate actions and aliases
+# ---------------------------------------------------------------------------
+
+#: A one-day adjusted move this large is far more often an unadjusted split or
+#: an anchor seam than a real return.
+JUMP_THRESHOLD = 0.40
+
+
+def audit_corporate_actions(prices: pd.DataFrame) -> Finding:
+    """adj_close moves that look like unapplied corporate actions."""
+    finding = Finding(name="11. Corporate-action mismatches and aliases")
+    ordered = prices.sort_values(["symbol", "date"])
+    grouped = ordered.groupby("symbol")
+    ret = grouped["adj_close"].pct_change()
+    raw = grouped["close"].pct_change()
+    jumps = ordered.assign(adj_return=ret, raw_return=raw)
+    jumps = jumps[jumps["adj_return"].abs() > JUMP_THRESHOLD]
+
+    pending = anchor.load()
+    alias_table = aliases.load()
+    finding.numbers = {
+        f"adj_close one-day moves > {JUMP_THRESHOLD:.0%}": int(len(jumps)),
+        "symbols affected": int(jumps["symbol"].nunique()) if len(jumps) else 0,
+        "pending anchor factors": int(len(pending)),
+        "recorded renames (symbol_aliases.csv)": int(len(alias_table)),
+    }
+    finding.headline = (
+        f"{len(jumps)} adj_close move(s) beyond {JUMP_THRESHOLD:.0%} in a day; "
+        f"{len(alias_table)} rename(s) recorded"
+    )
+    if len(jumps):
+        finding.table = jumps.reindex(
+            jumps["adj_return"].abs().sort_values(ascending=False).index
+        ).head(12)[["symbol", "date", "adj_return", "raw_return"]].round(4)
+        finding.notes.append(
+            "adj and raw moving together by a split ratio means the split was not "
+            "applied to adj_close; adj moving alone means an anchor seam. Either "
+            "is fixed by a symbol refresh: rebuild_prices.py --symbols <S>."
+        )
+    if len(alias_table) == 0:
+        finding.notes.append(
+            "No renames recorded yet: run scripts/refresh_aliases.py --since 2016-01-01."
+        )
+    return finding
+
+
+# ---------------------------------------------------------------------------
+# 12. Survivorship statement
+# ---------------------------------------------------------------------------
+
+def audit_survivorship() -> Finding:
+    """What a backtest may and may not claim, from the data's actual coverage."""
+    finding = Finding(name="12. Survivorship statement")
+    starts = {i: membership.coverage_start(i) for i in ("SP500", "SP400", "SP600", "SP1500")}
+    finding.numbers = {
+        f"{i} membership known from": (str(d.date()) if d is not None else "not recorded")
+        for i, d in starts.items()
+    }
+    finding.numbers["canonical price history from"] = str(LOOKBACK_START.date())
+
+    union = starts["SP1500"]
+    lines = [
+        "S&P 500 point-in-time membership is reconstructed from dated snapshots "
+        "(fja05680), accurate to the snapshot gap (section 5), with final rather "
+        "than point-in-time tickers for some names (section 3).",
+    ]
+    if union is None:
+        lines.append(
+            "S&P 400/600 membership has not been captured yet, so no S&P 1500 "
+            "result is point-in-time on any date."
+        )
+    else:
+        lines.append(
+            f"S&P 400/600 membership exists only from {union.date()} (the first "
+            f"capture); intervals are left-censored there. An S&P 1500 backtest over "
+            f"earlier dates uses today's mid/small caps and is NOT survivorship-free."
+        )
+    lines.append(
+        "Even inside covered dates, a member counts only if the lake can price it "
+        "(sections 2, 4, 8 and scripts/classify_gaps.py); unpriced members are the "
+        "residual bias. Describe results as survivorship-reduced, never "
+        "survivorship-free, unless both the membership and the pricing gaps are zero "
+        "over the tested window."
+    )
+    finding.headline = (
+        "no S&P 1500 result is survivorship-free" if union is None
+        else f"S&P 1500 is point-in-time only from {union.date()}"
+    )
+    finding.notes.extend(lines)
+    return finding
+
+
 # ---------------------------------------------------------------------------
 # Driver
 # ---------------------------------------------------------------------------
@@ -473,6 +782,7 @@ def audit_sector_vintage() -> Finding:
 def run_audit() -> List[Finding]:
     coverage = store.coverage()
     calendar = store.trading_calendar()
+    prices = store.load_prices()
 
     return [
         audit_history(coverage, calendar),
@@ -481,6 +791,12 @@ def run_audit() -> List[Finding]:
         audit_member_coverage(calendar),
         audit_membership_precision(),
         audit_sector_vintage(),
+        audit_provenance(),
+        audit_current_coverage(prices, calendar),
+        audit_latest_session(calendar),
+        audit_missing_sessions(prices, calendar),
+        audit_corporate_actions(prices),
+        audit_survivorship(),
     ]
 
 
