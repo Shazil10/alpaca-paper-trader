@@ -34,6 +34,10 @@ reports/*
 # Local price/data caches (incl. sync checkpoint state)
 .cache/
 
+# Staged rebuilds: batches, staged partitions and swap backups. Local only;
+# the rebuild report under data/audits/ is what gets committed.
+data/prices/staging/
+
 # Price lake
 # Cold years are committed Parquet; the hot year is a committed CSV that git can
 # delta cheaply. Parquet is ignored by default and un-ignored per closed year --

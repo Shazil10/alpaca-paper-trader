@@ -9,7 +9,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  # Needed to commit the refreshed price lake back to main.
+  # Read-only would do for trading itself; kept as before so report steps that
+  # may write are unaffected. The price lake is committed by sync_data.yml.
   contents: write
 
 jobs:
@@ -37,53 +38,17 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Refresh tradable universe
-        if: steps.gate.outputs.skip != 'true'
-        env:
-          PYTHONPATH: src
-        run: python src/universe.py
-
-      # Runs after universe.py because sync reads universe.csv rather than
-      # scraping Wikipedia itself.
+      # No universe refresh and no price sync here any more. Both moved to
+      # sync_data.yml, which runs after the previous evening's close and
+      # commits completed Alpaca SIP bars, the unfiltered membership capture
+      # and the screened universe.csv. This job only reads what that job
+      # committed -- the checkout above already has it -- so a data-vendor
+      # problem can no longer race the open, and the 09:30 run never stores a
+      # partial bar.
       #
-      # continue-on-error: a Yahoo hiccup must not stop the day's trading. A
-      # failed fetch leaves yesterday's committed bars in place and the next
-      # run's 5-day overlap re-fetches the gap, so the lake self-heals.
-      # Strategies skip only when their required lookback is uncovered --
-      # missing today's bar is not that.
-      - name: Sync price lake
-        id: sync
-        if: steps.gate.outputs.skip != 'true'
-        continue-on-error: true
-        timeout-minutes: 25
-        env:
-          PYTHONPATH: src
-        run: python src/data_pipeline/sync_prices.py
-
-      # Commit BEFORE trading. The hot-year CSV is only present on the next
-      # runner if it was committed, and ordering the commit first means a later
-      # trade failure cannot lose the day's bars.
-      #
-      # Paths are explicit, never `git add -A`: src/strategies/momentum/
-      # clenow_trend.py is 0 bytes locally (iCloud eviction) and a broad add
-      # would push the empty file over the working copy and silently kill that
-      # sleeve.
-      - name: Commit refreshed price lake
-        if: steps.gate.outputs.skip != 'true'
-        continue-on-error: true
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/prices/daily data/universe/master_tickers.csv
-          if git diff --staged --quiet; then
-            echo "Price lake unchanged — nothing to commit."
-          else
-            git commit -m "chore(data): refresh daily price lake"
-            # Rebase first: the close-report job also pushes to main, so a
-            # straight push can be rejected as non-fast-forward.
-            git pull --rebase --autostash origin main
-            git push
-          fi
+      # (Paths committed by any workflow stay explicit, never `git add -A`:
+      # src/strategies/momentum/clenow_trend.py is 0 bytes locally after an
+      # iCloud eviction and a broad add would push the empty file.)
 
       - name: Run Trading Bot
         if: steps.gate.outputs.skip != 'true'
@@ -106,7 +71,7 @@ jobs:
         env:
           PYTHONPATH: src
         run: |
-          echo "sync step outcome: ${{ steps.sync.outcome }}"
+          echo "price lake is written by the after-close sync_data workflow"
           python - <<'PY'
           from data_pipeline import store
           last = store.last_bar_date()

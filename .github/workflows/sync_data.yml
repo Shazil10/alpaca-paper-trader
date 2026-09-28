@@ -1,0 +1,178 @@
+name: Sync Market Data (after close)
+
+# The only scheduled writer of the canonical price lake.
+#
+# Runs after the extended-hours session has ended, so the bar it stores for
+# today is final (see data_pipeline.providers.base.completed_session_cutoff).
+# The 09:30 trading run then reads data that was completed and committed the
+# evening before, instead of racing a download against the open.
+#
+# Order matters:
+#   membership capture -> price sync (backfills any new constituent) ->
+#   universe filter (screens from the lake) -> readiness -> audit -> commit
+#
+# Scheduled workflows only run from the default branch: this file is inert
+# until it is merged to main.
+
+on:
+  schedule:
+    # 01:30 UTC Tue-Sat = 21:30 EDT / 20:30 EST, Mon-Fri sessions. Both are
+    # past 20:00 ET plus Alpaca's 15-minute SIP embargo in either season.
+    - cron: '30 1 * * 2-6'
+  workflow_dispatch:
+    inputs:
+      repair_only:
+        description: "Only scan for and repair gaps (no incremental sync)"
+        type: boolean
+        default: false
+
+# Never two writers at once; a queued run waits rather than cancelling one
+# that is halfway through a backfill.
+concurrency:
+  group: market-data-lake
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      PYTHONPATH: src
+      MARKET_DATA_PROVIDER: alpaca
+      ALPACA_KEY: ${{ secrets.ALPACA_KEY }}
+      ALPACA_SECRET: ${{ secrets.ALPACA_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -r requirements.txt
+
+      # Resume state for a sync interrupted mid-backfill (timeout, runner loss).
+      # The checkpoint is keyed by run so every run saves its own, and restored
+      # by prefix so the newest one wins. sync_prices discards it if the target
+      # set or window changed.
+      - name: Restore sync checkpoint
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/sync_state.json
+          key: sync-state-${{ github.run_id }}
+          restore-keys: sync-state-
+
+      # A refused capture (exit 2: the scrape did not look like the index)
+      # writes nothing and leaves yesterday's membership in force. Prices still
+      # sync; the final step fails the job so the refusal is seen.
+      - name: Capture S&P 500/400/600 membership
+        id: membership
+        if: inputs.repair_only != true
+        continue-on-error: true
+        run: python src/universe.py --capture-only
+
+      - name: Refresh ticker aliases
+        id: aliases
+        if: inputs.repair_only != true
+        continue-on-error: true
+        run: python scripts/refresh_aliases.py --days 30
+
+      # Not continue-on-error: rejected credentials, a missing SIP entitlement
+      # or a mixed-provider write must stop the job loudly. Per-symbol misses
+      # exit 0 and heal on the next run's overlap.
+      - name: Sync price lake
+        id: sync
+        timeout-minutes: 120
+        run: |
+          if [ "${{ inputs.repair_only }}" = "true" ]; then
+            python src/data_pipeline/sync_prices.py --repair-only
+          else
+            python src/data_pipeline/sync_prices.py
+          fi
+
+      - name: Save sync checkpoint
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/sync_state.json
+          key: sync-state-${{ github.run_id }}
+
+      - name: Filter tradable universe
+        id: universe
+        if: steps.sync.outcome == 'success' && inputs.repair_only != true
+        continue-on-error: true
+        run: python src/universe.py --filter-only
+
+      - name: Live readiness gate
+        id: readiness
+        if: steps.sync.outcome == 'success'
+        continue-on-error: true
+        run: python scripts/check_lake_readiness.py
+
+      - name: Data audit
+        if: steps.sync.outcome == 'success'
+        continue-on-error: true
+        run: |
+          mkdir -p data/audits
+          python scripts/audit_data.py --json data/audits/latest.json > data/audits/latest.txt
+          python scripts/classify_gaps.py --out data/audits/gaps_latest.json >> data/audits/latest.txt
+
+      # Explicit paths only, never `git add -A`: see run_bot.yml for the
+      # iCloud-evicted 0-byte source file a broad add would push. `git add -A
+      # -- <path>` is used per path so a deletion (anchor_factors.csv emptied
+      # by a rebuild) is staged too.
+      - name: Commit data
+        if: always() && steps.sync.outcome != 'skipped'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for path in \
+            data/prices/daily \
+            data/prices/manifest.json \
+            data/prices/anchor_factors.csv \
+            data/universe/master_tickers.csv \
+            data/universe/current_membership.csv \
+            data/universe/membership_baseline.csv \
+            data/universe/membership_events.csv \
+            data/universe/symbol_aliases.csv \
+            universe.csv \
+            data/audits/latest.json \
+            data/audits/latest.txt \
+            data/audits/gaps_latest.json
+          do
+            if [ -e "$path" ] || git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+              git add -A -- "$path"
+            fi
+          done
+          if git diff --staged --quiet; then
+            echo "Data unchanged — nothing to commit."
+          else
+            git commit -m "chore(data): after-close sync $(date -u +%Y-%m-%d)"
+            # Rebase first: the trading and close-report jobs also push to main.
+            git pull --rebase --autostash origin main
+            git push
+          fi
+
+      - name: Surface refused steps
+        if: always()
+        run: |
+          status=0
+          if [ "${{ steps.membership.outcome }}" = "failure" ]; then
+            echo "::error::membership capture refused or failed; previous membership kept"
+            status=1
+          fi
+          if [ "${{ steps.readiness.outcome }}" = "failure" ]; then
+            echo "::error::live readiness gate failed; see the step log"
+            status=1
+          fi
+          if [ "${{ steps.universe.outcome }}" = "failure" ]; then
+            echo "::error::universe filter failed; universe.csv not refreshed"
+            status=1
+          fi
+          if [ "${{ steps.aliases.outcome }}" = "failure" ]; then
+            echo "::warning::alias refresh failed; renames not updated today"
+          fi
+          exit $status
