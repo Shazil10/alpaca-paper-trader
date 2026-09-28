@@ -37,6 +37,9 @@ permissions:
 
 jobs:
   sync:
+    # On a non-main branch, repair_only is the explicit one-time migration
+    # trigger. Main keeps the normal scheduled/manual sync behaviour.
+    if: github.ref == 'refs/heads/main' || inputs.repair_only != true
     runs-on: ubuntu-latest
     timeout-minutes: 150
     env:
@@ -176,3 +179,98 @@ jobs:
             echo "::warning::alias refresh failed; renames not updated today"
           fi
           exit $status
+
+  migrate-alpaca-sip:
+    if: github.ref != 'refs/heads/main' && inputs.repair_only == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONPATH: src
+      MARKET_DATA_PROVIDER: alpaca
+      ALPACA_KEY: ${{ secrets.ALPACA_KEY }}
+      ALPACA_SECRET: ${{ secrets.ALPACA_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -r requirements.txt
+
+      - name: Capture current membership
+        run: python src/universe.py --capture-only
+
+      - name: Run Alpaca SIP pilot
+        run: python scripts/pilot_alpaca.py | tee pilot_alpaca.log
+
+      - name: Stage, validate and compare rebuild
+        run: python src/data_pipeline/rebuild_prices.py --stage-only |& tee rebuild_stage.log
+
+      - name: Locate staged run
+        id: staged
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          from pathlib import Path
+          runs = sorted(p.name for p in Path("data/prices/staging").iterdir() if p.is_dir())
+          if len(runs) != 1:
+              raise SystemExit(f"expected one staged run, found {runs}")
+          print(f"run_id={runs[0]}")
+          PY
+
+      - name: Install validated rebuild
+        run: python src/data_pipeline/rebuild_prices.py --resume "${{ steps.staged.outputs.run_id }}" |& tee rebuild_swap.log
+
+      - name: Refresh aliases and derived data
+        run: |
+          python scripts/refresh_aliases.py --since 2016-01-01
+          python src/universe.py --filter-only
+          python scripts/check_lake_readiness.py
+          python scripts/check_lake_readiness.py --backtest
+          python scripts/bootstrap_manifest.py --verify
+          python scripts/audit_data.py --json data/audits/latest.json > data/audits/latest.txt
+          python scripts/classify_gaps.py --out data/audits/gaps_latest.json >> data/audits/latest.txt
+
+      - name: Commit migrated lake to branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for path in \
+            data/prices/daily \
+            data/prices/manifest.json \
+            data/prices/anchor_factors.csv \
+            data/universe \
+            universe.csv \
+            data/audits
+          do
+            if [ -e "$path" ] || git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+              git add -A -- "$path"
+            fi
+          done
+          if git diff --staged --quiet; then
+            echo "Migration produced no tracked changes."
+          else
+            git commit -m "data: migrate 2016+ price lake to Alpaca SIP"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - name: Upload migration reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alpaca-sip-migration-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            data/audits/pilot_alpaca_*.json
+            data/audits/pilot_alpaca_*.txt
+            data/audits/rebuild_*.json
+            data/audits/latest.json
+            data/audits/latest.txt
+            data/audits/gaps_latest.json
+            pilot_alpaca.log
+            rebuild_stage.log
+            rebuild_swap.log
