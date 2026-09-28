@@ -382,7 +382,7 @@
     "2026": {
       "adjustment": "ohlcv=raw, adj_close=all (split+dividend+spin-off)",
       "content_hash": "sha256:e6f9e6f4c9416c1cce390b8178bac63710f9dff64fac983b78785a08c92cb4db",
-      "downloaded_at": "2026-09-28T03:43:17Z",
+      "downloaded_at": "2026-09-28T03:49:47Z",
       "end_date": "2026-09-25",
       "exceptions": [],
       "feed": "sip",

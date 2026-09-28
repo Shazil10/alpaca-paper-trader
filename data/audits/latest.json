@@ -1,9 +1,9 @@
 {
   "1. Price history completeness": {
-    "headline": "1722/1732 symbols are complete over their own span; 34 reach 15+ years",
+    "headline": "1732/1742 symbols are complete over their own span; 34 reach 15+ years",
     "numbers": {
-      "symbols in lake": 1732,
-      "complete over own span": 1722,
+      "symbols in lake": 1742,
+      "complete over own span": 1732,
       "under 99% complete": 9,
       "1-2 bar stubs": 0,
       "span >= 15 years": 34,
@@ -88,13 +88,13 @@
     ]
   },
   "2. Delisted and removed names": {
-    "headline": "237 of 759 removed intervals can be priced during the window they were actually members",
+    "headline": "246 of 759 removed intervals can be priced during the window they were actually members",
     "numbers": {
       "removed-from-index intervals": 759,
-      "priced during membership": 237,
+      "priced during membership": 246,
       "priced, but not then": 99,
-      "no bars at all": 423,
-      "usable share": "31.2%"
+      "no bars at all": 414,
+      "usable share": "32.4%"
     },
     "notes": [
       "The remainder is the residual survivorship bias. It is not zero and results should not be described as survivorship-free.",
@@ -103,12 +103,12 @@
     "table": null
   },
   "3. Historical ticker changes": {
-    "headline": "790 direct and 7 via alias; 412 of 1209 membership symbols remain unpriced; 29 carry a post-bankruptcy ticker no vendor covers",
+    "headline": "799 direct and 2 via alias; 408 of 1209 membership symbols remain unpriced; 29 carry a post-bankruptcy ticker no vendor covers",
     "numbers": {
       "membership symbols": 1209,
-      "priced directly by the lake": 790,
-      "priced via recorded alias": 7,
-      "still unpriced": 412,
+      "priced directly by the lake": 799,
+      "priced via recorded alias": 2,
+      "still unpriced": 408,
       "of those, bankruptcy-suffixed": 29,
       "of those, left index before lake starts": 208
     },
@@ -187,24 +187,24 @@
         "index": "SP500",
         "date": "2016-06-30",
         "members": 505,
-        "priced": 496,
-        "via_alias": 6,
+        "priced": 497,
+        "via_alias": 2,
         "coverage": "98%"
       },
       {
         "index": "SP500",
         "date": "2020-03-31",
         "members": 505,
-        "priced": 504,
-        "via_alias": 3,
+        "priced": 505,
+        "via_alias": 0,
         "coverage": "100%"
       },
       {
         "index": "SP500",
         "date": "2024-06-28",
         "members": 503,
-        "priced": 502,
-        "via_alias": 3,
+        "priced": 503,
+        "via_alias": 0,
         "coverage": "100%"
       }
     ]
@@ -358,8 +358,8 @@
         "year": 2016,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 364743,
-        "symbols": 1478,
+        "rows": 366507,
+        "symbols": 1485,
         "first": "2016-01-04",
         "last": "2016-12-30"
       },
@@ -367,8 +367,8 @@
         "year": 2017,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 372384,
-        "symbols": 1509,
+        "rows": 374349,
+        "symbols": 1518,
         "first": "2017-01-03",
         "last": "2017-12-29"
       },
@@ -376,8 +376,8 @@
         "year": 2018,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 380994,
-        "symbols": 1542,
+        "rows": 383217,
+        "symbols": 1551,
         "first": "2018-01-02",
         "last": "2018-12-31"
       },
@@ -385,8 +385,8 @@
         "year": 2019,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 387855,
-        "symbols": 1559,
+        "rows": 389657,
+        "symbols": 1567,
         "first": "2019-01-02",
         "last": "2019-12-31"
       },
@@ -394,8 +394,8 @@
         "year": 2020,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 394021,
-        "symbols": 1584,
+        "rows": 395286,
+        "symbols": 1589,
         "first": "2020-01-02",
         "last": "2020-12-31"
       },
@@ -403,8 +403,8 @@
         "year": 2021,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 400807,
-        "symbols": 1619,
+        "rows": 402173,
+        "symbols": 1625,
         "first": "2021-01-04",
         "last": "2021-12-31"
       },
@@ -412,8 +412,8 @@
         "year": 2022,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 402640,
-        "symbols": 1621,
+        "rows": 404135,
+        "symbols": 1627,
         "first": "2022-01-03",
         "last": "2022-12-30"
       },
@@ -421,8 +421,8 @@
         "year": 2023,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 400908,
-        "symbols": 1616,
+        "rows": 402158,
+        "symbols": 1621,
         "first": "2023-01-03",
         "last": "2023-12-29"
       },
@@ -430,8 +430,8 @@
         "year": 2024,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 405615,
-        "symbols": 1621,
+        "rows": 406875,
+        "symbols": 1626,
         "first": "2024-01-02",
         "last": "2024-12-31"
       },
@@ -439,8 +439,8 @@
         "year": 2025,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 402124,
-        "symbols": 1622,
+        "rows": 403339,
+        "symbols": 1627,
         "first": "2025-01-02",
         "last": "2025-12-31"
       },
@@ -448,27 +448,27 @@
         "year": 2026,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 292838,
-        "symbols": 1618,
+        "rows": 293229,
+        "symbols": 1622,
         "first": "2026-01-02",
         "last": "2026-09-25"
       }
     ]
   },
   "8. Current constituent coverage (unfiltered)": {
-    "headline": "on 2026-09-25: SP500 99.8%; SP400 100.0%; SP600 99.5%; SP1500 99.7%",
+    "headline": "on 2026-09-25: SP500 100.0%; SP400 100.0%; SP600 99.5%; SP1500 99.8%",
     "numbers": {
       "latest lake session": "2026-09-25",
-      "unpriced current members": 4
+      "unpriced current members": 3
     },
     "notes": [],
     "table": [
       {
         "index": "SP500",
         "members": 503,
-        "priced": 502,
-        "coverage": "99.8%",
-        "missing_sample": "DOW"
+        "priced": 503,
+        "coverage": "100.0%",
+        "missing_sample": ""
       },
       {
         "index": "SP400",
@@ -487,9 +487,9 @@
       {
         "index": "SP1500",
         "members": 1504,
-        "priced": 1500,
-        "coverage": "99.7%",
-        "missing_sample": "CWEN-A, DOW, HLX, LEG"
+        "priced": 1501,
+        "coverage": "99.8%",
+        "missing_sample": "CWEN-A, HLX, LEG"
       }
     ]
   },
@@ -576,10 +576,10 @@
     ]
   },
   "11. Corporate-action mismatches and aliases": {
-    "headline": "476 adj_close move(s) beyond 40% in a day; 3444 rename(s) recorded",
+    "headline": "479 adj_close move(s) beyond 40% in a day; 3444 rename(s) recorded",
     "numbers": {
-      "adj_close one-day moves > 40%": 476,
-      "symbols affected": 249,
+      "adj_close one-day moves > 40%": 479,
+      "symbols affected": 250,
       "pending anchor factors": 193,
       "recorded renames (symbol_aliases.csv)": 3444
     },
@@ -624,6 +624,12 @@
         "raw_return": 48.2718
       },
       {
+        "symbol": "FI",
+        "date": "2023-06-07 00:00:00",
+        "adj_return": 35.7556,
+        "raw_return": 35.7556
+      },
+      {
         "symbol": "MNK",
         "date": "2022-10-27 00:00:00",
         "adj_return": 20.2,
@@ -652,12 +658,6 @@
         "date": "2020-03-13 00:00:00",
         "adj_return": 5.85,
         "raw_return": 5.85
-      },
-      {
-        "symbol": "MNK",
-        "date": "2023-05-19 00:00:00",
-        "adj_return": 4.5752,
-        "raw_return": 4.5752
       }
     ]
   },
