@@ -1,0 +1,225 @@
+==============================================================================
+DATA AUDIT
+==============================================================================
+
+1. Price history completeness
+-----------------------------
+1399/1404 symbols are complete over their own span; 34 reach 15+ years
+
+  symbols in lake         1,404
+  complete over own span  1,399
+  under 99% complete      2
+  1-2 bar stubs           9
+  span >= 15 years        34
+  median span (years)     3.63
+
+  symbol first_date  last_date  bars  expected  pct
+      EA 2026-07-17 2026-08-10     6        17 35.3
+     EQR 2023-01-03 2026-08-21   901       912 98.8
+  note: Ragged symbols are usually halts or mid-delisting names where the vendor itself has no bar; see _schema.md Contract 5.
+
+2. Delisted and removed names
+-----------------------------
+42 of 759 removed intervals can be priced during the window they were actually members
+
+  removed-from-index intervals  759
+  priced during membership      42
+  priced, but not then          125
+  no bars at all                592
+  usable share                  5.5%
+  note: The remainder is the residual survivorship bias. It is not zero and results should not be described as survivorship-free.
+  note: 125 symbol(s) have bars only outside their membership window -- a recycled ticker, or a lake that starts later
+
+3. Historical ticker changes
+----------------------------
+590 of 1209 membership symbols have no bars; 29 carry a post-bankruptcy ticker no vendor covers
+
+  membership symbols                       1,209
+  priced by the lake                       619
+  never priced                             590
+  of those, bankruptcy-suffixed            29
+  of those, left index before lake starts  216
+
+  unfetchable_ticker
+               AAMRQ
+               ABKFQ
+               ANRZQ
+               BHMSQ
+               BTUUQ
+               CCTYQ
+               CITGQ
+               CPNLQ
+               DALRQ
+               DCNAQ
+               DPHIQ
+               EKDKQ
+  note: No ticker-change table exists, so a rename is indistinguishable from a missing symbol. Resolving it needs a permanent id -- Tiingo permaTicker, FIGI or CUSIP. See data/universe/_schema.md contract 2.
+
+4. Index member coverage by date
+--------------------------------
+coverage ranges 0% (2008-06-30) to 96% (2024-06-28) on the probed dates
+
+  index       date  members  priced  via_alias coverage
+  SP500 2008-06-30      497       0          0       0%
+  SP500 2009-03-31      499       0          0       0%
+  SP500 2012-06-29      498       0          0       0%
+  SP500 2016-06-30      505       0          0       0%
+  SP500 2020-03-31      505       0          0       0%
+  SP500 2024-06-28      503     485          0      96%
+
+5. Membership date precision
+----------------------------
+a membership date is accurate to the preceding gap: median 2 day(s), worst 91
+
+  snapshots                 2,720
+  range                     1996-01-02 .. 2026-08-18
+  median gap (days)         2.00
+  90th pct gap (days)       10.00
+  worst gap (days)          91
+  years sampled <=12 times  0
+  note: Immaterial for a monthly-rebalanced sleeve. Material for anything trading index additions on their effective date.
+
+6. Sector label vintage
+-----------------------
+663 of 1254 spans carry a sector, and every label is today's classification applied to all of history
+
+  listing spans            1,254
+  with a sector label      663
+  tickers in sector_map    628
+  distinct sectors         12
+  vintage                  current only (not point-in-time)
+  registry first observed  2026-08-20
+  note: A company that changed GICS sector mid-history carries today's label throughout, and names that left before the registry existed carry none.
+  note: Good enough for RiskConfig.max_sector_pct, which does nothing at all without a map. Not good enough for sector attribution.
+
+7. Provenance (data/prices/manifest.json)
+-----------------------------------------
+partition providers: 2005-2026 yahoo
+
+  partitions                    22
+  providers                     2005-2026 yahoo
+  on a canonical provider       0
+  manifest vs disk problems     0
+  secondary-source exceptions   0
+  pending anchor factors        0
+  symbols with pending factors  0
+
+   year provider     feed   rows  symbols      first       last
+   2005    yahoo yfinance   6254       25 2005-01-03 2005-12-30
+   2006    yahoo yfinance   6761       28 2006-01-03 2006-12-29
+   2007    yahoo yfinance   8324       34 2007-01-03 2007-12-31
+   2008    yahoo yfinance   8602       34 2008-01-02 2008-12-31
+   2009    yahoo yfinance   8568       34 2009-01-02 2009-12-31
+   2010    yahoo yfinance   8568       34 2010-01-04 2010-12-31
+   2011    yahoo yfinance   8568       34 2011-01-03 2011-12-30
+   2012    yahoo yfinance   8500       34 2012-01-03 2012-12-31
+   2013    yahoo yfinance   8568       34 2013-01-02 2013-12-31
+   2014    yahoo yfinance   8568       34 2014-01-02 2014-12-31
+   2015    yahoo yfinance   8627       35 2015-01-02 2015-12-31
+   2016    yahoo yfinance   8820       35 2016-01-04 2016-12-30
+   2017    yahoo yfinance   8785       35 2017-01-03 2017-12-29
+   2018    yahoo yfinance   8920       36 2018-01-02 2018-12-31
+   2019    yahoo yfinance   9072       36 2019-01-02 2019-12-31
+   2020    yahoo yfinance   9108       36 2020-01-02 2020-12-31
+   2021    yahoo yfinance   9072       36 2021-01-04 2021-12-31
+   2022    yahoo yfinance   9036       36 2022-01-03 2022-12-30
+   2023    yahoo yfinance 342394     1377 2023-01-03 2023-12-29
+   2024    yahoo yfinance 348533     1388 2024-01-02 2024-12-31
+   2025    yahoo yfinance 347690     1394 2025-01-02 2025-12-31
+   2026    yahoo yfinance 223041     1404 2026-01-02 2026-08-21
+  note: Years on a cross-check provider (yahoo) carry Yahoo's semantics: close split-adjusted, not the raw print. See each partition's notes.
+
+8. Current constituent coverage (unfiltered)
+--------------------------------------------
+on 2026-08-21: SP500 97.6%; SP400 97.5%; SP600 76.0%; SP1500 88.9%
+
+  latest lake session       2026-08-21
+  unpriced current members  167
+
+   index  members  priced coverage                              missing_sample
+   SP500      503     491    97.6%    BE, BNY, ECHO, FDXF, FERG, HONA, MRVL, P
+   SP400      400     390    97.5% AGNC, ALSN, CDE, HUBS, IESC, ROKU, SIRI, SN
+   SP600      603     458    76.0% ABR, ADAM, ADIG, ADT, AGNT, AGX, ALHC, AMSF
+  SP1500     1504    1337    88.9% ABR, ADAM, ADIG, ADT, AGNC, AGNT, AGX, ALHC
+
+9. Latest completed session
+---------------------------
+the lake is 25 weekday(s) behind the latest completed session (at most; exchange holidays are not subtracted)
+
+  latest completed weekday (NY)            2026-09-25
+  lake frontier                            2026-08-21
+  weekdays behind (holidays not excluded)  25
+
+10. Missing symbol-sessions
+---------------------------
+5 symbol(s) have 25 missing session(s) inside their own span
+
+  symbols with internal holes                       5
+  missing symbol-sessions                           25
+  distinct sessions affected                        16
+  thin sessions, last 12m (<90% of median breadth)  0
+
+  symbol  missing      first       last
+      EA       11 2026-07-20 2026-08-03
+     EQR       11 2026-07-23 2026-08-10
+    FISV        1 2025-11-12 2025-11-12
+    MNST        1 2026-08-10 2026-08-10
+   RUSHA        1 2026-08-10 2026-08-10
+
+11. Corporate-action mismatches and aliases
+-------------------------------------------
+77 adj_close move(s) beyond 40% in a day; 0 rename(s) recorded
+
+  adj_close one-day moves > 40%          77
+  symbols affected                       59
+  pending anchor factors                 0
+  recorded renames (symbol_aliases.csv)  0
+
+  symbol       date  adj_return  raw_return
+    MRNA 2026-08-19      1.7697      1.7697
+    CORT 2025-03-31      1.0908      1.0908
+     SHC 2023-01-10      0.9965      0.9965
+    MNST 2026-07-23      0.9559      0.9559
+    MNST 2026-08-03      0.9413      0.9413
+    MNST 2026-08-07      0.9193      0.9193
+     TDS 2023-08-04      0.8785      0.8785
+    CYTK 2023-12-27      0.8254      0.8254
+    SEZL 2023-09-14     -0.8050     -0.8050
+     MXL 2026-04-24      0.7612      0.7612
+    SEZL 2024-05-09      0.7566      0.7566
+     GME 2024-05-13      0.7440      0.7440
+  note: adj and raw moving together by a split ratio means the split was not applied to adj_close; adj moving alone means an anchor seam. Either is fixed by a symbol refresh: rebuild_prices.py --symbols <S>.
+  note: No renames recorded yet: run scripts/refresh_aliases.py --since 2016-01-01.
+
+12. Survivorship statement
+--------------------------
+S&P 1500 is point-in-time only from 2026-09-27
+
+  SP500 membership known from   1996-01-02
+  SP400 membership known from   2026-09-27
+  SP600 membership known from   2026-09-27
+  SP1500 membership known from  2026-09-27
+  canonical price history from  2016-01-01
+  note: S&P 500 point-in-time membership is reconstructed from dated snapshots (fja05680), accurate to the snapshot gap (section 5), with final rather than point-in-time tickers for some names (section 3).
+  note: S&P 400/600 membership exists only from 2026-09-27 (the first capture); intervals are left-censored there. An S&P 1500 backtest over earlier dates uses today's mid/small caps and is NOT survivorship-free.
+  note: Even inside covered dates, a member counts only if the lake can price it (sections 2, 4, 8 and scripts/classify_gaps.py); unpriced members are the residual bias. Describe results as survivorship-reduced, never survivorship-free, unless both the membership and the pricing gaps are zero over the tested window.
+
+==============================================================================
+This is a report, not a gate. Use scripts/check_lake_readiness.py
+--backtest for pass/fail.
+==============================================================================
+
+Wrote data/audits/pre_rebuild.json
+
+Gap classification (membership intervals vs the lake)
+-----------------------------------------------------
+  canonical window 2016-01-01 .. 2026-08-21
+  lake providers: yahoo (classes describe the lake as it stands, not the target)
+  A covered                                      66 intervals   2.30%
+  B covered via alias                             0 intervals   0.00%
+  C holes while a member                        469 intervals  83.46%
+  D before canonical history                    508 intervals     n/a
+  E not carried by the canonical provider       170 intervals  11.58%
+  F unresolvable identifier                      48 intervals   2.66%
+  Tiingo: DEFERRED -- deferred: 11 year(s) in the window (2016-2026) are not yet on a canonical provider, so these classes describe the old lake. Re-run after the Alpaca rebuild swap.
+
