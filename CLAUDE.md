@@ -9,10 +9,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # different project, so always go through the interpreter.
 ./venv/bin/python -m pip install -r requirements.txt
 
-# Run the full daily trading cycle (requires env vars)
+# After-close data cycle (what .github/workflows/sync_data.yml runs)
 export PYTHONPATH=src
-python src/universe.py                    # Refresh S&P 500/400/600 universe
-python src/data_pipeline/sync_prices.py   # Update the price lake
+python src/universe.py --capture-only     # Unfiltered S&P 500/400/600 membership
+python src/data_pipeline/sync_prices.py   # Alpaca SIP bars into the price lake
+python src/universe.py --filter-only      # Liquidity-screened universe.csv, from the lake
+
+# Trading cycle (reads what the after-close job committed)
 python src/trade.py                       # Generate signals and place orders
 python src/report.py                      # Orders report (CSV/MD/HTML)
 
@@ -24,14 +27,19 @@ python src/report.py                      # Orders report (CSV/MD/HTML)
 PYTHONPATH=src python scripts/check_lake_readiness.py
 ```
 
-Required env vars: `ALPACA_KEY`, `ALPACA_SECRET` (paper trading account).
-Optional: `PRICE_SOURCE` (`yfinance` default, or `lake`).
+Required env vars: `ALPACA_KEY`, `ALPACA_SECRET` (paper trading account; the
+same keys authenticate Alpaca market data for the price lake).
+Optional: `PRICE_SOURCE` (`yfinance` default, or `lake`) — what strategies *read*.
+Optional: `MARKET_DATA_PROVIDER` (`alpaca` default) — what the pipeline *writes*.
+The two are deliberately separate settings.
 
 ## Architecture
 
-Multi-strategy Alpaca paper trading bot. GitHub Actions runs the daily cycle:
-`universe.py → sync_prices.py → commit → trade.py → report.py` at 9:30 AM ET,
-then `report.py → export_portfolio.py → commit` at 4:30 PM ET.
+Multi-strategy Alpaca paper trading bot. GitHub Actions runs three jobs:
+`trade.py → report.py` at 9:30 AM ET, `report.py → export_portfolio.py → commit`
+at 4:30 PM ET, and the after-close data job (`sync_data.yml`, 01:30 UTC):
+membership capture → `sync_prices.py` → universe filter → readiness → audit →
+commit of explicit data paths.
 
 ### Price data (`src/data_pipeline/`)
 
@@ -39,9 +47,16 @@ One shared lake of daily bars in `data/prices/daily/`, replacing the per-strateg
 `yf.download` calls that each invented their own window. Full contracts live in
 `data/prices/_schema.md`; the load-bearing ones:
 
+- The canonical provider is **Alpaca SIP** (`data_pipeline/providers/`), with no
+  fallback to Yahoo or IEX anywhere in the write path. A year holds one provider,
+  recorded in `data/prices/manifest.json`; Yahoo-era years keep their label.
 - Strategies read **`adj_close`**, matching what `auto_adjust=True` used to give.
-- The lake holds **completed sessions only**. The 9:30 job runs at market open,
-  so a same-day bar would be a partial intraday quote stored as a close.
+  `close` is the raw print on Alpaca years (split-adjusted on Yahoo years), used
+  only as a same-row ratio or a single-date level.
+- The lake holds **completed sessions only**, cut off in New York time: the
+  after-close job stores a session once it is final (20:00 ET).
+- `adj_close` stays on one anchor per symbol between rebuilds (`anchor.py`), so a
+  split never shows up as a fake crash at the seam of an incremental fetch.
 - Cold years are Parquet; the current year is **CSV**, because git deltas
   append-only text cheaply while a recompressed Parquet blob is near-unshareable
   between commits.
@@ -109,7 +124,7 @@ Total deployable cap: **$40k** (a 10% cash reserve is held back at execution tim
 
 - `Signal(symbol, side, reason, notional, strategy_id)` — broker-agnostic trade intent
 - `Side` enum — `BUY` / `SELL`
-- Universe is stored in a local file and refreshed daily by `universe.py` (scrapes S&P 500/400/600, filters by price ≥ $10 and dollar volume ≥ $10M)
+- Universe is stored in a local file and refreshed each evening by `universe.py --filter-only` (screens the captured, unfiltered S&P 500/400/600 by price ≥ $10 and dollar volume ≥ $10M, from the lake). The screen decides what is *tradable*, never which histories the lake keeps
 
 ## Backtesting platform (`src/backtest/`)
 
@@ -203,19 +218,26 @@ so a run cannot see corporate actions that postdate its own window.
 - `data_pipeline/adjust.py` — as-of-date price adjustment (research/notebook tool; the engine anchors via `runner.load_panels`)
 - `data_pipeline/membership.py` — PIT S&P 500 membership via `members_asof(date)`
 - `data_pipeline/securities.py` — security master with permanent IDs (ticker recycling guard) and `sector_map()`, which is what makes `RiskConfig.max_sector_pct` bind
-- `data_pipeline/providers/tiingo.py` — free-tier delisted stock backfill (needs an API key; not yet wired)
+- `data_pipeline/providers/tiingo.py` — optional gap repair; disabled unless `TIINGO_ENABLED=1` and a key, and only through quarantine (`scripts/classify_gaps.py` decides whether it is worth it)
 
 **Data build steps** (manual, in order; see `data/universe/_schema.md`):
 ```bash
 PYTHONPATH=src ./venv/bin/python scripts/build_membership.py     # PIT index tape
 PYTHONPATH=src ./venv/bin/python scripts/build_securities.py     # security master + sectors
-PYTHONPATH=src ./venv/bin/python scripts/backfill_history.py --start 2005-01-01 --dry-run
+PYTHONPATH=src ./venv/bin/python scripts/pilot_alpaca.py               # Alpaca vs Yahoo, no lake writes
+PYTHONPATH=src ./venv/bin/python src/data_pipeline/rebuild_prices.py --stage-only
+PYTHONPATH=src ./venv/bin/python src/data_pipeline/rebuild_prices.py --resume <run>
+PYTHONPATH=src ./venv/bin/python scripts/classify_gaps.py             # gap classes A-F, Tiingo decision
 PYTHONPATH=src ./venv/bin/python scripts/check_lake_readiness.py --backtest
 ```
-`backfill_history.py` is the only way to deepen the lake — `sync_prices` clamps a
-known symbol's window to `max(LOOKBACK_START, last_stored - 5d)`, so it fetches
-nothing at all when asked for older history. Closed years land as Parquet and each
-new year needs an explicit `!data/prices/daily/<year>.parquet` line in `.gitignore`.
+`rebuild_prices.py` replaces whole year partitions through a staged, validated
+swap with rollback — the only way a year can change provider. `backfill_history.py`
+deepens symbols inside years the canonical provider already owns; `sync_prices`
+clamps a known symbol's window to `max(LOOKBACK_START, last_stored - 7d)`, so it
+fetches nothing when asked for older history. Canonical history starts 2016
+(Alpaca SIP); 2005-2015 is the preserved Yahoo ETF backfill. Closed years land as
+Parquet and each new year needs an explicit `!data/prices/daily/<year>.parquet`
+line in `.gitignore`.
 
 `check_lake_readiness.py` has two modes: bare for live-trading readiness, and
 `--backtest` for history depth and point-in-time coverage. They answer different

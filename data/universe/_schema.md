@@ -6,12 +6,18 @@ throughout.
 
 | File | Written by | Read by |
 |---|---|---|
-| `master_tickers.csv` | `src/universe.py` (daily) | `sync_prices`, `scripts/build_securities.py` |
+| `master_tickers.csv` | `sync_prices` (after close) | `sync_prices`, `scripts/build_securities.py` |
 | `membership.parquet` | `scripts/build_membership.py` (manual) | `data_pipeline.membership`, `backtest.runner` |
+| `membership_baseline.csv` | `src/universe.py --capture-only` (first run only) | `data_pipeline.membership` |
+| `membership_events.csv` | `src/universe.py --capture-only` (daily, append-only) | `data_pipeline.membership` |
+| `current_membership.csv` | `src/universe.py --capture-only` (daily) | `sync_prices`, `universe.py --filter-only`, audit |
+| `symbol_aliases.csv` | `scripts/refresh_aliases.py` (daily) | `data_pipeline.aliases`, audit, gap classifier |
 | `securities.parquet` | `scripts/build_securities.py` (manual) | `data_pipeline.securities`, `backtest.runner` |
+| `../../universe.csv` | `src/universe.py --filter-only` (daily) | live strategies (tradable list only) |
 
-Both parquet files are **derived and manual**. Nothing on the daily trading path
-writes or needs them; they exist for the backtester. Rebuild with:
+The parquet files are **derived and manual**; they exist for the backtester.
+The capture files are written every weekday evening by
+`.github/workflows/sync_data.yml`. Rebuild the parquet files with:
 
 ```bash
 PYTHONPATH=src ./venv/bin/python scripts/build_membership.py
@@ -146,6 +152,65 @@ without a map, which is worse — and not good enough for sector attribution.
 
 ---
 
+## The daily capture — unfiltered S&P 500 / 400 / 600
+
+Nothing free reconstructs S&P 400/600 history, so it is recorded from now on.
+`data_pipeline.membership_capture` scrapes the three Wikipedia constituent
+tables every weekday evening, **unfiltered** — the liquidity screen is applied
+afterwards, to `universe.csv` only, so a stock dipping under $10 never reads as
+an index removal.
+
+| File | Columns |
+|---|---|
+| `membership_baseline.csv` | `observed_date, index, symbol, source` |
+| `membership_events.csv` | `observed_date, effective_date, index, symbol, event, source` (`event` is `add` / `remove`) |
+| `current_membership.csv` | `observed_date, index, symbol, security, sector, industry, source` |
+
+### Contract 8: the first capture is a baseline, not additions
+
+Baseline members joined before anyone looked, so their intervals are
+**left-censored** at the baseline date and `coverage_start()` reports that date.
+`members_asof` before it answers "nothing recorded" for the S&P 400/600, and
+the S&P 500 part only for the S&P 1500 — with a warning, because a backtest
+there is not survivorship-free.
+
+### Contract 9: `effective_date` is an upper bound
+
+A change is recorded the first evening the page shows it, so `effective_date`
+equals `observed_date` and the true date is on or before it. A removal observed
+on day D closes the interval on D − 1.
+
+### Contract 10: a failed scrape records nothing
+
+Before anything is written the snapshot must look like the index: each index in
+its normal count range (S&P 500 480-520, 400 380-420, 600 560-640), the union
+1,440-1,560, sectors present, and no index losing more than 10% of its members
+in one capture. Otherwise `SuspiciousScrapeError`, exit code 2, all three files
+untouched, yesterday's membership stays in force, and the workflow fails loudly
+after committing prices. A missed day costs a day of precision; a phantom purge
+would corrupt the history permanently.
+
+### Contract 11: S&P 1500 is derived, and moves are continuous
+
+`SP1500` is never stored: it is the union of the three components, with gaps of
+up to 7 days between leaving one and joining another bridged. An S&P 600 → 400
+promotion is two events (`remove` SP600, `add` SP400), and when the two pages are
+edited on different days the company is still continuously in the S&P 1500.
+
+For the S&P 500 the reconstructed history (`membership.parquet`) is used up to
+the day before the baseline and the capture from then on; an interval spanning
+the join is one interval.
+
+### Contract 12: renames are explicit
+
+Alpaca's `asof` mapping stores a renamed company's whole history under its
+current ticker (FB's 2018 bars under `META`). Membership keeps the ticker as it
+was. `symbol_aliases.csv`, from Alpaca's corporate-actions `name_change`
+records, is what joins the two; the audit and the gap classifier count a member
+as priced when its successor is.
+
+---
+
 ## Audit: what this data currently supports
 
 Measured by `scripts/audit_data.py`. Re-run it after any backfill; these numbers
@@ -182,9 +247,11 @@ drawing conclusions from.
 
 ### What would move each number
 
-- **Equity depth and delisted names**: `scripts/backfill_history.py --start
-  2010-01-01` for the full symbol set. Fixes coverage on historical dates and
-  most of the 592 absent removed names.
+- **Equity depth and delisted names**: the staged Alpaca SIP rebuild
+  (`rebuild_prices.py`, see `data/prices/_schema.md` "Migration") over every
+  S&P 1500 member since 2016. Equity history before 2016 is outside the
+  canonical provider's reach; `scripts/classify_gaps.py` classifies what
+  remains (A-F) and decides whether a Tiingo trial is worth it.
 - **The 29 unfetchable tickers**: nothing free fixes these. They need a
   ticker-change table keyed on a permanent id (Tiingo `permaTicker`, FIGI, CUSIP).
 - **Sector vintage**: needs a historical GICS source; no free one is wired.
