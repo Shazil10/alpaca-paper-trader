@@ -89,8 +89,19 @@ def filter_universe(
     """
     if len(df) == 0:
         return df
-    end = pd.Timestamp(as_of) if as_of is not None else None
-    start = (end or market_date()) - pd.Timedelta(days=FILTER_LOOKBACK_DAYS)
+    # Anchor the window on the lake's newest session, not the calendar: the
+    # screen should judge the last sessions the lake actually holds, and a
+    # lagging lake is a problem to report, not a reason to screen out everyone.
+    end = pd.Timestamp(as_of) if as_of is not None else store.last_bar_date(root=lake_root)
+    if end is None:
+        logger.error("the price lake is empty; nothing to screen against")
+        return df.iloc[0:0]
+    lag = (market_date() - end).days
+    if as_of is None and lag > 7:
+        logger.warning(
+            "price lake frontier %s is %d days old; screening on stale bars", end.date(), lag
+        )
+    start = end - pd.Timedelta(days=FILTER_LOOKBACK_DAYS)
     bars = store.load_prices(df["Symbol"].tolist(), start, end, root=lake_root)
     if len(bars) == 0:
         logger.error("no lake bars for any candidate; universe.csv would be empty")

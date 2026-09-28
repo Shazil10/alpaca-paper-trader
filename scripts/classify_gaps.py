@@ -115,6 +115,8 @@ def classify(
                    "left_censored": bool(iv.get("left_censored", False)),
                    "lake_symbol": None, "expected": 0, "priced": 0}
 
+            if start > frontier:
+                continue  # membership that begins after the lake ends: nothing to price yet
             if end < window_start:
                 rows.append({**row, "class": "D"})
                 continue
@@ -260,9 +262,10 @@ def main() -> int:
     if args.out:
         out = Path(args.out)
         out.parent.mkdir(parents=True, exist_ok=True)
-        # Class A is the absence of a problem; listing it would only make the
-        # daily diff large.
-        gaps = table[table["class"] != "A"] if len(table) else table
+        # Class A is the absence of a problem and class D is out of scope by
+        # construction; listing either would only make the daily diff large.
+        # Their counts are in the summary.
+        gaps = table[~table["class"].isin(["A", "D"])] if len(table) else table
         payload = {**summary, "intervals": gaps.astype(str).to_dict("records")}
         out.write_text(json.dumps(payload, indent=2, default=str) + "\n")
     return 0
