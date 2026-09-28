@@ -71,6 +71,11 @@ LOOKBACK_START = pd.Timestamp("2016-01-01")
 #: spans a holiday week without leaving the Monday before it unrevisited.
 OVERLAP_DAYS = 7
 
+# Nightly repair protects every rolling window used by live strategies. Older
+# holes remain visible to audit_data and can be repaired explicitly with
+# --repair-only without making each evening job redownload delisted histories.
+AUTO_REPAIR_DAYS = 730
+
 #: A known symbol with no bar within this many calendar days of the lake's
 #: newest session has stopped trading. See ``_split_dormant``.
 DORMANT_AFTER_DAYS = 30
@@ -131,13 +136,15 @@ def repair_gaps(
     lookback_start: pd.Timestamp = LOOKBACK_START,
     max_symbols: int = 200,
     provider: Optional[MarketDataProvider] = None,
+    symbols: Optional[Sequence[str]] = None,
+    scan_start: Optional[pd.Timestamp] = None,
 ) -> Dict[str, object]:
     """Re-fetch symbols that have holes inside their own history.
 
     Why this is needed: yfinance intermittently returns NaN for individual
     ticker/date pairs inside large multi-ticker requests. A NaN close cannot be
     stored, so the row is dropped and the lake keeps a permanent hole -- the
-    daily 5-day overlap never reaches back far enough to heal it.
+    daily overlap never reaches back far enough to heal it.
 
     A single missing bar inside a 50-day window makes ``rolling(50)`` NaN, which
     silently drops that symbol from threshold comparisons and changes live
@@ -147,7 +154,7 @@ def repair_gaps(
     NaN behaviour.
     """
     source = _require_canonical(provider)
-    gaps = store.find_gaps(root=lake_root)
+    gaps = store.find_gaps(symbols, start=scan_start, root=lake_root)
     if not gaps:
         logger.info("gap scan: lake is complete")
         return {"scanned": True, "repaired": [], "unresolved": {}}
@@ -191,7 +198,7 @@ def repair_gaps(
 
     # Anything still short gets an individual request: single-ticker responses
     # do not show the batched-NaN behaviour.
-    remaining = store.find_gaps(root=lake_root)
+    remaining = store.find_gaps(symbols, start=scan_start, root=lake_root)
     stubborn = sorted(remaining, key=lambda s: -len(remaining[s]))[:max_symbols]
     if stubborn:
         logger.info("retrying %d symbol(s) individually", len(stubborn))
@@ -201,7 +208,7 @@ def repair_gaps(
             if len(bars) > 0:
                 writer.persist(bars, root=lake_root, provenance=source.provenance())
 
-    final = store.find_gaps(root=lake_root)
+    final = store.find_gaps(symbols, start=scan_start, root=lake_root)
     healed = [s for s in gaps if s not in final]
 
     logger.info(
@@ -446,8 +453,16 @@ def sync(
     gap_summary: Dict[str, object] = {}
     if repair and symbols_override is None:
         try:
+            repair_symbols = sorted(set(known) | set(fresh) | set(lagging))
             gap_summary = repair_gaps(
-                lake_root=lake_root, lookback_start=lookback_start, provider=source
+                lake_root=lake_root,
+                lookback_start=lookback_start,
+                provider=source,
+                symbols=repair_symbols,
+                scan_start=max(
+                    lookback_start,
+                    today - pd.Timedelta(days=AUTO_REPAIR_DAYS),
+                ),
             )
         except (ProviderError, manifest.MixedProviderError):
             raise
