@@ -30,8 +30,8 @@
       "label": "covered",
       "intervals": 707,
       "symbols": 701,
-      "member_sessions": 1313008,
-      "share_of_member_sessions": 0.9646994167755284,
+      "member_sessions": 1312540,
+      "share_of_member_sessions": 0.9643555656131204,
       "examples": [
         "A",
         "AAL",
@@ -62,10 +62,10 @@
     },
     "B": {
       "label": "covered via alias",
-      "intervals": 23,
-      "symbols": 23,
-      "member_sessions": 34251,
-      "share_of_member_sessions": 0.02516505590520288,
+      "intervals": 24,
+      "symbols": 24,
+      "member_sessions": 35330,
+      "share_of_member_sessions": 0.02595782386297678,
       "examples": [
         "ABC",
         "ANTM",
@@ -73,9 +73,10 @@
         "BLL",
         "CBS",
         "CTL",
-        "CTRA",
         "EQR",
+        "FB",
         "FBHS",
+        "FI",
         "FLT",
         "IR",
         "JEC",
@@ -151,16 +152,15 @@
     },
     "E": {
       "label": "not carried by the canonical provider",
-      "intervals": 6,
-      "symbols": 5,
-      "member_sessions": 4412,
-      "share_of_member_sessions": 0.003241605402871598,
+      "intervals": 5,
+      "symbols": 4,
+      "member_sessions": 3801,
+      "share_of_member_sessions": 0.0027926886075056536,
       "examples": [
         "BHGE",
         "CCE",
         "DOW",
-        "DWDP",
-        "FI"
+        "DWDP"
       ]
     },
     "F": {
@@ -179,25 +179,24 @@
   "by_index": {
     "SP500": {
       "A": 707,
-      "B": 23,
+      "B": 24,
       "C": 14,
       "D": 508,
-      "E": 6,
+      "E": 5,
       "F": 3
     }
   },
   "tiingo": {
     "recommend": false,
-    "class_e_share": 0.003241605402871598,
+    "class_e_share": 0.0027926886075056536,
     "threshold": 0.01,
     "candidates": [
       "BHGE",
       "CCE",
       "DOW",
-      "DWDP",
-      "FI"
+      "DWDP"
     ],
-    "reason": "class E holds 0.32% of member-sessions since 2016-01-01 (< 1%). A second vendor would not move coverage materially; do not add one."
+    "reason": "class E holds 0.28% of member-sessions since 2016-01-01 (< 1%). A second vendor would not move coverage materially; do not add one."
   },
   "intervals": [
     {
@@ -367,17 +366,6 @@
     },
     {
       "index": "SP500",
-      "symbol": "CTRA",
-      "start": "2021-10-04",
-      "end": "2026-05-07",
-      "left_censored": "False",
-      "lake_symbol": "AMR",
-      "expected": "1153",
-      "priced": "1153",
-      "class": "B"
-    },
-    {
-      "index": "SP500",
       "symbol": "DOW",
       "start": "1996-01-02",
       "end": "2017-09-01",
@@ -422,6 +410,17 @@
     },
     {
       "index": "SP500",
+      "symbol": "FB",
+      "start": "2013-12-23",
+      "end": "2022-06-09",
+      "left_censored": "False",
+      "lake_symbol": "META",
+      "expected": "1621",
+      "priced": "1621",
+      "class": "B"
+    },
+    {
+      "index": "SP500",
       "symbol": "FBHS",
       "start": "2016-06-24",
       "end": "2022-12-19",
@@ -437,10 +436,10 @@
       "start": "2023-06-07",
       "end": "2025-11-11",
       "left_censored": "False",
-      "lake_symbol": "None",
+      "lake_symbol": "FISV",
       "expected": "611",
-      "priced": "0",
-      "class": "E"
+      "priced": "611",
+      "class": "B"
     },
     {
       "index": "SP500",

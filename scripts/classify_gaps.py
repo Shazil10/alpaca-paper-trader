@@ -104,10 +104,15 @@ def classify(
         str(s): pd.DatetimeIndex(g[schema.DATE].unique())
         for s, g in prices.groupby(schema.SYMBOL, sort=False)
     }
+    intervals_by_index = {index: _intervals(index) for index in indices}
+    for frame in intervals_by_index.values():
+        if len(frame):
+            requests = list(zip(frame["symbol"].astype(str), frame["start_date"]))
+            frame["_successor"] = aliases.successors_asof(requests, alias_table)
 
     rows: List[dict] = []
     for index in indices:
-        for _, iv in _intervals(index).iterrows():
+        for _, iv in intervals_by_index[index].iterrows():
             symbol = str(iv["symbol"])
             start = pd.Timestamp(iv["start_date"])
             end = frontier if pd.isna(iv["end_date"]) else min(pd.Timestamp(iv["end_date"]), frontier)
@@ -128,7 +133,7 @@ def classify(
                 continue
 
             candidates = [symbol]
-            successor = aliases.successor(symbol, alias_table)
+            successor = str(iv.get("_successor", symbol))
             if successor != symbol:
                 candidates.append(successor)
 

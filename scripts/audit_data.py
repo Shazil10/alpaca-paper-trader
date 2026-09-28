@@ -106,7 +106,8 @@ class Finding:
         if self.table is not None and len(self.table) > 0:
             lines.append("")
             lines.extend(
-                "  " + row for row in self.table.to_string(index=False).split("\n")
+                ("  " + row).rstrip()
+                for row in self.table.to_string(index=False).split("\n")
             )
         for note in self.notes:
             lines.append(f"  note: {note}")
@@ -276,7 +277,20 @@ def audit_ticker_mapping(coverage: pd.DataFrame) -> Finding:
     )
     symbols = set(intervals["symbol"].astype(str))
     priced = set(coverage["symbol"].astype(str)) if len(coverage) else set()
-    missing = sorted(symbols - priced)
+    first_seen = (
+        intervals.assign(start_date=pd.to_datetime(intervals["start_date"], errors="coerce"))
+        .groupby("symbol")["start_date"].min().to_dict()
+    )
+    ordered_symbols = sorted(symbols)
+    aliases_by_symbol = dict(zip(
+        ordered_symbols,
+        aliases.successors_asof(
+            [(symbol, first_seen.get(symbol)) for symbol in ordered_symbols]
+        ),
+    ))
+    missing_direct = symbols - priced
+    via_alias = {s for s in missing_direct if aliases_by_symbol.get(s, s) in priced}
+    missing = sorted(missing_direct - via_alias)
 
     suffixed = [s for s in missing if s.endswith(BANKRUPTCY_SUFFIX) and len(s) > 3]
     lake_start = (
@@ -292,21 +306,23 @@ def audit_ticker_mapping(coverage: pd.DataFrame) -> Finding:
 
     finding.numbers = {
         "membership symbols": int(len(symbols)),
-        "priced by the lake": int(len(symbols & priced)),
-        "never priced": int(len(missing)),
+        "priced directly by the lake": int(len(symbols & priced)),
+        "priced via recorded alias": int(len(via_alias)),
+        "still unpriced": int(len(missing)),
         "of those, bankruptcy-suffixed": int(len(suffixed)),
         "of those, left index before lake starts": int(ended_before_lake),
     }
     finding.headline = (
-        f"{len(missing)} of {len(symbols)} membership symbols have no bars; "
+        f"{len(symbols & priced)} direct and {len(via_alias)} via alias; "
+        f"{len(missing)} of {len(symbols)} membership symbols remain unpriced; "
         f"{len(suffixed)} carry a post-bankruptcy ticker no vendor covers"
     )
     if suffixed:
         finding.table = pd.DataFrame({"unfetchable_ticker": suffixed[:12]})
     finding.notes.append(
-        "No ticker-change table exists, so a rename is indistinguishable from a "
-        "missing symbol. Resolving it needs a permanent id -- Tiingo permaTicker, "
-        "FIGI or CUSIP. See data/universe/_schema.md contract 2."
+        "Recorded Alpaca rename events resolve ordinary ticker changes. Remaining "
+        "recycled and bankruptcy tickers need a permanent id such as FIGI, CUSIP "
+        "or a vendor permaTicker. See data/universe/_schema.md contract 2."
     )
     return finding
 
@@ -356,7 +372,7 @@ def audit_member_coverage(calendar: pd.DatetimeIndex) -> Finding:
 
         # A renamed member counts as priced if the lake holds its successor:
         # Alpaca's asof mapping stores FB's history under META.
-        lookup = {s: aliases.successor(s, alias_table) for s in members}
+        lookup = aliases.successors(members, alias_table, since=date)
         panel = store.load_close_matrix(
             sorted(set(lookup) | set(lookup.values())), start=date, end=date
         )
@@ -600,9 +616,12 @@ def audit_current_coverage(prices: pd.DataFrame, calendar: pd.DatetimeIndex) -> 
         }
         members["SP1500"] = set().union(*members.values())
 
+    lookup = aliases.successors(
+        set().union(*members.values()), alias_table, since=latest
+    )
     rows, missing_all = [], set()
     for index, names in members.items():
-        priced = {s for s in names if s in have or aliases.successor(s, alias_table) in have}
+        priced = {s for s in names if s in have or lookup.get(s, s) in have}
         missing = sorted(names - priced)
         missing_all |= set(missing)
         rows.append({"index": index, "members": len(names), "priced": len(priced),

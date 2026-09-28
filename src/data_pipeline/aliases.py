@@ -28,7 +28,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import pandas as pd
 
@@ -88,27 +88,76 @@ def merge(new: pd.DataFrame, path: Optional[Path] = None) -> Dict[str, int]:
     return {"added": int(len(fresh)), "total": int(len(combined))}
 
 
-def successor(symbol: str, table: Optional[pd.DataFrame] = None) -> str:
-    """The latest name ``symbol`` was renamed to, following chains."""
-    frame = load() if table is None else table
-    if len(frame) == 0:
-        return normalize_symbol(symbol)
+def _events(frame: pd.DataFrame) -> List[Tuple[pd.Timestamp, str, str]]:
+    """Rename events in effective-date order."""
     ordered = frame.sort_values("effective_date", kind="mergesort")
-    forward: Dict[str, str] = {}
-    for _, row in ordered.iterrows():
-        forward[str(row["old_symbol"])] = str(row["new_symbol"])
+    events = []
+    for effective_date, old_symbol, new_symbol in ordered[
+        ["effective_date", "old_symbol", "new_symbol"]
+    ].itertuples(
+        index=False, name=None
+    ):
+        effective = pd.to_datetime(effective_date, errors="coerce")
+        if pd.notna(effective):
+            events.append(
+                (pd.Timestamp(effective), normalize_symbol(old_symbol), normalize_symbol(new_symbol))
+            )
+    return events
 
-    seen = set()
+
+def _resolve(
+    symbol: str,
+    events: Sequence[Tuple[pd.Timestamp, str, str]],
+    since: Optional[object] = None,
+) -> str:
+    """Follow chronologically possible renames after ``since``."""
     current = normalize_symbol(symbol)
-    while current in forward and current not in seen:
+    threshold = pd.Timestamp(since) if since is not None and not pd.isna(since) else None
+
+    seen = {current}
+    for effective, old_symbol, new_symbol in events:
+        if threshold is not None and effective < threshold:
+            continue
+        if old_symbol != current:
+            continue
+        if new_symbol in seen:
+            break
+        current = new_symbol
         seen.add(current)
-        current = forward[current]
     return current
 
 
-def successors(symbols: Sequence[str], table: Optional[pd.DataFrame] = None) -> Dict[str, str]:
+def successor(
+    symbol: str,
+    table: Optional[pd.DataFrame] = None,
+    *,
+    since: Optional[object] = None,
+) -> str:
+    """The latest name ``symbol`` was renamed to, following chains."""
     frame = load() if table is None else table
-    return {normalize_symbol(s): successor(s, frame) for s in symbols}
+    return _resolve(symbol, _events(frame), since) if len(frame) else normalize_symbol(symbol)
+
+
+def successors(
+    symbols: Sequence[str],
+    table: Optional[pd.DataFrame] = None,
+    *,
+    since: Optional[object] = None,
+) -> Dict[str, str]:
+    """Resolve many symbols after building the rename graph once."""
+    frame = load() if table is None else table
+    events = _events(frame) if len(frame) else []
+    return {normalize_symbol(s): _resolve(s, events, since) for s in symbols}
+
+
+def successors_asof(
+    requests: Sequence[Tuple[str, object]],
+    table: Optional[pd.DataFrame] = None,
+) -> List[str]:
+    """Resolve ``(symbol, first-known-date)`` requests with one event parse."""
+    frame = load() if table is None else table
+    events = _events(frame) if len(frame) else []
+    return [_resolve(symbol, events, since) for symbol, since in requests]
 
 
 def refresh(

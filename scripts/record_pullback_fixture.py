@@ -5,7 +5,8 @@ the lake, or it records post-change behaviour and proves nothing.
 
     PYTHONPATH=src python scripts/record_pullback_fixture.py
 
-Writes tests/fixtures/pullback_decisions.json.
+Writes tests/fixtures/pullback_decisions.json and saves the exact universe used
+as tests/fixtures/pullback_universe.csv.
 
 Records which symbols clear the gates and in what rank order -- the decisions --
 plus each candidate's pullback depth to 4dp. Prices agree between sources only to
@@ -31,6 +32,8 @@ import pandas as pd  # noqa: E402
 import yfinance as yf  # noqa: E402
 
 OUT_PATH = REPO_ROOT / "tests" / "fixtures" / "pullback_decisions.json"
+OUT_UNIVERSE = REPO_ROOT / "tests" / "fixtures" / "pullback_universe.csv"
+UNIVERSE_SOURCE = REPO_ROOT / "universe.csv"
 
 #: Latest completed session held by the lake, so both paths can reach it.
 AS_OF = pd.Timestamp("2026-08-21")
@@ -88,7 +91,7 @@ def regime_detail(m, as_of: pd.Timestamp) -> dict:
 def score_universe(m, as_of: pd.Timestamp) -> pd.DataFrame:
     """Reproduce _score_universe() over a pinned window."""
     start = as_of - pd.Timedelta(days=LOOKBACK_DAYS)
-    tickers = pd.read_csv(REPO_ROOT / "universe.csv")["Symbol"].tolist()
+    tickers = pd.read_csv(UNIVERSE_SOURCE)["Symbol"].tolist()
 
     records = []
     for i in range(0, len(tickers), CHUNK):
@@ -178,11 +181,13 @@ def main() -> int:
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(payload, indent=2) + "\n")
+    pd.read_csv(UNIVERSE_SOURCE).to_csv(OUT_UNIVERSE, index=False, lineterminator="\n")
 
     print(f"  top {m.TOP_N}: {payload['top_picks']}")
     if boundary:
         print(f"  within 0.5% of the {m.ENTRY_DEPTH:.0%} gate: {boundary}")
     print(f"\nwrote {OUT_PATH.relative_to(REPO_ROOT)}")
+    print(f"wrote {OUT_UNIVERSE.relative_to(REPO_ROOT)}")
     return 0
 
 

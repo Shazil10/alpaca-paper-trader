@@ -377,6 +377,18 @@ class SymbolChangeTests(unittest.TestCase):
         ])
         self.assertEqual(aliases.successor("A", table), "C")
         self.assertIn(aliases.successor("X", table), {"X", "Y"})
+        resolved = aliases.successors(["A", "AAPL", "X"], table)
+        self.assertEqual(resolved["A"], "C")
+        self.assertEqual(resolved["AAPL"], "AAPL")
+        self.assertIn(resolved["X"], {"X", "Y"})
+
+    def test_alias_chain_cannot_cross_an_earlier_ticker_reuse(self):
+        table = pd.DataFrame([
+            {"old_symbol": "META", "new_symbol": "METV", "effective_date": "2022-01-31", "source": "t", "recorded_at": ""},
+            {"old_symbol": "FB", "new_symbol": "META", "effective_date": "2022-06-09", "source": "t", "recorded_at": ""},
+        ])
+        self.assertEqual(aliases.successor("FB", table), "META")
+        self.assertEqual(aliases.successor("META", table, since="2022-06-09"), "META")
 
 
 if __name__ == "__main__":

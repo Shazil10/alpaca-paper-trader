@@ -13,7 +13,8 @@ sitting exactly on it can legitimately flip between sources. The fixture records
 those boundary names and they are excluded from the strict set comparison rather
 than pretended away.
 
-Requires the local lake and universe.csv. Skipped where either is absent.
+Requires the local lake and pinned pre-migration universe snapshot. Skipped
+where either is absent.
 """
 
 from __future__ import annotations
@@ -34,7 +35,7 @@ for p in (str(REPO_ROOT), str(SRC_DIR)):
         sys.path.insert(0, p)
 
 FIXTURE = REPO_ROOT / "tests" / "fixtures" / "pullback_decisions.json"
-UNIVERSE = REPO_ROOT / "universe.csv"
+UNIVERSE = REPO_ROOT / "tests" / "fixtures" / "pullback_universe.csv"
 
 MODULE = "strategies.mean_reversion.52W_mean_reversion_strat"
 

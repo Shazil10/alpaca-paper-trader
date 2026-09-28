@@ -103,16 +103,17 @@
     "table": null
   },
   "3. Historical ticker changes": {
-    "headline": "419 of 1209 membership symbols have no bars; 29 carry a post-bankruptcy ticker no vendor covers",
+    "headline": "790 direct and 7 via alias; 412 of 1209 membership symbols remain unpriced; 29 carry a post-bankruptcy ticker no vendor covers",
     "numbers": {
       "membership symbols": 1209,
-      "priced by the lake": 790,
-      "never priced": 419,
+      "priced directly by the lake": 790,
+      "priced via recorded alias": 7,
+      "still unpriced": 412,
       "of those, bankruptcy-suffixed": 29,
       "of those, left index before lake starts": 208
     },
     "notes": [
-      "No ticker-change table exists, so a rename is indistinguishable from a missing symbol. Resolving it needs a permanent id -- Tiingo permaTicker, FIGI or CUSIP. See data/universe/_schema.md contract 2."
+      "Recorded Alpaca rename events resolve ordinary ticker changes. Remaining recycled and bankruptcy tickers need a permanent id such as FIGI, CUSIP or a vendor permaTicker. See data/universe/_schema.md contract 2."
     ],
     "table": [
       {
@@ -202,8 +203,8 @@
         "index": "SP500",
         "date": "2024-06-28",
         "members": 503,
-        "priced": 501,
-        "via_alias": 2,
+        "priced": 502,
+        "via_alias": 3,
         "coverage": "100%"
       }
     ]
@@ -455,10 +456,10 @@
     ]
   },
   "8. Current constituent coverage (unfiltered)": {
-    "headline": "on 2026-09-25: SP500 99.8%; SP400 100.0%; SP600 99.7%; SP1500 99.8%",
+    "headline": "on 2026-09-25: SP500 99.8%; SP400 100.0%; SP600 99.5%; SP1500 99.7%",
     "numbers": {
       "latest lake session": "2026-09-25",
-      "unpriced current members": 3
+      "unpriced current members": 4
     },
     "notes": [],
     "table": [
@@ -479,16 +480,16 @@
       {
         "index": "SP600",
         "members": 603,
-        "priced": 601,
-        "coverage": "99.7%",
-        "missing_sample": "HLX, LEG"
+        "priced": 600,
+        "coverage": "99.5%",
+        "missing_sample": "CWEN-A, HLX, LEG"
       },
       {
         "index": "SP1500",
         "members": 1504,
-        "priced": 1501,
-        "coverage": "99.8%",
-        "missing_sample": "DOW, HLX, LEG"
+        "priced": 1500,
+        "coverage": "99.7%",
+        "missing_sample": "CWEN-A, DOW, HLX, LEG"
       }
     ]
   },

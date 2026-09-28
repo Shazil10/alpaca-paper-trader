@@ -39,11 +39,12 @@ DATA AUDIT
 
 3. Historical ticker changes
 ----------------------------
-419 of 1209 membership symbols have no bars; 29 carry a post-bankruptcy ticker no vendor covers
+790 direct and 7 via alias; 412 of 1209 membership symbols remain unpriced; 29 carry a post-bankruptcy ticker no vendor covers
 
   membership symbols                       1,209
-  priced by the lake                       790
-  never priced                             419
+  priced directly by the lake              790
+  priced via recorded alias                7
+  still unpriced                           412
   of those, bankruptcy-suffixed            29
   of those, left index before lake starts  208
 
@@ -60,7 +61,7 @@ DATA AUDIT
                DCNAQ
                DPHIQ
                EKDKQ
-  note: No ticker-change table exists, so a rename is indistinguishable from a missing symbol. Resolving it needs a permanent id -- Tiingo permaTicker, FIGI or CUSIP. See data/universe/_schema.md contract 2.
+  note: Recorded Alpaca rename events resolve ordinary ticker changes. Remaining recycled and bankruptcy tickers need a permanent id such as FIGI, CUSIP or a vendor permaTicker. See data/universe/_schema.md contract 2.
 
 4. Index member coverage by date
 --------------------------------
@@ -72,7 +73,7 @@ coverage ranges 0% (2008-06-30) to 100% (2020-03-31) on the probed dates
   SP500 2012-06-29      498       0          0       0%
   SP500 2016-06-30      505     496          6      98%
   SP500 2020-03-31      505     504          3     100%
-  SP500 2024-06-28      503     501          2     100%
+  SP500 2024-06-28      503     502          3     100%
 
 5. Membership date precision
 ----------------------------
@@ -138,16 +139,16 @@ partition providers: 2005-2015 yahoo; 2016-2026 alpaca
 
 8. Current constituent coverage (unfiltered)
 --------------------------------------------
-on 2026-09-25: SP500 99.8%; SP400 100.0%; SP600 99.7%; SP1500 99.8%
+on 2026-09-25: SP500 99.8%; SP400 100.0%; SP600 99.5%; SP1500 99.7%
 
   latest lake session       2026-09-25
-  unpriced current members  3
+  unpriced current members  4
 
-   index  members  priced coverage missing_sample
-   SP500      503     502    99.8%            DOW
-   SP400      400     400   100.0%               
-   SP600      603     601    99.7%       HLX, LEG
-  SP1500     1504    1501    99.8%  DOW, HLX, LEG
+   index  members  priced coverage        missing_sample
+   SP500      503     502    99.8%                   DOW
+   SP400      400     400   100.0%
+   SP600      603     600    99.5%      CWEN-A, HLX, LEG
+  SP1500     1504    1500    99.7% CWEN-A, DOW, HLX, LEG
 
 9. Latest completed session
 ---------------------------
@@ -226,11 +227,11 @@ Gap classification (membership intervals vs the lake)
 -----------------------------------------------------
   canonical window 2016-01-01 .. 2026-09-25
   lake providers: alpaca, yahoo (classes describe the lake as it stands, not the target)
-  A covered                                     707 intervals  96.47%
-  B covered via alias                            23 intervals   2.52%
+  A covered                                     707 intervals  96.44%
+  B covered via alias                            24 intervals   2.60%
   C holes while a member                         14 intervals   0.60%
   D before canonical history                    508 intervals     n/a
-  E not carried by the canonical provider         6 intervals   0.32%
+  E not carried by the canonical provider         5 intervals   0.28%
   F unresolvable identifier                       3 intervals   0.09%
-  Tiingo: not needed -- class E holds 0.32% of member-sessions since 2016-01-01 (< 1%). A second vendor would not move coverage materially; do not add one.
+  Tiingo: not needed -- class E holds 0.28% of member-sessions since 2016-01-01 (< 1%). A second vendor would not move coverage materially; do not add one.
 
