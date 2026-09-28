@@ -41,6 +41,10 @@ MIN_EQUITY_COVERAGE = 0.98
 #: has no history to give for those names.
 MIN_EQUITY_PRESENCE = 0.95
 
+# Missing bars outside the longest live strategy window cannot affect today's
+# rolling calculations. Historical/delisted names remain visible in audit_data.
+LIVE_GAP_WINDOW_DAYS = 730
+
 # --- Backtest-readiness thresholds (--backtest only) -----------------------
 #
 # The live gate and the backtest gate ask different questions. Live asks "is
@@ -275,20 +279,29 @@ def _run_live_gate() -> int:
         "a 09:35 quote persisted as a daily close corrupts every rolling window",
     )
 
-    gaps = store.find_gaps()
+    from strategies.ranks import ranked_asset_alloc as ra
+
+    live_symbols = set(ra.ALL_TICKERS)
+    universe_path = REPO_ROOT / "universe.csv"
+    if universe_path.exists():
+        live_symbols |= {
+            registry.normalize_symbol(t)
+            for t in pd.read_csv(universe_path)["Symbol"].tolist()
+        }
+    gap_start = newest - pd.Timedelta(days=LIVE_GAP_WINDOW_DAYS)
+    gaps = store.find_gaps(sorted(live_symbols), start=gap_start, end=newest)
     unexpected = {s: d for s, d in gaps.items() if s not in KNOWN_UNRESOLVED}
     check.add(
         not unexpected,
         "no unexpected gaps",
-        f"{len(gaps)} gapped ({len(unexpected)} unexpected)"
+        f"{len(gaps)} active symbol(s) gapped in last {LIVE_GAP_WINDOW_DAYS} days "
+        f"({len(unexpected)} unexpected)"
         + (f": {sorted(unexpected)[:8]}" if unexpected else ""),
         "one missing bar makes rolling(50) NaN, silently dropping a symbol "
         "from threshold comparisons and changing signals",
     )
 
     # --- Rotation sleeve ---
-    from strategies.ranks import ranked_asset_alloc as ra
-
     etf_cov = store.coverage(ra.ALL_TICKERS)
     missing_etfs = [t for t in ra.ALL_TICKERS if t not in set(etf_cov["symbol"])]
     check.add(
@@ -348,7 +361,6 @@ def _run_live_gate() -> int:
     # returns a single bar for them, so demanding full coverage of the whole
     # universe would fail permanently on a condition nothing can fix -- and
     # would say nothing about whether the lake matches its source.
-    universe_path = REPO_ROOT / "universe.csv"
     if universe_path.exists():
         tickers = {
             registry.normalize_symbol(t)
