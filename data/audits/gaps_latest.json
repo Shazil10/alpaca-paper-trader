@@ -1,6 +1,6 @@
 {
   "window_start": "2016-01-01",
-  "frontier": "2026-09-25",
+  "frontier": "2026-09-28",
   "providers_by_year": {
     "2005": "yahoo",
     "2006": "yahoo",
@@ -28,44 +28,44 @@
   "classes": {
     "A": {
       "label": "covered",
-      "intervals": 711,
-      "symbols": 704,
-      "member_sessions": 1315385,
-      "share_of_member_sessions": 0.9664458574016902,
+      "intervals": 1714,
+      "symbols": 1623,
+      "member_sessions": 1316886,
+      "share_of_member_sessions": 0.9664792743071865,
       "examples": [
         "A",
+        "AA",
         "AAL",
+        "AAMI",
+        "AAON",
         "AAP",
         "AAPL",
+        "AAT",
         "ABBV",
+        "ABCB",
+        "ABG",
+        "ABM",
         "ABMD",
         "ABNB",
+        "ABR",
         "ABT",
+        "ACA",
+        "ACAD",
         "ACGL",
-        "ACN",
-        "ADBE",
-        "ADI",
-        "ADM",
-        "ADP",
-        "ADS",
-        "ADSK",
-        "ADT",
-        "AEE",
-        "AEP",
-        "AES",
-        "AET",
-        "AFL",
-        "AGN",
-        "AIG",
-        "AIV"
+        "ACHC",
+        "ACI",
+        "ACIW",
+        "ACLS",
+        "ACM",
+        "ACMR"
       ]
     },
     "B": {
       "label": "covered via alias",
       "intervals": 24,
       "symbols": 24,
-      "member_sessions": 35330,
-      "share_of_member_sessions": 0.02595782386297678,
+      "member_sessions": 35331,
+      "share_of_member_sessions": 0.025929867308595585,
       "examples": [
         "ABC",
         "ANTM",
@@ -97,8 +97,8 @@
       "label": "holes while a member",
       "intervals": 15,
       "symbols": 15,
-      "member_sessions": 9131,
-      "share_of_member_sessions": 0.006708771290485168,
+      "member_sessions": 9132,
+      "share_of_member_sessions": 0.006702090183184593,
       "examples": [
         "AABA",
         "ANDV",
@@ -161,11 +161,14 @@
     },
     "F": {
       "label": "unresolvable identifier",
-      "intervals": 3,
-      "symbols": 3,
-      "member_sessions": 1208,
-      "share_of_member_sessions": 0.0008875474448478899,
+      "intervals": 6,
+      "symbols": 6,
+      "member_sessions": 1211,
+      "share_of_member_sessions": 0.000888768201033349,
       "examples": [
+        "CWEN-A",
+        "HLX",
+        "LEG",
         "SNDK",
         "STI",
         "TE"
@@ -173,11 +176,25 @@
     }
   },
   "by_index": {
+    "SP400": {
+      "A": 400,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "F": 0
+    },
     "SP500": {
-      "A": 711,
+      "A": 714,
       "B": 24,
       "C": 15,
       "D": 508,
+      "F": 3
+    },
+    "SP600": {
+      "A": 600,
+      "B": 0,
+      "C": 0,
+      "D": 0,
       "F": 3
     }
   },
@@ -237,11 +254,11 @@
       "index": "SP500",
       "symbol": "APTV",
       "start": "2012-12-24",
-      "end": "2026-09-25",
+      "end": "2026-09-28",
       "left_censored": "False",
       "lake_symbol": "APTV",
-      "expected": "2698",
-      "priced": "2224",
+      "expected": "2699",
+      "priced": "2225",
       "class": "C"
     },
     {
@@ -424,11 +441,11 @@
       "index": "SP500",
       "symbol": "IR",
       "start": "2010-11-17",
-      "end": "2026-09-25",
+      "end": "2026-09-28",
       "left_censored": "False",
       "lake_symbol": "TT",
-      "expected": "2698",
-      "priced": "2698",
+      "expected": "2699",
+      "priced": "2699",
       "class": "B"
     },
     {
@@ -650,6 +667,39 @@
       "expected": "607",
       "priced": "607",
       "class": "B"
+    },
+    {
+      "index": "SP600",
+      "symbol": "CWEN-A",
+      "start": "2026-09-27",
+      "end": "2026-09-28",
+      "left_censored": "True",
+      "lake_symbol": "None",
+      "expected": "1",
+      "priced": "0",
+      "class": "F"
+    },
+    {
+      "index": "SP600",
+      "symbol": "HLX",
+      "start": "2026-09-27",
+      "end": "2026-09-28",
+      "left_censored": "True",
+      "lake_symbol": "None",
+      "expected": "1",
+      "priced": "0",
+      "class": "F"
+    },
+    {
+      "index": "SP600",
+      "symbol": "LEG",
+      "start": "2026-09-27",
+      "end": "2026-09-28",
+      "left_censored": "True",
+      "lake_symbol": "None",
+      "expected": "1",
+      "priced": "0",
+      "class": "F"
     }
   ]
 }

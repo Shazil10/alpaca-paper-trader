@@ -1033,7 +1033,6 @@ DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
-DEI,Real Estate,Office REITs
 DFH,Consumer Discretionary,Homebuilding
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
@@ -1048,6 +1047,8 @@ ECG,Industrials,Construction & Engineering
 ECPG,Financials,Consumer Finance
 EFC,Financials,Specialized Finance
 EFOR,Information Technology,IT Consulting & Other Services
+EGBN,Financials,Regional Banks
+EIG,Financials,Property & Casualty Insurance
 EMN,Materials,Specialty Chemicals
 ENOV,Health Care,Health Care Equipment
 ENPH,Information Technology,Semiconductor Materials & Equipment
@@ -1078,6 +1079,7 @@ FIBK,Financials,Regional Banks
 FIVN,Information Technology,Application Software
 FIZZ,Consumer Staples,Soft Drinks & Non-alcoholic Beverages
 FORM,Information Technology,Semiconductor Materials & Equipment
+FOXF,Consumer Discretionary,Automotive Parts & Equipment
 FRPT,Consumer Staples,Packaged Foods & Meats
 FSS,Industrials,Construction Machinery & Heavy Transportation Equipment
 FTDR,Consumer Discretionary,Specialized Consumer Services
@@ -1117,7 +1119,6 @@ HTO,Utilities,Water Utilities
 HUBG,Industrials,Air Freight & Logistics
 HWKN,Materials,Commodity Chemicals
 HZO,Consumer Discretionary,Specialty Stores
-IART,Health Care,Health Care Equipment
 IBP,Consumer Discretionary,Homebuilding
 ICHR,Information Technology,Semiconductor Materials & Equipment
 ICUI,Health Care,Health Care Supplies
@@ -1202,7 +1203,6 @@ MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
 MTRN,Materials,Diversified Metals & Mining
-MTX,Materials,Specialty Chemicals
 MWA,Industrials,Industrial Machinery & Supplies & Components
 MXL,Information Technology,Semiconductors
 MYRG,Industrials,Construction & Engineering
@@ -1314,7 +1314,6 @@ SEZL,Financials,Transaction & Payment Processing Services
 SFBS,Financials,Regional Banks
 SFNC,Financials,Regional Banks
 SHAK,Consumer Discretionary,Restaurants
-SHEN,Communication Services,Wireless Telecommunication Services
 SHO,Real Estate,Hotel & Resort REITs
 SHOO,Consumer Discretionary,Footwear
 SIG,Consumer Discretionary,Specialty Stores
@@ -1357,6 +1356,7 @@ TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
 TRN,Industrials,Construction Machinery & Heavy Transportation Equipment
 TRNO,Real Estate,Industrial REITs
+TRUP,Financials,Life & Health Insurance
 UCB,Financials,Regional Banks
 UCTT,Information Technology,Semiconductor Materials & Equipment
 UE,Real Estate,Retail REITs
@@ -1384,7 +1384,6 @@ VSH,Information Technology,Electronic Components
 VSNT,Communication Services,Cable & Satellite
 VSTS,Industrials,Diversified Support Services
 VSXY,Consumer Discretionary,Apparel Retail
-VTOL,Energy,Oil & Gas Equipment & Services
 VVX,Industrials,Aerospace & Defense
 WABC,Financials,Regional Banks
 WAFD,Financials,Regional Banks
@@ -1400,6 +1399,7 @@ WLY,Communication Services,Publishing
 WOR,Industrials,Building Products
 WRBY,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
 WRLD,Financials,Consumer Finance
+WS,Materials,Steel
 WSBC,Financials,Regional Banks
 WSC,Industrials,Office Services & Supplies
 WSFS,Financials,Regional Banks
