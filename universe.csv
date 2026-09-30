@@ -901,6 +901,7 @@ YETI,Consumer Discretionary,Leisure Products
 ZION,Financials,Regional Banks
 AAMI,Financials,Asset Management & Custody Banks
 AAP,Consumer Discretionary,Automotive Retail
+AAT,Real Estate,Diversified REITs
 ABCB,Financials,Regional Banks
 ABG,Consumer Discretionary,Automotive Retail
 ABM,Industrials,Environmental & Facilities Services
@@ -1032,10 +1033,11 @@ CZR,Consumer Discretionary,Casinos & Gaming
 DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
-DCOM,Financials,Regional Banks
+DEA,Real Estate,Office REITs
 DFH,Consumer Discretionary,Homebuilding
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
+DLX,Industrials,Commercial Printing
 DNOW,Industrials,Trading Companies & Distributors
 DORM,Consumer Discretionary,Automotive Parts & Equipment
 DRH,Real Estate,Hotel & Resort REITs
@@ -1119,6 +1121,7 @@ HTO,Utilities,Water Utilities
 HUBG,Industrials,Air Freight & Logistics
 HWKN,Materials,Commodity Chemicals
 HZO,Consumer Discretionary,Specialty Stores
+IART,Health Care,Health Care Equipment
 IBP,Consumer Discretionary,Homebuilding
 ICHR,Information Technology,Semiconductor Materials & Equipment
 ICUI,Health Care,Health Care Supplies
@@ -1287,7 +1290,6 @@ RCUS,Health Care,Biotechnology
 RDN,Financials,Property & Casualty Insurance
 RDNT,Health Care,Health Care Services
 RELY,Financials,Transaction & Payment Processing Services
-REX,Energy,Oil & Gas Refining & Marketing
 REYN,Consumer Staples,Household Products
 REZI,Industrials,Trading Companies & Distributors
 RHI,Industrials,Human Resource & Employment Services
@@ -1314,6 +1316,7 @@ SEZL,Financials,Transaction & Payment Processing Services
 SFBS,Financials,Regional Banks
 SFNC,Financials,Regional Banks
 SHAK,Consumer Discretionary,Restaurants
+SHEN,Communication Services,Wireless Telecommunication Services
 SHO,Real Estate,Hotel & Resort REITs
 SHOO,Consumer Discretionary,Footwear
 SIG,Consumer Discretionary,Specialty Stores
@@ -1350,7 +1353,6 @@ THRM,Consumer Discretionary,Automotive Parts & Equipment
 TILE,Industrials,Office Services & Supplies
 TMDX,Health Care,Health Care Equipment
 TMP,Financials,Regional Banks
-TNC,Industrials,Industrial Machinery & Supplies & Components
 TNDM,Health Care,Health Care Equipment
 TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
@@ -1398,7 +1400,6 @@ WKC,Energy,Oil & Gas Refining & Marketing
 WLY,Communication Services,Publishing
 WOR,Industrials,Building Products
 WRBY,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
-WRLD,Financials,Consumer Finance
 WS,Materials,Steel
 WSBC,Financials,Regional Banks
 WSC,Industrials,Office Services & Supplies
@@ -1407,6 +1408,7 @@ WT,Financials,Asset Management & Custody Banks
 WWW,Consumer Discretionary,Footwear
 XHR,Real Estate,Hotel & Resort REITs
 XNCR,Health Care,Biotechnology
+XPEL,Consumer Discretionary,Automotive Parts & Equipment
 YELP,Communication Services,Interactive Media & Services
 YOU,Information Technology,Application Software
 ZD,Communication Services,Advertising
