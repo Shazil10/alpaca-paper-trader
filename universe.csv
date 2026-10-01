@@ -1033,6 +1033,7 @@ CZR,Consumer Discretionary,Casinos & Gaming
 DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
+DCOM,Financials,Regional Banks
 DEA,Real Estate,Office REITs
 DFH,Consumer Discretionary,Homebuilding
 DGII,Information Technology,Communications Equipment
@@ -1166,7 +1167,6 @@ LFST,Health Care,Health Care Services
 LGIH,Consumer Discretionary,Homebuilding
 LGND,Health Care,Biotechnology
 LIF,Information Technology,Application Software
-LKFN,Financials,Regional Banks
 LKQ,Consumer Discretionary,Distributors
 LMAT,Health Care,Health Care Equipment
 LNC,Financials,Multi-line Insurance
@@ -1202,6 +1202,7 @@ MLKN,Industrials,Office Services & Supplies
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
+MRTN,Industrials,Cargo Ground Transportation
 MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
@@ -1274,6 +1275,7 @@ PRIM,Industrials,Construction & Engineering
 PRK,Financials,Regional Banks
 PRKS,Consumer Discretionary,Leisure Facilities
 PRLB,Industrials,Industrial Machinery & Supplies & Components
+PRSU,Consumer Discretionary,"Hotels, Resorts & Cruise Lines"
 PRVA,Health Care,Health Care Services
 PSMT,Consumer Staples,Consumer Staples Merchandise Retail
 PTCT,Health Care,Pharmaceuticals
@@ -1290,6 +1292,7 @@ RCUS,Health Care,Biotechnology
 RDN,Financials,Property & Casualty Insurance
 RDNT,Health Care,Health Care Services
 RELY,Financials,Transaction & Payment Processing Services
+REX,Energy,Oil & Gas Refining & Marketing
 REYN,Consumer Staples,Household Products
 REZI,Industrials,Trading Companies & Distributors
 RHI,Industrials,Human Resource & Employment Services
@@ -1353,6 +1356,7 @@ THRM,Consumer Discretionary,Automotive Parts & Equipment
 TILE,Industrials,Office Services & Supplies
 TMDX,Health Care,Health Care Equipment
 TMP,Financials,Regional Banks
+TNC,Industrials,Industrial Machinery & Supplies & Components
 TNDM,Health Care,Health Care Equipment
 TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
@@ -1400,6 +1404,7 @@ WKC,Energy,Oil & Gas Refining & Marketing
 WLY,Communication Services,Publishing
 WOR,Industrials,Building Products
 WRBY,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
+WRLD,Financials,Consumer Finance
 WS,Materials,Steel
 WSBC,Financials,Regional Banks
 WSC,Industrials,Office Services & Supplies
