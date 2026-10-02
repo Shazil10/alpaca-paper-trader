@@ -378,7 +378,6 @@ PPG,Materials,Specialty Chemicals
 PPL,Utilities,Electric Utilities
 PRU,Financials,Life & Health Insurance
 PSA,Real Estate,Self-Storage REITs
-PSKY,Communication Services,Movies & Entertainment
 PSX,Energy,Oil & Gas Refining & Marketing
 PTC,Information Technology,Application Software
 PWR,Industrials,Construction & Engineering
@@ -1036,6 +1035,7 @@ DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
 DEA,Real Estate,Office REITs
 DFH,Consumer Discretionary,Homebuilding
+DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
 DLX,Industrials,Commercial Printing
@@ -1167,12 +1167,14 @@ LFST,Health Care,Health Care Services
 LGIH,Consumer Discretionary,Homebuilding
 LGND,Health Care,Biotechnology
 LIF,Information Technology,Application Software
+LKFN,Financials,Regional Banks
 LKQ,Consumer Discretionary,Distributors
 LMAT,Health Care,Health Care Equipment
 LNC,Financials,Multi-line Insurance
 LNN,Materials,Agricultural & Farm Machinery
 LPG,Energy,Oil & Gas Storage & Transportation
 LQDA,Health Care,Pharmaceuticals
+LQDT,Industrials,Diversified Support Services
 LRN,Consumer Discretionary,Education Services
 LTC,Real Estate,Health Care REITs
 LTH,Consumer Discretionary,Leisure Facilities
@@ -1413,7 +1415,6 @@ WT,Financials,Asset Management & Custody Banks
 WWW,Consumer Discretionary,Footwear
 XHR,Real Estate,Hotel & Resort REITs
 XNCR,Health Care,Biotechnology
-XPEL,Consumer Discretionary,Automotive Parts & Equipment
 YELP,Communication Services,Interactive Media & Services
 YOU,Information Technology,Application Software
 ZD,Communication Services,Advertising
