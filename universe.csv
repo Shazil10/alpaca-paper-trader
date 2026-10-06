@@ -939,6 +939,7 @@ AORT,Health Care,Health Care Equipment
 AOSL,Information Technology,Semiconductors
 APAM,Financials,Asset Management & Custody Banks
 APLE,Real Estate,Hotel & Resort REITs
+APOG,Industrials,Building Products
 ARCB,Industrials,Cargo Ground Transportation
 ARLO,Information Technology,Communications Equipment
 AROC,Energy,Oil & Gas Equipment & Services
@@ -1038,6 +1039,7 @@ DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
+DLX,Industrials,Commercial Printing
 DMC,Consumer Staples,Packaged Foods & Meats
 DNOW,Industrials,Trading Companies & Distributors
 DORM,Consumer Discretionary,Automotive Parts & Equipment
@@ -1137,6 +1139,7 @@ IRDM,Communication Services,Alternative Carriers
 ITGR,Health Care,Health Care Equipment
 ITRI,Information Technology,Electronic Equipment & Instruments
 IVT,Real Estate,Retail REITs
+JBGS,Real Estate,Office REITs
 JBTM,Industrials,Industrial Machinery & Supplies & Components
 JJSF,Consumer Staples,Packaged Foods & Meats
 JOE,Real Estate,Real Estate Development
@@ -1205,6 +1208,7 @@ MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
 MTRN,Materials,Diversified Metals & Mining
+MTX,Materials,Specialty Chemicals
 MWA,Industrials,Industrial Machinery & Supplies & Components
 MXL,Information Technology,Semiconductors
 MYRG,Industrials,Construction & Engineering
@@ -1304,6 +1308,7 @@ RRR,Consumer Discretionary,Casinos & Gaming
 RSI,Consumer Discretionary,Casinos & Gaming
 RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment
 RXO,Industrials,Cargo Ground Transportation
+SAFE,Real Estate,Other Specialized REITs
 SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
@@ -1317,6 +1322,7 @@ SEZL,Financials,Transaction & Payment Processing Services
 SFBS,Financials,Regional Banks
 SFNC,Financials,Regional Banks
 SHAK,Consumer Discretionary,Restaurants
+SHEN,Communication Services,Wireless Telecommunication Services
 SHO,Real Estate,Hotel & Resort REITs
 SHOO,Consumer Discretionary,Footwear
 SIG,Consumer Discretionary,Specialty Stores
