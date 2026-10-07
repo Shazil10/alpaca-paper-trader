@@ -1039,7 +1039,6 @@ DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
-DLX,Industrials,Commercial Printing
 DMC,Consumer Staples,Packaged Foods & Meats
 DNOW,Industrials,Trading Companies & Distributors
 DORM,Consumer Discretionary,Automotive Parts & Equipment
@@ -1308,7 +1307,6 @@ RRR,Consumer Discretionary,Casinos & Gaming
 RSI,Consumer Discretionary,Casinos & Gaming
 RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment
 RXO,Industrials,Cargo Ground Transportation
-SAFE,Real Estate,Other Specialized REITs
 SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
@@ -1322,7 +1320,6 @@ SEZL,Financials,Transaction & Payment Processing Services
 SFBS,Financials,Regional Banks
 SFNC,Financials,Regional Banks
 SHAK,Consumer Discretionary,Restaurants
-SHEN,Communication Services,Wireless Telecommunication Services
 SHO,Real Estate,Hotel & Resort REITs
 SHOO,Consumer Discretionary,Footwear
 SIG,Consumer Discretionary,Specialty Stores
@@ -1358,7 +1355,6 @@ TGTX,Health Care,Biotechnology
 THRM,Consumer Discretionary,Automotive Parts & Equipment
 TILE,Industrials,Office Services & Supplies
 TMDX,Health Care,Health Care Equipment
-TMP,Financials,Regional Banks
 TNC,Industrials,Industrial Machinery & Supplies & Components
 TNDM,Health Care,Health Care Equipment
 TPC,Industrials,Construction & Engineering
