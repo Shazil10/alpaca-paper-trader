@@ -1,0 +1,7 @@
+observed_date,effective_date,index,symbol,event,source
+2026-10-08,2026-10-08,SP500,SKYD,add,wikipedia
+2026-10-08,2026-10-08,SP500,TWLO,add,wikipedia
+2026-10-08,2026-10-08,SP500,VYLR,add,wikipedia
+2026-10-08,2026-10-08,SP500,CTVA,remove,wikipedia
+2026-10-08,2026-10-08,SP500,PSKY,remove,wikipedia
+2026-10-08,2026-10-08,SP500,WBD,remove,wikipedia

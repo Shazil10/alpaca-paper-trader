@@ -4,24 +4,24 @@ DATA AUDIT
 
 1. Price history completeness
 -----------------------------
-1732/1742 symbols are complete over their own span; 34 reach 15+ years
+1734/1744 symbols are complete over their own span; 34 reach 15+ years
 
-  symbols in lake         1,742
-  complete over own span  1,732
+  symbols in lake         1,744
+  complete over own span  1,734
   under 99% complete      9
   1-2 bar stubs           0
   span >= 15 years        34
-  median span (years)     10.75
+  median span (years)     10.76
 
   symbol first_date  last_date  bars  expected  pct
-     POM 2016-01-04 2026-10-06   306      2705 11.3
-     CAM 2016-01-04 2026-10-06   314      2705 11.6
-     PCL 2016-01-04 2026-10-06   330      2705 12.2
-    CSRA 2016-01-04 2026-10-06   605      2705 22.4
-    SPLS 2016-01-04 2026-10-06   608      2705 22.5
-     NFX 2016-01-04 2026-10-06   849      2705 31.4
-     APC 2016-01-04 2026-10-06  1069      2705 39.5
-      FB 2016-01-04 2026-10-06  1942      2705 71.8
+     POM 2016-01-04 2026-10-07   307      2706 11.3
+     CAM 2016-01-04 2026-10-07   315      2706 11.6
+     PCL 2016-01-04 2026-10-07   331      2706 12.2
+    CSRA 2016-01-04 2026-10-07   606      2706 22.4
+    SPLS 2016-01-04 2026-10-07   609      2706 22.5
+     NFX 2016-01-04 2026-10-07   850      2706 31.4
+     APC 2016-01-04 2026-10-07  1070      2706 39.5
+      FB 2016-01-04 2026-10-07  1943      2706 71.8
     BBBY 2016-01-04 2026-08-14  2086      2669 78.2
   note: Ragged symbols are usually halts or mid-delisting names where the vendor itself has no bar; see _schema.md Contract 5.
 
@@ -75,7 +75,7 @@ coverage ranges 0% (2008-06-30) to 100% (2020-03-31) on the probed dates
    SP500 2020-03-31      505     505          0     100%
    SP500 2024-06-28      503     503          0     100%
   SP1500 2026-09-30     1504    1501          0     100%
-  SP1500 2026-10-06     1504    1497          0     100%
+  SP1500 2026-10-07     1504    1497          0     100%
 
 5. Membership date precision
 ----------------------------
@@ -111,8 +111,8 @@ partition providers: 2005-2015 yahoo; 2016-2026 alpaca
   on a canonical provider       11
   manifest vs disk problems     0
   secondary-source exceptions   0
-  pending anchor factors        1,617
-  symbols with pending factors  167
+  pending anchor factors        1,497
+  symbols with pending factors  168
 
    year provider     feed   rows  symbols      first       last
    2005    yahoo yfinance   6254       25 2005-01-03 2005-12-30
@@ -135,29 +135,29 @@ partition providers: 2005-2015 yahoo; 2016-2026 alpaca
    2022   alpaca      sip 404135     1627 2022-01-03 2022-12-30
    2023   alpaca      sip 402158     1621 2023-01-03 2023-12-29
    2024   alpaca      sip 406875     1626 2024-01-02 2024-12-31
-   2025   alpaca      sip 403339     1627 2025-01-02 2025-12-31
-   2026   alpaca      sip 304249     1622 2026-01-02 2026-10-06
+   2025   alpaca      sip 403441     1628 2025-01-02 2025-12-31
+   2026   alpaca      sip 306017     1624 2026-01-02 2026-10-07
   note: Years on a cross-check provider (yahoo) carry Yahoo's semantics: close split-adjusted, not the raw print. See each partition's notes.
 
 8. Current constituent coverage (unfiltered)
 --------------------------------------------
-on 2026-10-06: SP500 99.6%; SP400 100.0%; SP600 99.2%; SP1500 99.5%
+on 2026-10-07: SP500 100.0%; SP400 100.0%; SP600 99.2%; SP1500 99.7%
 
-  latest lake session       2026-10-06
-  unpriced current members  7
+  latest lake session       2026-10-07
+  unpriced current members  5
 
-   index  members  priced coverage                          missing_sample
-   SP500      503     501    99.6%                               PSKY, WBD
+   index  members  priced coverage               missing_sample
+   SP500      503     503   100.0%
    SP400      400     400   100.0%
-   SP600      603     598    99.2%            BLFS, CWEN-A, HLX, LEG, QRVO
-  SP1500     1504    1497    99.5% BLFS, CWEN-A, HLX, LEG, PSKY, QRVO, WBD
+   SP600      603     598    99.2% BLFS, CWEN-A, HLX, LEG, QRVO
+  SP1500     1503    1498    99.7% BLFS, CWEN-A, HLX, LEG, QRVO
 
 9. Latest completed session
 ---------------------------
 the lake holds the latest completed session
 
-  latest completed weekday (NY)            2026-10-06
-  lake frontier                            2026-10-06
+  latest completed weekday (NY)            2026-10-07
+  lake frontier                            2026-10-07
   weekdays behind (holidays not excluded)  0
 
 10. Missing symbol-sessions
@@ -183,12 +183,12 @@ the lake holds the latest completed session
 
 11. Corporate-action mismatches and aliases
 -------------------------------------------
-481 adj_close move(s) beyond 40% in a day; 3460 rename(s) recorded
+481 adj_close move(s) beyond 40% in a day; 3464 rename(s) recorded
 
   adj_close one-day moves > 40%          481
   symbols affected                       251
-  pending anchor factors                 1,617
-  recorded renames (symbol_aliases.csv)  3,460
+  pending anchor factors                 1,497
+  recorded renames (symbol_aliases.csv)  3,464
 
   symbol       date  adj_return  raw_return
     GPOR 2021-05-18    526.4765    526.4765
@@ -227,10 +227,10 @@ Wrote data/audits/latest.json
 
 Gap classification (membership intervals vs the lake)
 -----------------------------------------------------
-  canonical window 2016-01-01 .. 2026-10-06
+  canonical window 2016-01-01 .. 2026-10-07
   lake providers: alpaca, yahoo (classes describe the lake as it stands, not the target)
-  A covered                                    1712 intervals  96.67%
-  B covered via alias                            24 intervals   2.58%
+  A covered                                    1711 intervals  96.65%
+  B covered via alias                            25 intervals   2.59%
   C holes while a member                         17 intervals   0.67%
   D before canonical history                    508 intervals     n/a
   E not carried by the canonical provider         0 intervals   0.00%

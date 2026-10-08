@@ -120,7 +120,6 @@ CSGP,Real Estate,Real Estate Services
 CSX,Industrials,Rail Transportation
 CTAS,Industrials,Diversified Support Services
 CTSH,Information Technology,IT Consulting & Other Services
-CTVA,Materials,Fertilizers & Agricultural Chemicals
 CVNA,Consumer Discretionary,Automotive Retail
 CVS,Health Care,Health Care Services
 CVX,Energy,Integrated Oil & Gas
@@ -448,6 +447,7 @@ TSLA,Consumer Discretionary,Automobile Manufacturers
 TSN,Consumer Staples,Packaged Foods & Meats
 TT,Industrials,Building Products
 TTWO,Communication Services,Interactive Home Entertainment
+TWLO,Information Technology,Systems Software
 TXN,Information Technology,Semiconductors
 TXT,Industrials,Aerospace & Defense
 TYL,Information Technology,Application Software
@@ -475,10 +475,10 @@ VRTX,Health Care,Biotechnology
 VST,Utilities,Electric Utilities
 VTR,Real Estate,Health Care REITs
 VTRS,Health Care,Pharmaceuticals
+VYLR,Consumer Staples,Agricultural Products & Services
 VZ,Communication Services,Integrated Telecommunication Services
 WAB,Industrials,Construction Machinery & Heavy Transportation Equipment
 WAT,Health Care,Life Sciences Tools & Services
-WBD,Communication Services,Broadcasting
 WDAY,Information Technology,Application Software
 WDC,Information Technology,"Technology Hardware, Storage & Peripherals"
 WEC,Utilities,Electric Utilities
@@ -856,7 +856,6 @@ TRU,Industrials,Research & Consulting Services
 TTC,Industrials,Agricultural & Farm Machinery
 TTEK,Industrials,Construction & Engineering
 TTMI,Information Technology,Electronic Manufacturing Services
-TWLO,Information Technology,Systems Software
 TXNM,Utilities,Electric Utilities
 TXRH,Consumer Discretionary,Restaurants
 UBSI,Financials,Regional Banks
@@ -900,7 +899,6 @@ YETI,Consumer Discretionary,Leisure Products
 ZION,Financials,Regional Banks
 AAMI,Financials,Asset Management & Custody Banks
 AAP,Consumer Discretionary,Automotive Retail
-AAT,Real Estate,Diversified REITs
 ABCB,Financials,Regional Banks
 ABG,Consumer Discretionary,Automotive Retail
 ABM,Industrials,Environmental & Facilities Services
@@ -913,6 +911,7 @@ ACMR,Information Technology,Semiconductor Materials & Equipment
 ACT,Financials,Commercial & Residential Mortgage Finance
 ADEA,Information Technology,IT Consulting & Other Services
 ADIG,Information Technology,Electronic Equipment & Instruments
+ADMA,Health Care,Biotechnology
 ADNT,Consumer Discretionary,Automotive Parts & Equipment
 ADUS,Health Care,Health Care Services
 AEO,Consumer Discretionary,Apparel Retail
@@ -945,6 +944,7 @@ ARLO,Information Technology,Communications Equipment
 AROC,Energy,Oil & Gas Equipment & Services
 ARR,Real Estate,Mortgage REITs
 ASO,Consumer Discretionary,Specialty Stores
+ASTE,Industrials,Construction Machinery & Heavy Transportation Equipment
 ASTH,Health Care,Health Care Facilities
 ATEN,Information Technology,Systems Software
 ATMU,Industrials,Industrial Machinery & Supplies & Components
@@ -993,6 +993,7 @@ CBU,Financials,Regional Banks
 CC,Materials,Diversified Chemicals
 CCS,Consumer Discretionary,Homebuilding
 CE,Materials,Specialty Chemicals
+CENTA,Consumer Staples,Household Products
 CENX,Materials,Aluminum
 CHCO,Financials,Regional Banks
 CHEF,Consumer Staples,Food Distributors
@@ -1039,6 +1040,7 @@ DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
+DLX,Industrials,Commercial Printing
 DMC,Consumer Staples,Packaged Foods & Meats
 DNOW,Industrials,Trading Companies & Distributors
 DORM,Consumer Discretionary,Automotive Parts & Equipment
@@ -1108,7 +1110,6 @@ HAYW,Industrials,Electrical Components & Equipment
 HCC,Materials,Steel
 HCI,Financials,Property & Casualty Insurance
 HCSG,Industrials,Environmental & Facilities Services
-HFWA,Financials,Regional Banks
 HIW,Real Estate,Office REITs
 HLIT,Information Technology,Communications Equipment
 HMN,Financials,Multi-line Insurance
@@ -1373,7 +1374,6 @@ URBN,Consumer Discretionary,Apparel Retail
 USLM,Materials,Construction Materials
 USPH,Health Care,Health Care Facilities
 UTI,Consumer Discretionary,Education Services
-UTL,Utilities,Electric Utilities
 UVV,Consumer Staples,Tobacco
 VAC,Consumer Discretionary,"Hotels, Resorts & Cruise Lines"
 VCEL,Health Care,Biotechnology

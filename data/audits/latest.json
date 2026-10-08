@@ -1,13 +1,13 @@
 {
   "1. Price history completeness": {
-    "headline": "1732/1742 symbols are complete over their own span; 34 reach 15+ years",
+    "headline": "1734/1744 symbols are complete over their own span; 34 reach 15+ years",
     "numbers": {
-      "symbols in lake": 1742,
-      "complete over own span": 1732,
+      "symbols in lake": 1744,
+      "complete over own span": 1734,
       "under 99% complete": 9,
       "1-2 bar stubs": 0,
       "span >= 15 years": 34,
-      "median span (years)": 10.754277891854894
+      "median span (years)": 10.757015742642025
     },
     "notes": [
       "Ragged symbols are usually halts or mid-delisting names where the vendor itself has no bar; see _schema.md Contract 5."
@@ -16,65 +16,65 @@
       {
         "symbol": "POM",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-06 00:00:00",
-        "bars": 306,
-        "expected": 2705,
+        "last_date": "2026-10-07 00:00:00",
+        "bars": 307,
+        "expected": 2706,
         "pct": 11.3
       },
       {
         "symbol": "CAM",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-06 00:00:00",
-        "bars": 314,
-        "expected": 2705,
+        "last_date": "2026-10-07 00:00:00",
+        "bars": 315,
+        "expected": 2706,
         "pct": 11.6
       },
       {
         "symbol": "PCL",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-06 00:00:00",
-        "bars": 330,
-        "expected": 2705,
+        "last_date": "2026-10-07 00:00:00",
+        "bars": 331,
+        "expected": 2706,
         "pct": 12.2
       },
       {
         "symbol": "CSRA",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-06 00:00:00",
-        "bars": 605,
-        "expected": 2705,
+        "last_date": "2026-10-07 00:00:00",
+        "bars": 606,
+        "expected": 2706,
         "pct": 22.4
       },
       {
         "symbol": "SPLS",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-06 00:00:00",
-        "bars": 608,
-        "expected": 2705,
+        "last_date": "2026-10-07 00:00:00",
+        "bars": 609,
+        "expected": 2706,
         "pct": 22.5
       },
       {
         "symbol": "NFX",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-06 00:00:00",
-        "bars": 849,
-        "expected": 2705,
+        "last_date": "2026-10-07 00:00:00",
+        "bars": 850,
+        "expected": 2706,
         "pct": 31.4
       },
       {
         "symbol": "APC",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-06 00:00:00",
-        "bars": 1069,
-        "expected": 2705,
+        "last_date": "2026-10-07 00:00:00",
+        "bars": 1070,
+        "expected": 2706,
         "pct": 39.5
       },
       {
         "symbol": "FB",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-06 00:00:00",
-        "bars": 1942,
-        "expected": 2705,
+        "last_date": "2026-10-07 00:00:00",
+        "bars": 1943,
+        "expected": 2706,
         "pct": 71.8
       },
       {
@@ -217,7 +217,7 @@
       },
       {
         "index": "SP1500",
-        "date": "2026-10-06",
+        "date": "2026-10-07",
         "members": 1504,
         "priced": 1497,
         "via_alias": 0,
@@ -264,8 +264,8 @@
       "on a canonical provider": 11,
       "manifest vs disk problems": 0,
       "secondary-source exceptions": 0,
-      "pending anchor factors": 1617,
-      "symbols with pending factors": 167
+      "pending anchor factors": 1497,
+      "symbols with pending factors": 168
     },
     "notes": [
       "Years on a cross-check provider (yahoo) carry Yahoo's semantics: close split-adjusted, not the raw print. See each partition's notes."
@@ -455,8 +455,8 @@
         "year": 2025,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 403339,
-        "symbols": 1627,
+        "rows": 403441,
+        "symbols": 1628,
         "first": "2025-01-02",
         "last": "2025-12-31"
       },
@@ -464,27 +464,27 @@
         "year": 2026,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 304249,
-        "symbols": 1622,
+        "rows": 306017,
+        "symbols": 1624,
         "first": "2026-01-02",
-        "last": "2026-10-06"
+        "last": "2026-10-07"
       }
     ]
   },
   "8. Current constituent coverage (unfiltered)": {
-    "headline": "on 2026-10-06: SP500 99.6%; SP400 100.0%; SP600 99.2%; SP1500 99.5%",
+    "headline": "on 2026-10-07: SP500 100.0%; SP400 100.0%; SP600 99.2%; SP1500 99.7%",
     "numbers": {
-      "latest lake session": "2026-10-06",
-      "unpriced current members": 7
+      "latest lake session": "2026-10-07",
+      "unpriced current members": 5
     },
     "notes": [],
     "table": [
       {
         "index": "SP500",
         "members": 503,
-        "priced": 501,
-        "coverage": "99.6%",
-        "missing_sample": "PSKY, WBD"
+        "priced": 503,
+        "coverage": "100.0%",
+        "missing_sample": ""
       },
       {
         "index": "SP400",
@@ -502,18 +502,18 @@
       },
       {
         "index": "SP1500",
-        "members": 1504,
-        "priced": 1497,
-        "coverage": "99.5%",
-        "missing_sample": "BLFS, CWEN-A, HLX, LEG, PSKY, QRVO, WBD"
+        "members": 1503,
+        "priced": 1498,
+        "coverage": "99.7%",
+        "missing_sample": "BLFS, CWEN-A, HLX, LEG, QRVO"
       }
     ]
   },
   "9. Latest completed session": {
     "headline": "the lake holds the latest completed session",
     "numbers": {
-      "latest completed weekday (NY)": "2026-10-06",
-      "lake frontier": "2026-10-06",
+      "latest completed weekday (NY)": "2026-10-07",
+      "lake frontier": "2026-10-07",
       "weekdays behind (holidays not excluded)": 0
     },
     "notes": [],
@@ -592,12 +592,12 @@
     ]
   },
   "11. Corporate-action mismatches and aliases": {
-    "headline": "481 adj_close move(s) beyond 40% in a day; 3460 rename(s) recorded",
+    "headline": "481 adj_close move(s) beyond 40% in a day; 3464 rename(s) recorded",
     "numbers": {
       "adj_close one-day moves > 40%": 481,
       "symbols affected": 251,
-      "pending anchor factors": 1617,
-      "recorded renames (symbol_aliases.csv)": 3460
+      "pending anchor factors": 1497,
+      "recorded renames (symbol_aliases.csv)": 3464
     },
     "notes": [
       "adj and raw moving together by a split ratio means the split was not applied to adj_close; adj moving alone means an anchor seam. Either is fixed by a symbol refresh: rebuild_prices.py --symbols <S>."
