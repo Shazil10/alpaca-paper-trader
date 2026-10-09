@@ -595,6 +595,7 @@ CRS,Industrials,Industrial Machinery & Supplies & Components
 CRUS,Information Technology,Semiconductors
 CSL,Industrials,Industrial Conglomerates
 CTRE,Real Estate,Health Care REITs
+CTVA,Materials,Fertilizers & Agricultural Chemicals
 CUBE,Real Estate,Industrial REITs
 CUZ,Real Estate,Office REITs
 CVLT,Information Technology,Systems Software
@@ -649,6 +650,7 @@ FN,Information Technology,Electronic Manufacturing Services
 FNB,Financials,Regional Banks
 FND,Consumer Discretionary,Home Improvement Retail
 FNF,Financials,Property & Casualty Insurance
+FORM,Information Technology,Semiconductor Materials & Equipment
 FOUR,Financials,Transaction & Payment Processing Services
 FR,Real Estate,Industrial REITs
 FTI,Energy,Oil & Gas Equipment & Services
@@ -758,7 +760,6 @@ OHI,Real Estate,Health Care REITs
 OKTA,Information Technology,Application Software
 OLED,Information Technology,Semiconductors
 OLLI,Consumer Discretionary,Broadline Retail
-OLN,Materials,Diversified Chemicals
 ONB,Financials,Regional Banks
 ONTO,Information Technology,Semiconductor Materials & Equipment
 OPCH,Health Care,Health Care Facilities
@@ -1036,7 +1037,6 @@ DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
 DEA,Real Estate,Office REITs
-DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
@@ -1082,7 +1082,6 @@ FHB,Financials,Regional Banks
 FIBK,Financials,Regional Banks
 FIVN,Information Technology,Application Software
 FIZZ,Consumer Staples,Soft Drinks & Non-alcoholic Beverages
-FORM,Information Technology,Semiconductor Materials & Equipment
 FOXF,Consumer Discretionary,Automotive Parts & Equipment
 FRPT,Consumer Staples,Packaged Foods & Meats
 FSS,Industrials,Construction Machinery & Heavy Transportation Equipment
@@ -1254,7 +1253,6 @@ PEB,Real Estate,Hotel & Resort REITs
 PECO,Real Estate,Retail REITs
 PENG,Information Technology,Semiconductors
 PENN,Consumer Discretionary,Casinos & Gaming
-PFBC,Financials,Regional Banks
 PFS,Financials,Regional Banks
 PGNY,Health Care,Health Care Services
 PHIN,Consumer Discretionary,Automotive Retail
@@ -1356,7 +1354,6 @@ TGTX,Health Care,Biotechnology
 THRM,Consumer Discretionary,Automotive Parts & Equipment
 TILE,Industrials,Office Services & Supplies
 TMDX,Health Care,Health Care Equipment
-TNC,Industrials,Industrial Machinery & Supplies & Components
 TNDM,Health Care,Health Care Equipment
 TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
@@ -1404,7 +1401,6 @@ WKC,Energy,Oil & Gas Refining & Marketing
 WLY,Communication Services,Publishing
 WOR,Industrials,Building Products
 WRBY,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
-WRLD,Financials,Consumer Finance
 WS,Materials,Steel
 WSBC,Financials,Regional Banks
 WSC,Industrials,Office Services & Supplies

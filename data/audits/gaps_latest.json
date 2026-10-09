@@ -1,6 +1,6 @@
 {
   "window_start": "2016-01-01",
-  "frontier": "2026-10-07",
+  "frontier": "2026-10-08",
   "providers_by_year": {
     "2005": "yahoo",
     "2006": "yahoo",
@@ -28,10 +28,10 @@
   "classes": {
     "A": {
       "label": "covered",
-      "intervals": 1711,
-      "symbols": 1621,
-      "member_sessions": 1327084,
-      "share_of_member_sessions": 0.9664861022706251,
+      "intervals": 1714,
+      "symbols": 1623,
+      "member_sessions": 1328583,
+      "share_of_member_sessions": 0.966517727235692,
       "examples": [
         "A",
         "AA",
@@ -64,8 +64,8 @@
       "label": "covered via alias",
       "intervals": 25,
       "symbols": 25,
-      "member_sessions": 35631,
-      "share_of_member_sessions": 0.025949273979646085,
+      "member_sessions": 35632,
+      "share_of_member_sessions": 0.025921571822657804,
       "examples": [
         "ABC",
         "ANTM",
@@ -98,8 +98,8 @@
       "label": "holes while a member",
       "intervals": 17,
       "symbols": 17,
-      "member_sessions": 9155,
-      "share_of_member_sessions": 0.006667385234308886,
+      "member_sessions": 9158,
+      "share_of_member_sessions": 0.0066622629869751955,
       "examples": [
         "AABA",
         "ANDV",
@@ -166,8 +166,8 @@
       "label": "unresolvable identifier",
       "intervals": 6,
       "symbols": 6,
-      "member_sessions": 1232,
-      "share_of_member_sessions": 0.0008972385154198305,
+      "member_sessions": 1235,
+      "share_of_member_sessions": 0.0008984379546750782,
       "examples": [
         "CWEN-A",
         "HLX",
@@ -187,7 +187,7 @@
       "F": 0
     },
     "SP500": {
-      "A": 713,
+      "A": 716,
       "B": 25,
       "C": 15,
       "D": 508,
@@ -257,11 +257,11 @@
       "index": "SP500",
       "symbol": "APTV",
       "start": "2012-12-24",
-      "end": "2026-10-07",
+      "end": "2026-10-08",
       "left_censored": "False",
       "lake_symbol": "APTV",
-      "expected": "2706",
-      "priced": "2232",
+      "expected": "2707",
+      "priced": "2233",
       "class": "C"
     },
     {
@@ -444,11 +444,11 @@
       "index": "SP500",
       "symbol": "IR",
       "start": "2010-11-17",
-      "end": "2026-10-07",
+      "end": "2026-10-08",
       "left_censored": "False",
       "lake_symbol": "TT",
-      "expected": "2706",
-      "priced": "2706",
+      "expected": "2707",
+      "priced": "2707",
       "class": "B"
     },
     {
@@ -686,10 +686,10 @@
       "index": "SP600",
       "symbol": "BLFS",
       "start": "2026-09-27",
-      "end": "2026-10-07",
+      "end": "2026-10-08",
       "left_censored": "True",
       "lake_symbol": "BLFS",
-      "expected": "8",
+      "expected": "9",
       "priced": "6",
       "class": "C"
     },
@@ -697,10 +697,10 @@
       "index": "SP600",
       "symbol": "CWEN-A",
       "start": "2026-09-27",
-      "end": "2026-10-07",
+      "end": "2026-10-08",
       "left_censored": "True",
       "lake_symbol": "None",
-      "expected": "8",
+      "expected": "9",
       "priced": "0",
       "class": "F"
     },
@@ -708,10 +708,10 @@
       "index": "SP600",
       "symbol": "HLX",
       "start": "2026-09-27",
-      "end": "2026-10-07",
+      "end": "2026-10-08",
       "left_censored": "True",
       "lake_symbol": "None",
-      "expected": "8",
+      "expected": "9",
       "priced": "0",
       "class": "F"
     },
@@ -719,10 +719,10 @@
       "index": "SP600",
       "symbol": "LEG",
       "start": "2026-09-27",
-      "end": "2026-10-07",
+      "end": "2026-10-08",
       "left_censored": "True",
       "lake_symbol": "None",
-      "expected": "8",
+      "expected": "9",
       "priced": "0",
       "class": "F"
     },
@@ -730,10 +730,10 @@
       "index": "SP600",
       "symbol": "QRVO",
       "start": "2026-09-27",
-      "end": "2026-10-07",
+      "end": "2026-10-08",
       "left_censored": "True",
       "lake_symbol": "QRVO",
-      "expected": "8",
+      "expected": "9",
       "priced": "5",
       "class": "C"
     }

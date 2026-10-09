@@ -5,3 +5,7 @@ observed_date,effective_date,index,symbol,event,source
 2026-10-08,2026-10-08,SP500,CTVA,remove,wikipedia
 2026-10-08,2026-10-08,SP500,PSKY,remove,wikipedia
 2026-10-08,2026-10-08,SP500,WBD,remove,wikipedia
+2026-10-09,2026-10-09,SP400,CTVA,add,wikipedia
+2026-10-09,2026-10-09,SP400,FORM,add,wikipedia
+2026-10-09,2026-10-09,SP400,OLN,remove,wikipedia
+2026-10-09,2026-10-09,SP400,TWLO,remove,wikipedia
