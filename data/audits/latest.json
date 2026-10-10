@@ -7,7 +7,7 @@
       "under 99% complete": 9,
       "1-2 bar stubs": 0,
       "span >= 15 years": 34,
-      "median span (years)": 10.759753593429158
+      "median span (years)": 10.76249144421629
     },
     "notes": [
       "Ragged symbols are usually halts or mid-delisting names where the vendor itself has no bar; see _schema.md Contract 5."
@@ -16,65 +16,65 @@
       {
         "symbol": "POM",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-08 00:00:00",
-        "bars": 308,
-        "expected": 2707,
+        "last_date": "2026-10-09 00:00:00",
+        "bars": 309,
+        "expected": 2708,
         "pct": 11.4
       },
       {
         "symbol": "CAM",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-08 00:00:00",
-        "bars": 316,
-        "expected": 2707,
+        "last_date": "2026-10-09 00:00:00",
+        "bars": 317,
+        "expected": 2708,
         "pct": 11.7
       },
       {
         "symbol": "PCL",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-08 00:00:00",
-        "bars": 332,
-        "expected": 2707,
+        "last_date": "2026-10-09 00:00:00",
+        "bars": 333,
+        "expected": 2708,
         "pct": 12.3
       },
       {
         "symbol": "CSRA",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-08 00:00:00",
-        "bars": 607,
-        "expected": 2707,
-        "pct": 22.4
+        "last_date": "2026-10-09 00:00:00",
+        "bars": 608,
+        "expected": 2708,
+        "pct": 22.5
       },
       {
         "symbol": "SPLS",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-08 00:00:00",
-        "bars": 610,
-        "expected": 2707,
-        "pct": 22.5
+        "last_date": "2026-10-09 00:00:00",
+        "bars": 611,
+        "expected": 2708,
+        "pct": 22.6
       },
       {
         "symbol": "NFX",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-08 00:00:00",
-        "bars": 851,
-        "expected": 2707,
-        "pct": 31.4
+        "last_date": "2026-10-09 00:00:00",
+        "bars": 852,
+        "expected": 2708,
+        "pct": 31.5
       },
       {
         "symbol": "APC",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-08 00:00:00",
-        "bars": 1071,
-        "expected": 2707,
+        "last_date": "2026-10-09 00:00:00",
+        "bars": 1072,
+        "expected": 2708,
         "pct": 39.6
       },
       {
         "symbol": "FB",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-10-08 00:00:00",
-        "bars": 1944,
-        "expected": 2707,
+        "last_date": "2026-10-09 00:00:00",
+        "bars": 1945,
+        "expected": 2708,
         "pct": 71.8
       },
       {
@@ -217,9 +217,9 @@
       },
       {
         "index": "SP1500",
-        "date": "2026-10-08",
-        "members": 1504,
-        "priced": 1499,
+        "date": "2026-10-09",
+        "members": 1503,
+        "priced": 1498,
         "via_alias": 0,
         "coverage": "100%"
       }
@@ -464,17 +464,17 @@
         "year": 2026,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 307590,
+        "rows": 309163,
         "symbols": 1624,
         "first": "2026-01-02",
-        "last": "2026-10-08"
+        "last": "2026-10-09"
       }
     ]
   },
   "8. Current constituent coverage (unfiltered)": {
-    "headline": "on 2026-10-08: SP500 100.0%; SP400 100.0%; SP600 99.2%; SP1500 99.7%",
+    "headline": "on 2026-10-09: SP500 100.0%; SP400 100.0%; SP600 99.2%; SP1500 99.7%",
     "numbers": {
-      "latest lake session": "2026-10-08",
+      "latest lake session": "2026-10-09",
       "unpriced current members": 5
     },
     "notes": [],
@@ -512,8 +512,8 @@
   "9. Latest completed session": {
     "headline": "the lake holds the latest completed session",
     "numbers": {
-      "latest completed weekday (NY)": "2026-10-08",
-      "lake frontier": "2026-10-08",
+      "latest completed weekday (NY)": "2026-10-09",
+      "lake frontier": "2026-10-09",
       "weekdays behind (holidays not excluded)": 0
     },
     "notes": [],

@@ -911,7 +911,6 @@ ACLS,Information Technology,Semiconductor Materials & Equipment
 ACMR,Information Technology,Semiconductor Materials & Equipment
 ACT,Financials,Commercial & Residential Mortgage Finance
 ADEA,Information Technology,IT Consulting & Other Services
-ADIG,Information Technology,Electronic Equipment & Instruments
 ADMA,Health Care,Biotechnology
 ADNT,Consumer Discretionary,Automotive Parts & Equipment
 ADUS,Health Care,Health Care Services
@@ -1203,6 +1202,7 @@ MLKN,Industrials,Office Services & Supplies
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
+MRTN,Industrials,Cargo Ground Transportation
 MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
@@ -1328,6 +1328,7 @@ SKYW,Industrials,Passenger Airlines
 SLG,Real Estate,Office REITs
 SLVM,Materials,Paper Products
 SM,Energy,Oil & Gas Exploration & Production
+SMPL,Consumer Staples,Packaged Foods & Meats
 SNDR,Industrials,Cargo Ground Transportation
 SNEX,Financials,Investment Banking & Brokerage
 SONO,Consumer Discretionary,Consumer Electronics
