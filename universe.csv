@@ -934,7 +934,6 @@ AMSF,Financials,Property & Casualty Insurance
 AMTM,Industrials,Diversified Support Services
 ANDE,Consumer Staples,Food Distributors
 ANIP,Health Care,Pharmaceuticals
-AORT,Health Care,Health Care Equipment
 AOSL,Information Technology,Semiconductors
 APAM,Financials,Asset Management & Custody Banks
 APLE,Real Estate,Hotel & Resort REITs
@@ -1035,7 +1034,6 @@ DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
-DEA,Real Estate,Office REITs
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
@@ -1052,6 +1050,7 @@ ECG,Industrials,Construction & Engineering
 ECPG,Financials,Consumer Finance
 EFC,Financials,Specialized Finance
 EFOR,Information Technology,IT Consulting & Other Services
+EGBN,Financials,Regional Banks
 EMN,Materials,Specialty Chemicals
 ENOV,Health Care,Health Care Equipment
 ENPH,Information Technology,Semiconductor Materials & Equipment
@@ -1191,7 +1190,6 @@ MCRI,Consumer Discretionary,Casinos & Gaming
 MCY,Financials,Property & Casualty Insurance
 MD,Health Care,Health Care Services
 MDU,Utilities,Multi-Utilities
-MFP,Industrials,Industrial Machinery & Supplies & Components
 MGEE,Utilities,Electric Utilities
 MGY,Energy,Oil & Gas Exploration & Production
 MHK,Consumer Discretionary,Home Furnishings
@@ -1253,6 +1251,7 @@ PEB,Real Estate,Hotel & Resort REITs
 PECO,Real Estate,Retail REITs
 PENG,Information Technology,Semiconductors
 PENN,Consumer Discretionary,Casinos & Gaming
+PFBC,Financials,Regional Banks
 PFS,Financials,Regional Banks
 PGNY,Health Care,Health Care Services
 PHIN,Consumer Discretionary,Automotive Retail
@@ -1337,7 +1336,6 @@ SPNT,Financials,Reinsurance
 SPSC,Information Technology,Application Software
 SRPT,Health Care,Biotechnology
 STAA,Health Care,Health Care Equipment
-STBA,Financials,Regional Banks
 STC,Financials,Property & Casualty Insurance
 STEP,Financials,Asset Management & Custody Banks
 STRA,Consumer Discretionary,Education Services
@@ -1360,7 +1358,6 @@ TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
 TRN,Industrials,Construction Machinery & Heavy Transportation Equipment
 TRNO,Real Estate,Industrial REITs
-TRUP,Financials,Life & Health Insurance
 UCB,Financials,Regional Banks
 UCTT,Information Technology,Semiconductor Materials & Equipment
 UE,Real Estate,Retail REITs
