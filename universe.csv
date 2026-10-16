@@ -927,10 +927,8 @@ ALGT,Industrials,Passenger Airlines
 ALKS,Health Care,Pharmaceuticals
 ALRM,Financials,Application Software
 AMN,Health Care,Health Care Services
-AMPH,Health Care,Pharmaceuticals
 AMR,Materials,Steel
 AMRX,Health Care,Pharmaceuticals
-AMSF,Financials,Property & Casualty Insurance
 AMTM,Industrials,Diversified Support Services
 ANDE,Consumer Staples,Food Distributors
 ANIP,Health Care,Pharmaceuticals
@@ -944,7 +942,6 @@ ARLO,Information Technology,Communications Equipment
 AROC,Energy,Oil & Gas Equipment & Services
 ARR,Real Estate,Mortgage REITs
 ASO,Consumer Discretionary,Specialty Stores
-ASTE,Industrials,Construction Machinery & Heavy Transportation Equipment
 ASTH,Health Care,Health Care Facilities
 ATEN,Information Technology,Systems Software
 ATMU,Industrials,Industrial Machinery & Supplies & Components
@@ -993,11 +990,9 @@ CBU,Financials,Regional Banks
 CC,Materials,Diversified Chemicals
 CCS,Consumer Discretionary,Homebuilding
 CE,Materials,Specialty Chemicals
-CENTA,Consumer Staples,Household Products
 CENX,Materials,Aluminum
 CHCO,Financials,Regional Banks
 CHEF,Consumer Staples,Food Distributors
-CLSK,Information Technology,Internet Services & Infrastructure
 CNK,Communication Services,Movies & Entertainment
 CNMD,Health Care,Health Care Equipment
 CNR,Energy,Coal & Consumable Fuels
@@ -1087,7 +1082,6 @@ FTRE,Health Care,Biotechnology
 FUL,Materials,Specialty Chemicals
 FULT,Financials,Regional Banks
 FUN,Consumer Discretionary,Leisure Facilities
-GBX,Industrials,Construction Machinery & Heavy Transportation Equipment
 GEO,Industrials,Environmental & Facilities Services
 GFF,Industrials,Building Products
 GIII,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
@@ -1168,7 +1162,6 @@ LNC,Financials,Multi-line Insurance
 LNN,Materials,Agricultural & Farm Machinery
 LPG,Energy,Oil & Gas Storage & Transportation
 LQDA,Health Care,Pharmaceuticals
-LQDT,Industrials,Diversified Support Services
 LRN,Consumer Discretionary,Education Services
 LTC,Real Estate,Health Care REITs
 LTH,Consumer Discretionary,Leisure Facilities
@@ -1178,7 +1171,6 @@ LYFT,Industrials,Passenger Ground Transportation
 LZB,Consumer Discretionary,Home Furnishings
 MAC,Real Estate,Retail REITs
 MAN,Industrials,Human Resource & Employment Services
-MATW,Consumer Discretionary,Specialized Consumer Services
 MATX,Industrials,Marine Transportation
 MBGL,Industrials,Data Processing & Outsourced Services
 MC,Financials,Investment Banking & Brokerage
@@ -1187,7 +1179,6 @@ MCY,Financials,Property & Casualty Insurance
 MD,Health Care,Health Care Services
 MDU,Utilities,Multi-Utilities
 MFP,Industrials,Industrial Machinery & Supplies & Components
-MGEE,Utilities,Electric Utilities
 MGY,Energy,Oil & Gas Exploration & Production
 MHK,Consumer Discretionary,Home Furnishings
 MHO,Consumer Discretionary,Homebuilding
@@ -1234,7 +1225,6 @@ OSIS,Information Technology,Electronic Equipment & Instruments
 OSW,Consumer Discretionary,Leisure Facilities
 OTTR,Utilities,Electric Utilities
 OUT,Real Estate,Other Specialized REITs
-PAHC,Health Care,Pharmaceuticals
 PARR,Energy,Oil & Gas Refining & Marketing
 PATK,Consumer Discretionary,Automotive Parts & Equipment
 PAYC,Industrials,Human Resource & Employment Services
@@ -1246,7 +1236,6 @@ PEB,Real Estate,Hotel & Resort REITs
 PECO,Real Estate,Retail REITs
 PENG,Information Technology,Semiconductors
 PENN,Consumer Discretionary,Casinos & Gaming
-PFBC,Financials,Regional Banks
 PFS,Financials,Regional Banks
 PGNY,Health Care,Health Care Services
 PHIN,Consumer Discretionary,Automotive Retail
