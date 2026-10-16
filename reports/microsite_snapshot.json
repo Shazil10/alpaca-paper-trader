@@ -1,8 +1,8 @@
 {
   "schema_version": 4,
-  "generated_at": "2026-10-15T19:46:20-04:00",
-  "snapshot_date": "2026-10-15",
-  "last_report_date": "2026-10-15",
+  "generated_at": "2026-10-16T19:47:06-04:00",
+  "snapshot_date": "2026-10-16",
+  "last_report_date": "2026-10-16",
   "status_label": "active",
   "source": "Alpaca paper account",
   "data_source": "Alpaca paper account",
@@ -23,7 +23,7 @@
   "strategy_count": 3,
   "total_committed": 36098.22,
   "total_remaining": 3982.6,
-  "total_market_value_attributed": 34896.8,
+  "total_market_value_attributed": 34837.1,
   "total_realized_pnl_closed": 4556.66,
   "strategy_order_realized_pnl_desc": [
     "high-pullback-reversion",
@@ -46,37 +46,37 @@
       "capital_cap": 15000,
       "committed": 14968.74,
       "remaining": 31.26,
-      "market_value_attributed": 18277.06,
+      "market_value_attributed": 18090.11,
       "realized_pnl_closed": 5088.63,
-      "utilization_by_market_value": 121.8,
+      "utilization_by_market_value": 120.6,
       "holdings": [
         {
           "symbol": "FOUR",
           "qty": 192.0,
-          "market_value": 7553.28,
-          "current_price": 39.34,
-          "unrealized_pl": -2478.72
+          "market_value": 7570.56,
+          "current_price": 39.43,
+          "unrealized_pl": -2461.44
         },
         {
           "symbol": "HIMS",
           "qty": 42.0,
-          "market_value": 1222.2,
-          "current_price": 29.1,
-          "unrealized_pl": -255.78
+          "market_value": 1178.94,
+          "current_price": 28.07,
+          "unrealized_pl": -299.04
         },
         {
           "symbol": "SFM",
           "qty": 120.0,
-          "market_value": 7920.0,
-          "current_price": 66.0,
-          "unrealized_pl": -1455.6
+          "market_value": 7777.2,
+          "current_price": 64.81,
+          "unrealized_pl": -1598.4
         },
         {
           "symbol": "WWW",
           "qty": 79.0,
-          "market_value": 1581.58,
-          "current_price": 20.02,
-          "unrealized_pl": 182.49
+          "market_value": 1563.41,
+          "current_price": 19.79,
+          "unrealized_pl": 164.32
         }
       ],
       "live_since_date": "2026-04-20",
@@ -94,51 +94,51 @@
       "capital_cap": 10000,
       "committed": 10080.82,
       "remaining": 0.0,
-      "market_value_attributed": 5822.81,
+      "market_value_attributed": 5858.63,
       "realized_pnl_closed": -228.13,
-      "utilization_by_market_value": 58.2,
+      "utilization_by_market_value": 58.6,
       "holdings": [
         {
           "symbol": "AVTR",
           "qty": 191.0,
-          "market_value": 3073.19,
-          "current_price": 16.09,
-          "unrealized_pl": 500.42
+          "market_value": 3139.91,
+          "current_price": 16.4393,
+          "unrealized_pl": 567.14
         },
         {
           "symbol": "CAKE",
           "qty": 1.0,
-          "market_value": 117.59,
-          "current_price": 117.5943,
-          "unrealized_pl": 18.09
+          "market_value": 113.74,
+          "current_price": 113.737,
+          "unrealized_pl": 14.24
         },
         {
           "symbol": "CORT",
           "qty": 1.0,
-          "market_value": 113.37,
-          "current_price": 113.37,
-          "unrealized_pl": -4.31
+          "market_value": 109.84,
+          "current_price": 109.84,
+          "unrealized_pl": -7.84
         },
         {
           "symbol": "EAT",
           "qty": 11.0,
-          "market_value": 2254.01,
-          "current_price": 204.91,
-          "unrealized_pl": -221.76
+          "market_value": 2245.54,
+          "current_price": 204.14,
+          "unrealized_pl": -230.23
         },
         {
           "symbol": "QLYS",
           "qty": 1.0,
-          "market_value": 192.65,
-          "current_price": 192.65,
-          "unrealized_pl": 11.51
+          "market_value": 181.05,
+          "current_price": 181.05,
+          "unrealized_pl": -0.09
         },
         {
           "symbol": "XNCR",
           "qty": 3.0,
-          "market_value": 72.0,
-          "current_price": 24.0,
-          "unrealized_pl": 8.4
+          "market_value": 68.55,
+          "current_price": 22.85,
+          "unrealized_pl": 4.95
         }
       ],
       "live_since_date": "2026-02-12",
@@ -156,51 +156,51 @@
       "capital_cap": 15000,
       "committed": 11048.66,
       "remaining": 3951.34,
-      "market_value_attributed": 10796.93,
+      "market_value_attributed": 10888.36,
       "realized_pnl_closed": -303.84,
-      "utilization_by_market_value": 72.0,
+      "utilization_by_market_value": 72.6,
       "holdings": [
         {
           "symbol": "XLE",
           "qty": 25.0,
-          "market_value": 1664.0,
-          "current_price": 66.56,
-          "unrealized_pl": 192.25
+          "market_value": 1706.71,
+          "current_price": 68.2685,
+          "unrealized_pl": 234.96
         },
         {
           "symbol": "XLF",
           "qty": 28.0,
-          "market_value": 1548.4,
-          "current_price": 55.3,
-          "unrealized_pl": 80.92
+          "market_value": 1552.9,
+          "current_price": 55.4608,
+          "unrealized_pl": 85.42
         },
         {
           "symbol": "XLI",
           "qty": 5.0,
-          "market_value": 839.7,
-          "current_price": 167.94,
-          "unrealized_pl": -68.93
+          "market_value": 836.46,
+          "current_price": 167.2919,
+          "unrealized_pl": -72.17
         },
         {
           "symbol": "XLK",
           "qty": 4.0,
-          "market_value": 753.44,
-          "current_price": 188.36,
-          "unrealized_pl": 106.48
+          "market_value": 732.82,
+          "current_price": 183.2042,
+          "unrealized_pl": 85.86
         },
         {
           "symbol": "XLP",
           "qty": 36.6802,
-          "market_value": 3177.28,
-          "current_price": 86.621,
-          "unrealized_pl": 52.28
+          "market_value": 3215.02,
+          "current_price": 87.65,
+          "unrealized_pl": 90.02
         },
         {
           "symbol": "XLU",
           "qty": 67.4361,
-          "market_value": 2814.11,
-          "current_price": 41.73,
-          "unrealized_pl": -310.89
+          "market_value": 2844.45,
+          "current_price": 42.18,
+          "unrealized_pl": -280.55
         }
       ],
       "live_since_date": "2026-03-11",
