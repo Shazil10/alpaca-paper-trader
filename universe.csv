@@ -990,6 +990,7 @@ CBU,Financials,Regional Banks
 CC,Materials,Diversified Chemicals
 CCS,Consumer Discretionary,Homebuilding
 CE,Materials,Specialty Chemicals
+CENTA,Consumer Staples,Household Products
 CENX,Materials,Aluminum
 CHCO,Financials,Regional Banks
 CHEF,Consumer Staples,Food Distributors
@@ -1029,6 +1030,7 @@ DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
+DEA,Real Estate,Office REITs
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
@@ -1081,7 +1083,6 @@ FTDR,Consumer Discretionary,Specialized Consumer Services
 FTRE,Health Care,Biotechnology
 FUL,Materials,Specialty Chemicals
 FULT,Financials,Regional Banks
-GBX,Industrials,Construction Machinery & Heavy Transportation Equipment
 GEO,Industrials,Environmental & Facilities Services
 GFF,Industrials,Building Products
 GIII,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
@@ -1128,7 +1129,6 @@ IRDM,Communication Services,Alternative Carriers
 ITGR,Health Care,Health Care Equipment
 ITRI,Information Technology,Electronic Equipment & Instruments
 IVT,Real Estate,Retail REITs
-JBSS,Consumer Staples,Packaged Foods & Meats
 JBTM,Industrials,Industrial Machinery & Supplies & Components
 JJSF,Consumer Staples,Packaged Foods & Meats
 JOE,Real Estate,Real Estate Development
@@ -1163,7 +1163,6 @@ LNC,Financials,Multi-line Insurance
 LNN,Materials,Agricultural & Farm Machinery
 LPG,Energy,Oil & Gas Storage & Transportation
 LQDA,Health Care,Pharmaceuticals
-LQDT,Industrials,Diversified Support Services
 LRN,Consumer Discretionary,Education Services
 LTC,Real Estate,Health Care REITs
 LTH,Consumer Discretionary,Leisure Facilities
@@ -1189,7 +1188,6 @@ MKTX,Financials,Financial Exchanges & Data
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
-MRTN,Industrials,Cargo Ground Transportation
 MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
@@ -1277,7 +1275,6 @@ RCUS,Health Care,Biotechnology
 RDN,Financials,Property & Casualty Insurance
 RDNT,Health Care,Health Care Services
 RELY,Financials,Transaction & Payment Processing Services
-REX,Energy,Oil & Gas Refining & Marketing
 REYN,Consumer Staples,Household Products
 REZI,Industrials,Trading Companies & Distributors
 RHI,Industrials,Human Resource & Employment Services
@@ -1291,7 +1288,6 @@ RRR,Consumer Discretionary,Casinos & Gaming
 RSI,Consumer Discretionary,Casinos & Gaming
 RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment
 RXO,Industrials,Cargo Ground Transportation
-SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
 SBH,Consumer Discretionary,Specialty Stores
@@ -1344,6 +1340,7 @@ TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
 TRN,Industrials,Construction Machinery & Heavy Transportation Equipment
 TRNO,Real Estate,Industrial REITs
+TRUP,Financials,Life & Health Insurance
 UCB,Financials,Regional Banks
 UCTT,Information Technology,Semiconductor Materials & Equipment
 UE,Real Estate,Retail REITs
