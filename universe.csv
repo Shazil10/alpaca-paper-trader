@@ -990,7 +990,6 @@ CBU,Financials,Regional Banks
 CC,Materials,Diversified Chemicals
 CCS,Consumer Discretionary,Homebuilding
 CE,Materials,Specialty Chemicals
-CENTA,Consumer Staples,Household Products
 CENX,Materials,Aluminum
 CHCO,Financials,Regional Banks
 CHEF,Consumer Staples,Food Distributors
@@ -1013,7 +1012,6 @@ CRK,Energy,Oil & Gas Exploration & Production
 CRSR,Information Technology,"Technology Hardware, Storage & Peripherals"
 CRVL,Health Care,Health Care Services
 CSW,Industrials,Industrial Conglomerates
-CTS,Information Technology,Electronic Manufacturing Services
 CUBI,Financials,Regional Banks
 CURB,Real Estate,Retail REITs
 CVBF,Financials,Regional Banks
@@ -1065,7 +1063,6 @@ EYE,Consumer Discretionary,Specialty Stores
 EZPW,Financials,Consumer Finance
 FA,Industrials,Human Resource & Employment Services
 FBK,Financials,Regional Banks
-FBNC,Financials,Regional Banks
 FBP,Financials,Regional Banks
 FCF,Financials,Regional Banks
 FCPT,Real Estate,Other Specialized REITs
@@ -1083,6 +1080,7 @@ FTDR,Consumer Discretionary,Specialized Consumer Services
 FTRE,Health Care,Biotechnology
 FUL,Materials,Specialty Chemicals
 FULT,Financials,Regional Banks
+GBX,Industrials,Construction Machinery & Heavy Transportation Equipment
 GEO,Industrials,Environmental & Facilities Services
 GFF,Industrials,Building Products
 GIII,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
@@ -1192,7 +1190,6 @@ MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
 MTRN,Materials,Diversified Metals & Mining
-MTX,Materials,Specialty Chemicals
 MWA,Industrials,Industrial Machinery & Supplies & Components
 MXL,Information Technology,Semiconductors
 MYRG,Industrials,Construction & Engineering
@@ -1275,6 +1272,7 @@ RCUS,Health Care,Biotechnology
 RDN,Financials,Property & Casualty Insurance
 RDNT,Health Care,Health Care Services
 RELY,Financials,Transaction & Payment Processing Services
+REX,Energy,Oil & Gas Refining & Marketing
 REYN,Consumer Staples,Household Products
 REZI,Industrials,Trading Companies & Distributors
 RHI,Industrials,Human Resource & Employment Services
@@ -1335,6 +1333,7 @@ TGTX,Health Care,Biotechnology
 THRM,Consumer Discretionary,Automotive Parts & Equipment
 TILE,Industrials,Office Services & Supplies
 TMDX,Health Care,Health Care Equipment
+TNC,Industrials,Industrial Machinery & Supplies & Components
 TNDM,Health Care,Health Care Equipment
 TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
