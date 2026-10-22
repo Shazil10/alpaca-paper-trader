@@ -606,7 +606,7 @@ DAR,Consumer Staples,Agricultural Products & Services
 DBX,Information Technology,Application Software
 DCI,Industrials,Industrial Machinery & Supplies & Components
 DINO,Energy,Oil & Gas Refining & Marketing
-DKS,Consumer Discretionary,Specialty Stores
+DKS,Consumer Discretionary,Other Specialty Retail
 DLB,Information Technology,Application Software
 DOCN,Information Technology,Internet Services & Infrastructure
 DOCS,Health Care,Health Care Technology
@@ -642,7 +642,7 @@ FCN,Industrials,Research & Consulting Services
 FFIN,Financials,Regional Banks
 FHI,Financials,Asset Management & Custody Banks
 FHN,Financials,Regional Banks
-FIVE,Consumer Discretionary,Specialty Stores
+FIVE,Consumer Discretionary,Other Specialty Retail
 FLG,Financials,Regional Banks
 FLR,Industrials,Construction & Engineering
 FLS,Industrials,Industrial Machinery & Supplies & Components
@@ -915,7 +915,6 @@ ADMA,Health Care,Biotechnology
 ADNT,Consumer Discretionary,Automotive Parts & Equipment
 ADUS,Health Care,Health Care Services
 AEO,Consumer Discretionary,Apparel Retail
-AESI,Energy,Oil & Gas Equipment & Services
 AGO,Financials,Property & Casualty Insurance
 AGX,Industrials,Construction & Engineering
 AGYS,Information Technology,Application Software
@@ -941,8 +940,7 @@ ARCB,Industrials,Cargo Ground Transportation
 ARLO,Information Technology,Communications Equipment
 AROC,Energy,Oil & Gas Equipment & Services
 ARR,Real Estate,Mortgage REITs
-ASO,Consumer Discretionary,Specialty Stores
-ASTH,Health Care,Health Care Facilities
+ASO,Consumer Discretionary,Other Specialty Retail
 ATEN,Information Technology,Systems Software
 ATMU,Industrials,Industrial Machinery & Supplies & Components
 AUB,Financials,Regional Banks
@@ -990,6 +988,7 @@ CBU,Financials,Regional Banks
 CC,Materials,Diversified Chemicals
 CCS,Consumer Discretionary,Homebuilding
 CE,Materials,Specialty Chemicals
+CENTA,Consumer Staples,Household Products
 CENX,Materials,Aluminum
 CHCO,Financials,Regional Banks
 CHEF,Consumer Staples,Food Distributors
@@ -1028,7 +1027,6 @@ DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
-DEA,Real Estate,Office REITs
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
@@ -1059,7 +1057,7 @@ ESI,Materials,Specialty Chemicals
 ETSY,Consumer Discretionary,Broadline Retail
 EVTC,Financials,Transaction & Payment Processing Services
 EXTR,Information Technology,Communications Equipment
-EYE,Consumer Discretionary,Specialty Stores
+EYE,Consumer Discretionary,Other Specialty Retail
 EZPW,Financials,Consumer Finance
 FA,Industrials,Human Resource & Employment Services
 FBK,Financials,Regional Banks
@@ -1109,7 +1107,7 @@ HRMY,Health Care,Biotechnology
 HTO,Utilities,Water Utilities
 HUBG,Industrials,Air Freight & Logistics
 HWKN,Materials,Commodity Chemicals
-HZO,Consumer Discretionary,Specialty Stores
+HZO,Consumer Discretionary,Other Specialty Retail
 IART,Health Care,Health Care Equipment
 IBP,Consumer Discretionary,Homebuilding
 ICHR,Information Technology,Semiconductor Materials & Equipment
@@ -1288,7 +1286,7 @@ RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment
 RXO,Industrials,Cargo Ground Transportation
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
-SBH,Consumer Discretionary,Specialty Stores
+SBH,Consumer Discretionary,Other Specialty Retail
 SCHL,Consumer Discretionary,Publishing
 SCSC,Information Technology,Technology Distributors
 SDGR,Health Care,Health Care Services
@@ -1300,7 +1298,7 @@ SFNC,Financials,Regional Banks
 SHAK,Consumer Discretionary,Restaurants
 SHO,Real Estate,Hotel & Resort REITs
 SHOO,Consumer Discretionary,Footwear
-SIG,Consumer Discretionary,Specialty Stores
+SIG,Consumer Discretionary,Other Specialty Retail
 SKT,Real Estate,Retail REITs
 SKY,Consumer Discretionary,Homebuilding
 SKYW,Industrials,Passenger Airlines
