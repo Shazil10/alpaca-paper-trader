@@ -1010,6 +1010,7 @@ CRI,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
 CRK,Energy,Oil & Gas Exploration & Production
 CRSR,Information Technology,"Technology Hardware, Storage & Peripherals"
 CRVL,Health Care,Health Care Services
+CSR,Real Estate,Multi-Family Residential REITs
 CSW,Industrials,Industrial Conglomerates
 CUBI,Financials,Regional Banks
 CURB,Real Estate,Retail REITs
@@ -1061,6 +1062,7 @@ EYE,Consumer Discretionary,Other Specialty Retail
 EZPW,Financials,Consumer Finance
 FA,Industrials,Human Resource & Employment Services
 FBK,Financials,Regional Banks
+FBNC,Financials,Regional Banks
 FBP,Financials,Regional Banks
 FCF,Financials,Regional Banks
 FCPT,Real Estate,Other Specialized REITs
@@ -1181,6 +1183,7 @@ MHK,Consumer Discretionary,Home Furnishings
 MHO,Consumer Discretionary,Homebuilding
 MIR,Information Technology,Electronic Equipment & Instruments
 MKTX,Financials,Financial Exchanges & Data
+MLKN,Industrials,Office Services & Supplies
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
@@ -1231,6 +1234,7 @@ PEB,Real Estate,Hotel & Resort REITs
 PECO,Real Estate,Retail REITs
 PENG,Information Technology,Semiconductors
 PENN,Consumer Discretionary,Casinos & Gaming
+PFBC,Financials,Regional Banks
 PFS,Financials,Regional Banks
 PGNY,Health Care,Health Care Services
 PHIN,Consumer Discretionary,Automotive Retail
@@ -1284,6 +1288,7 @@ RRR,Consumer Discretionary,Casinos & Gaming
 RSI,Consumer Discretionary,Casinos & Gaming
 RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment
 RXO,Industrials,Cargo Ground Transportation
+SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
 SBH,Consumer Discretionary,Other Specialty Retail
@@ -1303,7 +1308,6 @@ SKT,Real Estate,Retail REITs
 SKY,Consumer Discretionary,Homebuilding
 SKYW,Industrials,Passenger Airlines
 SLG,Real Estate,Office REITs
-SLVM,Materials,Paper Products
 SM,Energy,Oil & Gas Exploration & Production
 SMPL,Consumer Staples,Packaged Foods & Meats
 SNDR,Industrials,Cargo Ground Transportation
@@ -1314,6 +1318,7 @@ SPNT,Financials,Reinsurance
 SPSC,Information Technology,Application Software
 SRPT,Health Care,Biotechnology
 STAA,Health Care,Health Care Equipment
+STBA,Financials,Regional Banks
 STC,Financials,Property & Casualty Insurance
 STEP,Financials,Asset Management & Custody Banks
 STRA,Consumer Discretionary,Education Services
@@ -1365,7 +1370,6 @@ VSH,Information Technology,Electronic Components
 VSNT,Communication Services,Cable & Satellite
 VSTS,Industrials,Diversified Support Services
 VSXY,Consumer Discretionary,Apparel Retail
-VTOL,Energy,Oil & Gas Equipment & Services
 VVX,Industrials,Aerospace & Defense
 WABC,Financials,Regional Banks
 WAFD,Financials,Regional Banks
