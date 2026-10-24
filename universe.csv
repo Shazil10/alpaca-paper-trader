@@ -1012,6 +1012,7 @@ CRSR,Information Technology,"Technology Hardware, Storage & Peripherals"
 CRVL,Health Care,Health Care Services
 CSR,Real Estate,Multi-Family Residential REITs
 CSW,Industrials,Industrial Conglomerates
+CTS,Information Technology,Electronic Manufacturing Services
 CUBI,Financials,Regional Banks
 CURB,Real Estate,Retail REITs
 CVBF,Financials,Regional Banks
@@ -1072,7 +1073,6 @@ FG,Financials,Life & Health Insurance
 FHB,Financials,Regional Banks
 FIBK,Financials,Regional Banks
 FIVN,Information Technology,Application Software
-FIZZ,Consumer Staples,Soft Drinks & Non-alcoholic Beverages
 FOXF,Consumer Discretionary,Automotive Parts & Equipment
 FRPT,Consumer Staples,Packaged Foods & Meats
 FSS,Industrials,Construction Machinery & Heavy Transportation Equipment
@@ -1106,6 +1106,7 @@ HNI,Industrials,Office Services & Supplies
 HOPE,Financials,Regional Banks
 HP,Energy,Oil & Gas Drilling
 HRMY,Health Care,Biotechnology
+HTH,Financials,Regional Banks
 HTO,Utilities,Water Utilities
 HUBG,Industrials,Air Freight & Logistics
 HWKN,Materials,Commodity Chemicals
@@ -1183,7 +1184,6 @@ MHK,Consumer Discretionary,Home Furnishings
 MHO,Consumer Discretionary,Homebuilding
 MIR,Information Technology,Electronic Equipment & Instruments
 MKTX,Financials,Financial Exchanges & Data
-MLKN,Industrials,Office Services & Supplies
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
@@ -1191,6 +1191,7 @@ MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
 MTRN,Materials,Diversified Metals & Mining
+MTX,Materials,Specialty Chemicals
 MWA,Industrials,Industrial Machinery & Supplies & Components
 MXL,Information Technology,Semiconductors
 MYRG,Industrials,Construction & Engineering
@@ -1265,7 +1266,6 @@ PTEN,Energy,Oil & Gas Drilling
 PTGX,Health Care,Biotechnology
 PZZA,Consumer Discretionary,Restaurants
 QDEL,Health Care,Health Care Supplies
-QNST,Communication Services,Interactive Media & Services
 QRVO,Information Technology,Semiconductors
 QTWO,Information Technology,Application Software
 RAL,Information Technology,Electronic Equipment & Instruments
@@ -1274,7 +1274,6 @@ RCUS,Health Care,Biotechnology
 RDN,Financials,Property & Casualty Insurance
 RDNT,Health Care,Health Care Services
 RELY,Financials,Transaction & Payment Processing Services
-REX,Energy,Oil & Gas Refining & Marketing
 REYN,Consumer Staples,Household Products
 REZI,Industrials,Trading Companies & Distributors
 RHI,Industrials,Human Resource & Employment Services
@@ -1293,6 +1292,7 @@ SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
 SBH,Consumer Discretionary,Other Specialty Retail
 SCHL,Consumer Discretionary,Publishing
+SCL,Materials,Specialty Chemicals
 SCSC,Information Technology,Technology Distributors
 SDGR,Health Care,Health Care Services
 SEDG,Information Technology,Semiconductor Materials & Equipment
@@ -1336,6 +1336,7 @@ TGTX,Health Care,Biotechnology
 THRM,Consumer Discretionary,Automotive Parts & Equipment
 TILE,Industrials,Office Services & Supplies
 TMDX,Health Care,Health Care Equipment
+TMP,Financials,Regional Banks
 TNC,Industrials,Industrial Machinery & Supplies & Components
 TNDM,Health Care,Health Care Equipment
 TPC,Industrials,Construction & Engineering
@@ -1370,6 +1371,7 @@ VSH,Information Technology,Electronic Components
 VSNT,Communication Services,Cable & Satellite
 VSTS,Industrials,Diversified Support Services
 VSXY,Consumer Discretionary,Apparel Retail
+VTOL,Energy,Oil & Gas Equipment & Services
 VVX,Industrials,Aerospace & Defense
 WABC,Financials,Regional Banks
 WAFD,Financials,Regional Banks
@@ -1384,6 +1386,7 @@ WKC,Energy,Oil & Gas Refining & Marketing
 WLY,Communication Services,Publishing
 WOR,Industrials,Building Products
 WRBY,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
+WRLD,Financials,Consumer Finance
 WS,Materials,Steel
 WSBC,Financials,Regional Banks
 WSC,Industrials,Office Services & Supplies
