@@ -990,6 +990,7 @@ CCS,Consumer Discretionary,Homebuilding
 CE,Materials,Specialty Chemicals
 CENTA,Consumer Staples,Household Products
 CENX,Materials,Aluminum
+CERT,Health Care,Health Care Technology
 CHCO,Financials,Regional Banks
 CHEF,Consumer Staples,Food Distributors
 CNK,Communication Services,Movies & Entertainment
@@ -1099,6 +1100,7 @@ HAYW,Industrials,Electrical Components & Equipment
 HCC,Materials,Steel
 HCI,Financials,Property & Casualty Insurance
 HCSG,Industrials,Environmental & Facilities Services
+HFWA,Financials,Regional Banks
 HIW,Real Estate,Office REITs
 HLIT,Information Technology,Communications Equipment
 HMN,Financials,Multi-line Insurance
@@ -1184,9 +1186,11 @@ MHK,Consumer Discretionary,Home Furnishings
 MHO,Consumer Discretionary,Homebuilding
 MIR,Information Technology,Electronic Equipment & Instruments
 MKTX,Financials,Financial Exchanges & Data
+MLKN,Industrials,Office Services & Supplies
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
+MRTN,Industrials,Cargo Ground Transportation
 MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
@@ -1211,6 +1215,7 @@ NPK,Industrials,Aerospace & Defense
 NPO,Industrials,Industrial Machinery & Supplies & Components
 NSIT,Industrials,Technology Distributors
 NSP,Industrials,Human Resource & Employment Services
+NSSC,Information Technology,Electronic Equipment & Instruments
 NTCT,Information Technology,Communications Equipment
 NTST,Real Estate,Retail REITs
 NWBI,Financials,Regional Banks
@@ -1266,7 +1271,6 @@ PTEN,Energy,Oil & Gas Drilling
 PTGX,Health Care,Biotechnology
 PZZA,Consumer Discretionary,Restaurants
 QDEL,Health Care,Health Care Supplies
-QRVO,Information Technology,Semiconductors
 QTWO,Information Technology,Application Software
 RAL,Information Technology,Electronic Equipment & Instruments
 RAMP,Information Technology,Application Software
@@ -1292,7 +1296,6 @@ SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
 SBH,Consumer Discretionary,Other Specialty Retail
 SCHL,Consumer Discretionary,Publishing
-SCL,Materials,Specialty Chemicals
 SCSC,Information Technology,Technology Distributors
 SDGR,Health Care,Health Care Services
 SEDG,Information Technology,Semiconductor Materials & Equipment
@@ -1343,7 +1346,6 @@ TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
 TRN,Industrials,Construction Machinery & Heavy Transportation Equipment
 TRNO,Real Estate,Industrial REITs
-TRUP,Financials,Life & Health Insurance
 UCB,Financials,Regional Banks
 UCTT,Information Technology,Semiconductor Materials & Equipment
 UE,Real Estate,Retail REITs
@@ -1371,9 +1373,7 @@ VSH,Information Technology,Electronic Components
 VSNT,Communication Services,Cable & Satellite
 VSTS,Industrials,Diversified Support Services
 VSXY,Consumer Discretionary,Apparel Retail
-VTOL,Energy,Oil & Gas Equipment & Services
 VVX,Industrials,Aerospace & Defense
-WABC,Financials,Regional Banks
 WAFD,Financials,Regional Banks
 WAY,Health Care,Health Care Technology
 WD,Financials,Commercial & Residential Mortgage Finance
