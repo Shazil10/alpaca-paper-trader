@@ -964,7 +964,6 @@ BJRI,Consumer Discretionary,Restaurants
 BKE,Consumer Discretionary,Apparel Retail
 BKU,Financials,Regional Banks
 BL,Information Technology,Application Software
-BLFS,Health Care,Health Care Supplies
 BLKB,Information Technology,Application Software
 BMI,Information Technology,Electronic Equipment & Instruments
 BNL,Real Estate,Industrial REITs
@@ -1030,6 +1029,8 @@ DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
+DEA,Real Estate,Office REITs
+DEI,Real Estate,Office REITs
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
@@ -1271,6 +1272,7 @@ PTEN,Energy,Oil & Gas Drilling
 PTGX,Health Care,Biotechnology
 PZZA,Consumer Discretionary,Restaurants
 QDEL,Health Care,Health Care Supplies
+QNST,Communication Services,Interactive Media & Services
 QTWO,Information Technology,Application Software
 RAL,Information Technology,Electronic Equipment & Instruments
 RAMP,Information Technology,Application Software
@@ -1291,11 +1293,13 @@ RRR,Consumer Discretionary,Casinos & Gaming
 RSI,Consumer Discretionary,Casinos & Gaming
 RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment
 RXO,Industrials,Cargo Ground Transportation
+SAFE,Real Estate,Other Specialized REITs
 SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
 SBH,Consumer Discretionary,Other Specialty Retail
 SCHL,Consumer Discretionary,Publishing
+SCL,Materials,Specialty Chemicals
 SCSC,Information Technology,Technology Distributors
 SDGR,Health Care,Health Care Services
 SEDG,Information Technology,Semiconductor Materials & Equipment
@@ -1340,7 +1344,6 @@ THRM,Consumer Discretionary,Automotive Parts & Equipment
 TILE,Industrials,Office Services & Supplies
 TMDX,Health Care,Health Care Equipment
 TMP,Financials,Regional Banks
-TNC,Industrials,Industrial Machinery & Supplies & Components
 TNDM,Health Care,Health Care Equipment
 TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
@@ -1373,6 +1376,7 @@ VSH,Information Technology,Electronic Components
 VSNT,Communication Services,Cable & Satellite
 VSTS,Industrials,Diversified Support Services
 VSXY,Consumer Discretionary,Apparel Retail
+VTOL,Energy,Oil & Gas Equipment & Services
 VVX,Industrials,Aerospace & Defense
 WAFD,Financials,Regional Banks
 WAY,Health Care,Health Care Technology
