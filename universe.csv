@@ -900,6 +900,7 @@ YETI,Consumer Discretionary,Leisure Products
 ZION,Financials,Regional Banks
 AAMI,Financials,Asset Management & Custody Banks
 AAP,Consumer Discretionary,Automotive Retail
+AAT,Real Estate,Diversified REITs
 ABCB,Financials,Regional Banks
 ABG,Consumer Discretionary,Automotive Retail
 ABM,Industrials,Environmental & Facilities Services
@@ -1031,6 +1032,7 @@ DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
 DEA,Real Estate,Office REITs
 DEI,Real Estate,Office REITs
+DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
@@ -1174,6 +1176,7 @@ LYFT,Industrials,Passenger Ground Transportation
 LZB,Consumer Discretionary,Home Furnishings
 MAC,Real Estate,Retail REITs
 MAN,Industrials,Human Resource & Employment Services
+MATW,Consumer Discretionary,Specialized Consumer Services
 MATX,Industrials,Marine Transportation
 MBGL,Industrials,Data Processing & Outsourced Services
 MC,Financials,Investment Banking & Brokerage
@@ -1182,12 +1185,12 @@ MCY,Financials,Property & Casualty Insurance
 MD,Health Care,Health Care Services
 MDU,Utilities,Multi-Utilities
 MFP,Industrials,Industrial Machinery & Supplies & Components
+MGEE,Utilities,Electric Utilities
 MGY,Energy,Oil & Gas Exploration & Production
 MHK,Consumer Discretionary,Home Furnishings
 MHO,Consumer Discretionary,Homebuilding
 MIR,Information Technology,Electronic Equipment & Instruments
 MKTX,Financials,Financial Exchanges & Data
-MLKN,Industrials,Office Services & Supplies
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
@@ -1298,7 +1301,6 @@ SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
 SBH,Consumer Discretionary,Other Specialty Retail
-SCHL,Consumer Discretionary,Publishing
 SCL,Materials,Specialty Chemicals
 SCSC,Information Technology,Technology Distributors
 SDGR,Health Care,Health Care Services
@@ -1315,6 +1317,7 @@ SKT,Real Estate,Retail REITs
 SKY,Consumer Discretionary,Homebuilding
 SKYW,Industrials,Passenger Airlines
 SLG,Real Estate,Office REITs
+SLVM,Materials,Paper Products
 SM,Energy,Oil & Gas Exploration & Production
 SMPL,Consumer Staples,Packaged Foods & Meats
 SNDR,Industrials,Cargo Ground Transportation
@@ -1349,6 +1352,7 @@ TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
 TRN,Industrials,Construction Machinery & Heavy Transportation Equipment
 TRNO,Real Estate,Industrial REITs
+TRUP,Financials,Life & Health Insurance
 UCB,Financials,Regional Banks
 UCTT,Information Technology,Semiconductor Materials & Equipment
 UE,Real Estate,Retail REITs
