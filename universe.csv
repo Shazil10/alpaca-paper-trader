@@ -932,7 +932,6 @@ AMRX,Health Care,Pharmaceuticals
 AMTM,Industrials,Diversified Support Services
 ANDE,Consumer Staples,Food Distributors
 ANIP,Health Care,Pharmaceuticals
-AORT,Health Care,Health Care Equipment
 AOSL,Information Technology,Semiconductors
 APAM,Financials,Asset Management & Custody Banks
 APLE,Real Estate,Hotel & Resort REITs
@@ -1036,6 +1035,7 @@ DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
 DGII,Information Technology,Communications Equipment
 DIOD,Information Technology,Semiconductors
+DLX,Industrials,Commercial Printing
 DMC,Consumer Staples,Packaged Foods & Meats
 DNOW,Industrials,Trading Companies & Distributors
 DORM,Consumer Discretionary,Automotive Parts & Equipment
@@ -1103,7 +1103,6 @@ HAYW,Industrials,Electrical Components & Equipment
 HCC,Materials,Steel
 HCI,Financials,Property & Casualty Insurance
 HCSG,Industrials,Environmental & Facilities Services
-HFWA,Financials,Regional Banks
 HIW,Real Estate,Office REITs
 HLIT,Information Technology,Communications Equipment
 HMN,Financials,Multi-line Insurance
@@ -1403,6 +1402,7 @@ WT,Financials,Asset Management & Custody Banks
 WWW,Consumer Discretionary,Footwear
 XHR,Real Estate,Hotel & Resort REITs
 XNCR,Health Care,Biotechnology
+XPEL,Consumer Discretionary,Automotive Parts & Equipment
 YELP,Communication Services,Interactive Media & Services
 YOU,Information Technology,Application Software
 ZD,Communication Services,Advertising
