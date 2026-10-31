@@ -927,11 +927,14 @@ ALGT,Industrials,Passenger Airlines
 ALKS,Health Care,Pharmaceuticals
 ALRM,Financials,Application Software
 AMN,Health Care,Health Care Services
+AMPH,Health Care,Pharmaceuticals
 AMR,Materials,Steel
 AMRX,Health Care,Pharmaceuticals
+AMSF,Financials,Property & Casualty Insurance
 AMTM,Industrials,Diversified Support Services
 ANDE,Consumer Staples,Food Distributors
 ANIP,Health Care,Pharmaceuticals
+AORT,Health Care,Health Care Equipment
 AOSL,Information Technology,Semiconductors
 APAM,Financials,Asset Management & Custody Banks
 APLE,Real Estate,Hotel & Resort REITs
@@ -1132,6 +1135,7 @@ IRDM,Communication Services,Alternative Carriers
 ITGR,Health Care,Health Care Equipment
 ITRI,Information Technology,Electronic Equipment & Instruments
 IVT,Real Estate,Retail REITs
+JBSS,Consumer Staples,Packaged Foods & Meats
 JBTM,Industrials,Industrial Machinery & Supplies & Components
 JJSF,Consumer Staples,Packaged Foods & Meats
 JOE,Real Estate,Real Estate Development
@@ -1166,6 +1170,7 @@ LNC,Financials,Multi-line Insurance
 LNN,Materials,Agricultural & Farm Machinery
 LPG,Energy,Oil & Gas Storage & Transportation
 LQDA,Health Care,Pharmaceuticals
+LQDT,Industrials,Diversified Support Services
 LRN,Consumer Discretionary,Education Services
 LTC,Real Estate,Health Care REITs
 LTH,Consumer Discretionary,Leisure Facilities
@@ -1243,7 +1248,6 @@ PEB,Real Estate,Hotel & Resort REITs
 PECO,Real Estate,Retail REITs
 PENG,Information Technology,Semiconductors
 PENN,Consumer Discretionary,Casinos & Gaming
-PFBC,Financials,Regional Banks
 PFS,Financials,Regional Banks
 PGNY,Health Care,Health Care Services
 PHIN,Consumer Discretionary,Automotive Retail
@@ -1346,6 +1350,7 @@ THRM,Consumer Discretionary,Automotive Parts & Equipment
 TILE,Industrials,Office Services & Supplies
 TMDX,Health Care,Health Care Equipment
 TMP,Financials,Regional Banks
+TNC,Industrials,Industrial Machinery & Supplies & Components
 TNDM,Health Care,Health Care Equipment
 TPC,Industrials,Construction & Engineering
 TRMK,Financials,Regional Banks
@@ -1379,7 +1384,6 @@ VSH,Information Technology,Electronic Components
 VSNT,Communication Services,Cable & Satellite
 VSTS,Industrials,Diversified Support Services
 VSXY,Consumer Discretionary,Apparel Retail
-VTOL,Energy,Oil & Gas Equipment & Services
 VVX,Industrials,Aerospace & Defense
 WAFD,Financials,Regional Banks
 WAY,Health Care,Health Care Technology
@@ -1393,7 +1397,6 @@ WKC,Energy,Oil & Gas Refining & Marketing
 WLY,Communication Services,Publishing
 WOR,Industrials,Building Products
 WRBY,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
-WRLD,Financials,Consumer Finance
 WS,Materials,Steel
 WSBC,Financials,Regional Banks
 WSC,Industrials,Office Services & Supplies
