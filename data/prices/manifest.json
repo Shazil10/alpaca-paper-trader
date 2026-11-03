@@ -381,9 +381,9 @@
     },
     "2026": {
       "adjustment": "ohlcv=raw, adj_close=all (split+dividend+spin-off)",
-      "content_hash": "sha256:e9a44010a9a20a24c5b42e1d855d46b6587ee3ea9691770a90420037434096f9",
-      "downloaded_at": "2026-10-31T07:19:25Z",
-      "end_date": "2026-10-30",
+      "content_hash": "sha256:8dce41d15bdcdb12431d4cbce4635d5a195a7fd6d9bf9d823fd511eea16a7c65",
+      "downloaded_at": "2026-11-03T08:18:25Z",
+      "end_date": "2026-11-02",
       "exceptions": [],
       "feed": "sip",
       "file": "2026.csv",
@@ -391,7 +391,7 @@
         "rebuilt 2016-01-01..2026-09-28 (exclusive) by rebuild_prices run alpaca_20160101_20260928_f0ebd2b452"
       ],
       "provider": "alpaca",
-      "row_count": 332748,
+      "row_count": 334316,
       "start_date": "2026-01-02",
       "symbol_count": 1624,
       "year": 2026
