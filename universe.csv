@@ -944,6 +944,7 @@ ARLO,Information Technology,Communications Equipment
 AROC,Energy,Oil & Gas Equipment & Services
 ARR,Real Estate,Mortgage REITs
 ASO,Consumer Discretionary,Other Specialty Retail
+ASTH,Health Care,Health Care Facilities
 ATEN,Information Technology,Systems Software
 ATMU,Industrials,Industrial Machinery & Supplies & Components
 AUB,Financials,Regional Banks
@@ -1032,7 +1033,6 @@ DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
-DEA,Real Estate,Office REITs
 DEI,Real Estate,Office REITs
 DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
@@ -1114,6 +1114,7 @@ HNI,Industrials,Office Services & Supplies
 HOPE,Financials,Regional Banks
 HP,Energy,Oil & Gas Drilling
 HRMY,Health Care,Biotechnology
+HSTM,Health Care,Health Care Technology
 HTH,Financials,Regional Banks
 HTO,Utilities,Water Utilities
 HUBG,Industrials,Air Freight & Logistics
@@ -1181,7 +1182,6 @@ LYFT,Industrials,Passenger Ground Transportation
 LZB,Consumer Discretionary,Home Furnishings
 MAC,Real Estate,Retail REITs
 MAN,Industrials,Human Resource & Employment Services
-MATW,Consumer Discretionary,Specialized Consumer Services
 MATX,Industrials,Marine Transportation
 MBGL,Industrials,Data Processing & Outsourced Services
 MBIN,Financials,Regional Banks
@@ -1200,7 +1200,6 @@ MKTX,Financials,Financial Exchanges & Data
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
-MRTN,Industrials,Cargo Ground Transportation
 MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
@@ -1230,6 +1229,7 @@ NTCT,Information Technology,Communications Equipment
 NTST,Real Estate,Retail REITs
 NWBI,Financials,Regional Banks
 NWN,Utilities,Gas Utilities
+NXRT,Real Estate,Multi-Family Residential REITs
 OFG,Financials,Regional Banks
 OGN,Health Care,Pharmaceuticals
 OII,Energy,Oil & Gas Equipment & Services
@@ -1250,6 +1250,7 @@ PEB,Real Estate,Hotel & Resort REITs
 PECO,Real Estate,Retail REITs
 PENG,Information Technology,Semiconductors
 PENN,Consumer Discretionary,Casinos & Gaming
+PFBC,Financials,Regional Banks
 PFS,Financials,Regional Banks
 PGNY,Health Care,Health Care Services
 PHIN,Consumer Discretionary,Automotive Retail
@@ -1301,7 +1302,6 @@ RRR,Consumer Discretionary,Casinos & Gaming
 RSI,Consumer Discretionary,Casinos & Gaming
 RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment
 RXO,Industrials,Cargo Ground Transportation
-SAFE,Real Estate,Other Specialized REITs
 SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
