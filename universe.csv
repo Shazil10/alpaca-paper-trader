@@ -272,7 +272,6 @@ KMB,Consumer Staples,Household Products
 KMI,Energy,Oil & Gas Storage & Transportation
 KO,Consumer Staples,Soft Drinks & Non-alcoholic Beverages
 KR,Consumer Staples,Food Retail
-KVUE,Consumer Staples,Personal Care Products
 L,Financials,Multi-line Insurance
 LDOS,Industrials,Diversified Support Services
 LEN,Consumer Discretionary,Homebuilding
@@ -346,6 +345,7 @@ NXPI,Information Technology,Semiconductors
 O,Real Estate,Retail REITs
 ODFL,Industrials,Cargo Ground Transportation
 OKE,Energy,Oil & Gas Storage & Transportation
+OKTA,Information Technology,Application Software
 OMC,Communication Services,Advertising
 ON,Information Technology,Semiconductors
 ORCL,Information Technology,Application Software
@@ -661,10 +661,12 @@ GBCI,Financials,Regional Banks
 GEF,Materials,"Metal, Glass & Plastic Containers"
 GGG,Industrials,Industrial Machinery & Supplies & Components
 GHC,Consumer Discretionary,Education Services
+GKOS,Health Care,Health Care Equipment
 GLPI,Real Estate,Other Specialized REITs
 GME,Consumer Discretionary,Computer & Electronics Retail
 GMED,Health Care,Health Care Equipment
 GNTX,Consumer Discretionary,Automotive Parts & Equipment
+GPK,Materials,Paper & Plastic Packaging Products & Materials
 GWRE,Information Technology,Application Software
 GXO,Industrials,Air Freight & Logistics
 H,Consumer Discretionary,"Hotels, Resorts & Cruise Lines"
@@ -757,7 +759,6 @@ OC,Industrials,Building Products
 OGE,Utilities,Multi-Utilities
 OGS,Utilities,Gas Utilities
 OHI,Real Estate,Health Care REITs
-OKTA,Information Technology,Application Software
 OLED,Information Technology,Semiconductors
 OLLI,Consumer Discretionary,Broadline Retail
 ONB,Financials,Regional Banks
@@ -1092,7 +1093,6 @@ GBX,Industrials,Construction Machinery & Heavy Transportation Equipment
 GEO,Industrials,Environmental & Facilities Services
 GFF,Industrials,Building Products
 GIII,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
-GKOS,Health Care,Health Care Equipment
 GO,Consumer Staples,Food Retail
 GOLF,Consumer Discretionary,Leisure Products
 GPI,Consumer Discretionary,Automotive Retail
@@ -1200,10 +1200,12 @@ MKTX,Financials,Financial Exchanges & Data
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
+MSEX,Utilities,Water Utilities
 MSGS,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
 MTRN,Materials,Diversified Metals & Mining
+MTUS,Materials,Steel
 MTX,Materials,Specialty Chemicals
 MWA,Industrials,Industrial Machinery & Supplies & Components
 MXL,Information Technology,Semiconductors
@@ -1325,6 +1327,7 @@ SKYW,Industrials,Passenger Airlines
 SLG,Real Estate,Office REITs
 SLVM,Materials,Paper Products
 SM,Energy,Oil & Gas Exploration & Production
+SMP,Consumer Discretionary,Automotive Parts & Equipment
 SMPL,Consumer Staples,Packaged Foods & Meats
 SNDR,Industrials,Cargo Ground Transportation
 SNEX,Financials,Investment Banking & Brokerage
@@ -1387,6 +1390,7 @@ VSH,Information Technology,Electronic Components
 VSNT,Communication Services,Cable & Satellite
 VSTS,Industrials,Diversified Support Services
 VSXY,Consumer Discretionary,Apparel Retail
+VTOL,Energy,Oil & Gas Equipment & Services
 VVX,Industrials,Aerospace & Defense
 WAFD,Financials,Regional Banks
 WAY,Health Care,Health Care Technology
@@ -1400,6 +1404,7 @@ WKC,Energy,Oil & Gas Refining & Marketing
 WLY,Communication Services,Publishing
 WOR,Industrials,Building Products
 WRBY,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
+WRLD,Financials,Consumer Finance
 WS,Materials,Steel
 WSBC,Financials,Regional Banks
 WSC,Industrials,Office Services & Supplies
