@@ -901,7 +901,6 @@ YETI,Consumer Discretionary,Leisure Products
 ZION,Financials,Regional Banks
 AAMI,Financials,Asset Management & Custody Banks
 AAP,Consumer Discretionary,Automotive Retail
-AAT,Real Estate,Diversified REITs
 ABCB,Financials,Regional Banks
 ABG,Consumer Discretionary,Automotive Retail
 ABM,Industrials,Environmental & Facilities Services
@@ -932,7 +931,6 @@ AMN,Health Care,Health Care Services
 AMPH,Health Care,Pharmaceuticals
 AMR,Materials,Steel
 AMRX,Health Care,Pharmaceuticals
-AMSF,Financials,Property & Casualty Insurance
 AMTM,Industrials,Diversified Support Services
 ANDE,Consumer Staples,Food Distributors
 ANIP,Health Care,Pharmaceuticals
@@ -1036,6 +1034,7 @@ DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
+DEA,Real Estate,Office REITs
 DEI,Real Estate,Office REITs
 DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
@@ -1111,7 +1110,6 @@ HCC,Materials,Steel
 HCI,Financials,Property & Casualty Insurance
 HCSG,Industrials,Environmental & Facilities Services
 HIW,Real Estate,Office REITs
-HLIT,Information Technology,Communications Equipment
 HMN,Financials,Multi-line Insurance
 HNI,Industrials,Office Services & Supplies
 HOPE,Financials,Regional Banks
@@ -1176,6 +1174,7 @@ LNC,Financials,Multi-line Insurance
 LNN,Materials,Agricultural & Farm Machinery
 LPG,Energy,Oil & Gas Storage & Transportation
 LQDA,Health Care,Pharmaceuticals
+LQDT,Industrials,Diversified Support Services
 LRN,Consumer Discretionary,Education Services
 LTC,Real Estate,Health Care REITs
 LTH,Consumer Discretionary,Leisure Facilities
@@ -1203,7 +1202,7 @@ MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
 MSEX,Utilities,Water Utilities
-MSGS,Communication Services,Movies & Entertainment
+MSGK,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
 MTRN,Materials,Diversified Metals & Mining
@@ -1311,7 +1310,6 @@ SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
 SBH,Consumer Discretionary,Other Specialty Retail
-SCHL,Consumer Discretionary,Publishing
 SCL,Materials,Specialty Chemicals
 SCSC,Information Technology,Technology Distributors
 SDGR,Health Care,Health Care Services
@@ -1374,6 +1372,7 @@ UFPT,Health Care,Health Care Equipment
 UNF,Industrials,Diversified Support Services
 UNFI,Consumer Staples,Food Retail
 UPBD,Consumer Discretionary,Computer & Electronics Retail
+UPWK,Industrials,Human Resource & Employment Services
 URBN,Consumer Discretionary,Apparel Retail
 USLM,Materials,Construction Materials
 USPH,Health Care,Health Care Facilities
