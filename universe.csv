@@ -1034,7 +1034,6 @@ DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
 DCOM,Financials,Regional Banks
-DEA,Real Estate,Office REITs
 DEI,Real Estate,Office REITs
 DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
@@ -1054,7 +1053,6 @@ ECPG,Financials,Consumer Finance
 EFC,Financials,Specialized Finance
 EFOR,Information Technology,IT Consulting & Other Services
 EGBN,Financials,Regional Banks
-EIG,Financials,Property & Casualty Insurance
 EMN,Materials,Specialty Chemicals
 ENOV,Health Care,Health Care Equipment
 ENPH,Information Technology,Semiconductor Materials & Equipment
@@ -1328,7 +1326,6 @@ SKYW,Industrials,Passenger Airlines
 SLG,Real Estate,Office REITs
 SLVM,Materials,Paper Products
 SM,Energy,Oil & Gas Exploration & Production
-SMP,Consumer Discretionary,Automotive Parts & Equipment
 SMPL,Consumer Staples,Packaged Foods & Meats
 SNDR,Industrials,Cargo Ground Transportation
 SNEX,Financials,Investment Banking & Brokerage

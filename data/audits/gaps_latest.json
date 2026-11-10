@@ -1,6 +1,6 @@
 {
   "window_start": "2016-01-01",
-  "frontier": "2026-11-06",
+  "frontier": "2026-11-09",
   "providers_by_year": {
     "2005": "yahoo",
     "2006": "yahoo",
@@ -28,10 +28,10 @@
   "classes": {
     "A": {
       "label": "covered",
-      "intervals": 1713,
-      "symbols": 1618,
-      "member_sessions": 1359912,
-      "share_of_member_sessions": 0.9670595363218355,
+      "intervals": 1712,
+      "symbols": 1617,
+      "member_sessions": 1361345,
+      "share_of_member_sessions": 0.96704291985736,
       "examples": [
         "A",
         "AA",
@@ -64,8 +64,8 @@
       "label": "covered via alias",
       "intervals": 26,
       "symbols": 26,
-      "member_sessions": 35683,
-      "share_of_member_sessions": 0.02537486648736981,
+      "member_sessions": 35684,
+      "share_of_member_sessions": 0.02534843081819086,
       "examples": [
         "ABC",
         "ANTM",
@@ -96,10 +96,10 @@
     },
     "C": {
       "label": "holes while a member",
-      "intervals": 21,
-      "symbols": 21,
-      "member_sessions": 9341,
-      "share_of_member_sessions": 0.006642564466511264,
+      "intervals": 23,
+      "symbols": 23,
+      "member_sessions": 9410,
+      "share_of_member_sessions": 0.006684472985068265,
       "examples": [
         "AABA",
         "ACA",
@@ -120,6 +120,8 @@
         "POM",
         "QRVO",
         "RAMP",
+        "ROKU",
+        "TCBI",
         "TWC",
         "UAA"
       ]
@@ -170,8 +172,8 @@
       "label": "unresolvable identifier",
       "intervals": 6,
       "symbols": 6,
-      "member_sessions": 1298,
-      "share_of_member_sessions": 0.0009230327242834407,
+      "member_sessions": 1301,
+      "share_of_member_sessions": 0.0009241763393808516,
       "examples": [
         "CWEN-A",
         "HLX",
@@ -184,9 +186,9 @@
   },
   "by_index": {
     "SP400": {
-      "A": 403,
+      "A": 401,
       "B": 0,
-      "C": 0,
+      "C": 2,
       "D": 0,
       "F": 0
     },
@@ -198,7 +200,7 @@
       "F": 3
     },
     "SP600": {
-      "A": 593,
+      "A": 594,
       "B": 1,
       "C": 6,
       "D": 0,
@@ -261,11 +263,11 @@
       "index": "SP500",
       "symbol": "APTV",
       "start": "2012-12-24",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "False",
       "lake_symbol": "APTV",
-      "expected": "2728",
-      "priced": "2254",
+      "expected": "2729",
+      "priced": "2255",
       "class": "C"
     },
     {
@@ -448,11 +450,11 @@
       "index": "SP500",
       "symbol": "IR",
       "start": "2010-11-17",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "False",
       "lake_symbol": "TT",
-      "expected": "2728",
-      "priced": "2728",
+      "expected": "2729",
+      "priced": "2729",
       "class": "B"
     },
     {
@@ -687,13 +689,35 @@
       "class": "B"
     },
     {
+      "index": "SP400",
+      "symbol": "ROKU",
+      "start": "2026-09-27",
+      "end": "2026-11-09",
+      "left_censored": "True",
+      "lake_symbol": "ROKU",
+      "expected": "31",
+      "priced": "30",
+      "class": "C"
+    },
+    {
+      "index": "SP400",
+      "symbol": "TCBI",
+      "start": "2026-09-27",
+      "end": "2026-11-09",
+      "left_censored": "True",
+      "lake_symbol": "TCBI",
+      "expected": "31",
+      "priced": "30",
+      "class": "C"
+    },
+    {
       "index": "SP600",
       "symbol": "ACA",
       "start": "2026-09-27",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "True",
       "lake_symbol": "ACA",
-      "expected": "30",
+      "expected": "31",
       "priced": "19",
       "class": "C"
     },
@@ -701,10 +725,10 @@
       "index": "SP600",
       "symbol": "BLFS",
       "start": "2026-09-27",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "True",
       "lake_symbol": "BLFS",
-      "expected": "30",
+      "expected": "31",
       "priced": "6",
       "class": "C"
     },
@@ -712,10 +736,10 @@
       "index": "SP600",
       "symbol": "CWEN-A",
       "start": "2026-09-27",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "True",
       "lake_symbol": "None",
-      "expected": "30",
+      "expected": "31",
       "priced": "0",
       "class": "F"
     },
@@ -723,10 +747,10 @@
       "index": "SP600",
       "symbol": "HLX",
       "start": "2026-09-27",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "True",
       "lake_symbol": "None",
-      "expected": "30",
+      "expected": "31",
       "priced": "0",
       "class": "F"
     },
@@ -734,10 +758,10 @@
       "index": "SP600",
       "symbol": "INDV",
       "start": "2026-09-27",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "True",
       "lake_symbol": "INDV",
-      "expected": "30",
+      "expected": "31",
       "priced": "26",
       "class": "C"
     },
@@ -745,10 +769,10 @@
       "index": "SP600",
       "symbol": "LEG",
       "start": "2026-09-27",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "True",
       "lake_symbol": "None",
-      "expected": "30",
+      "expected": "31",
       "priced": "0",
       "class": "F"
     },
@@ -756,10 +780,10 @@
       "index": "SP600",
       "symbol": "LXP",
       "start": "2026-09-27",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "True",
       "lake_symbol": "LXP",
-      "expected": "30",
+      "expected": "31",
       "priced": "25",
       "class": "C"
     },
@@ -778,10 +802,10 @@
       "index": "SP600",
       "symbol": "QRVO",
       "start": "2026-09-27",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "True",
       "lake_symbol": "QRVO",
-      "expected": "30",
+      "expected": "31",
       "priced": "5",
       "class": "C"
     },
@@ -789,10 +813,10 @@
       "index": "SP600",
       "symbol": "RAMP",
       "start": "2026-09-27",
-      "end": "2026-11-06",
+      "end": "2026-11-09",
       "left_censored": "True",
       "lake_symbol": "RAMP",
-      "expected": "30",
+      "expected": "31",
       "priced": "25",
       "class": "C"
     }
