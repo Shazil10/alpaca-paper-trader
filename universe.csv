@@ -912,7 +912,6 @@ ACLS,Information Technology,Semiconductor Materials & Equipment
 ACMR,Information Technology,Semiconductor Materials & Equipment
 ACT,Financials,Commercial & Residential Mortgage Finance
 ADEA,Information Technology,IT Consulting & Other Services
-ADIG,Information Technology,Electronic Equipment & Instruments
 ADMA,Health Care,Biotechnology
 ADNT,Consumer Discretionary,Automotive Parts & Equipment
 ADUS,Health Care,Health Care Services
@@ -1015,7 +1014,6 @@ CRI,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
 CRK,Energy,Oil & Gas Exploration & Production
 CRSR,Information Technology,"Technology Hardware, Storage & Peripherals"
 CRVL,Health Care,Health Care Services
-CSR,Real Estate,Multi-Family Residential REITs
 CSW,Industrials,Industrial Conglomerates
 CTS,Information Technology,Electronic Manufacturing Services
 CUBI,Financials,Regional Banks
@@ -1113,7 +1111,6 @@ HNI,Industrials,Office Services & Supplies
 HOPE,Financials,Regional Banks
 HP,Energy,Oil & Gas Drilling
 HRMY,Health Care,Biotechnology
-HSTM,Health Care,Health Care Technology
 HTH,Financials,Regional Banks
 HTO,Utilities,Water Utilities
 HUBG,Industrials,Air Freight & Logistics
@@ -1137,7 +1134,6 @@ ITGR,Health Care,Health Care Equipment
 ITRI,Information Technology,Electronic Equipment & Instruments
 IVT,Real Estate,Retail REITs
 JBGS,Real Estate,Office REITs
-JBSS,Consumer Staples,Packaged Foods & Meats
 JBTM,Industrials,Industrial Machinery & Supplies & Components
 JJSF,Consumer Staples,Packaged Foods & Meats
 JOE,Real Estate,Real Estate Development
@@ -1199,7 +1195,6 @@ MKTX,Financials,Financial Exchanges & Data
 MMSI,Health Care,Health Care Supplies
 MRCY,Industrials,Electrical Components & Equipment
 MRP,Real Estate,Single-Family Residential REITs
-MSEX,Utilities,Water Utilities
 MSGK,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
@@ -1230,7 +1225,6 @@ NTCT,Information Technology,Communications Equipment
 NTST,Real Estate,Retail REITs
 NWBI,Financials,Regional Banks
 NWN,Utilities,Gas Utilities
-NXRT,Real Estate,Multi-Family Residential REITs
 OFG,Financials,Regional Banks
 OGN,Health Care,Pharmaceuticals
 OII,Energy,Oil & Gas Equipment & Services
@@ -1240,7 +1234,6 @@ OSIS,Information Technology,Electronic Equipment & Instruments
 OSW,Consumer Discretionary,Leisure Facilities
 OTTR,Utilities,Electric Utilities
 OUT,Real Estate,Other Specialized REITs
-PAHC,Health Care,Pharmaceuticals
 PARR,Energy,Oil & Gas Refining & Marketing
 PATK,Consumer Discretionary,Automotive Parts & Equipment
 PAYC,Industrials,Human Resource & Employment Services
@@ -1304,6 +1297,7 @@ RRR,Consumer Discretionary,Casinos & Gaming
 RSI,Consumer Discretionary,Casinos & Gaming
 RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment
 RXO,Industrials,Cargo Ground Transportation
+SAFE,Real Estate,Other Specialized REITs
 SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
