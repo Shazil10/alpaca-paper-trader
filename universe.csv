@@ -695,6 +695,7 @@ IRT,Real Estate,Multi-Family Residential REITs
 ITT,Industrials,Industrial Machinery & Supplies & Components
 JAZZ,Health Care,Pharmaceuticals
 JEF,Financials,Multi-Sector Holdings
+JHX,Materials,Construction Materials
 JLL,Real Estate,Real Estate Services
 KBH,Consumer Discretionary,Homebuilding
 KBR,Industrials,Diversified Support Services
@@ -802,7 +803,6 @@ RLI,Financials,Property & Casualty Insurance
 RMBS,Information Technology,Semiconductors
 RNR,Financials,Reinsurance
 ROIV,Health Care,Biotechnology
-ROKU,Communication Services,Movies & Entertainment
 RPM,Materials,Specialty Chemicals
 RRC,Energy,Oil & Gas Exploration & Production
 RRX,Industrials,Electrical Components & Equipment
@@ -991,7 +991,6 @@ CBU,Financials,Regional Banks
 CC,Materials,Diversified Chemicals
 CCS,Consumer Discretionary,Homebuilding
 CE,Materials,Specialty Chemicals
-CENTA,Consumer Staples,Household Products
 CENX,Materials,Aluminum
 CERT,Health Care,Health Care Technology
 CHCO,Financials,Regional Banks
@@ -1050,7 +1049,6 @@ ECG,Industrials,Construction & Engineering
 ECPG,Financials,Consumer Finance
 EFC,Financials,Specialized Finance
 EFOR,Information Technology,IT Consulting & Other Services
-EGBN,Financials,Regional Banks
 EMN,Materials,Specialty Chemicals
 ENOV,Health Care,Health Care Equipment
 ENPH,Information Technology,Semiconductor Materials & Equipment
@@ -1087,10 +1085,10 @@ FTDR,Consumer Discretionary,Specialized Consumer Services
 FTRE,Health Care,Biotechnology
 FUL,Materials,Specialty Chemicals
 FULT,Financials,Regional Banks
+FUN,Consumer Discretionary,Leisure Facilities
 GBX,Industrials,Construction Machinery & Heavy Transportation Equipment
 GEO,Industrials,Environmental & Facilities Services
 GFF,Industrials,Building Products
-GIII,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
 GO,Consumer Staples,Food Retail
 GOLF,Consumer Discretionary,Leisure Products
 GPI,Consumer Discretionary,Automotive Retail
@@ -1133,7 +1131,6 @@ IRDM,Communication Services,Alternative Carriers
 ITGR,Health Care,Health Care Equipment
 ITRI,Information Technology,Electronic Equipment & Instruments
 IVT,Real Estate,Retail REITs
-JBGS,Real Estate,Office REITs
 JBTM,Industrials,Industrial Machinery & Supplies & Components
 JJSF,Consumer Staples,Packaged Foods & Meats
 JOE,Real Estate,Real Estate Development
@@ -1148,6 +1145,7 @@ KMT,Industrials,Industrial Machinery & Supplies & Components
 KMX,Consumer Discretionary,Automotive Retail
 KN,Information Technology,Electronic Components
 KNTK,Energy,Oil & Gas Storage & Transportation
+KOP,Materials,Commodity Chemicals
 KRMN,Industrials,Aerospace & Defense
 KSS,Consumer Discretionary,Broadline Retail
 KTB,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
@@ -1199,7 +1197,6 @@ MSGK,Communication Services,Movies & Entertainment
 MTCH,Communication Services,Interactive Media & Services
 MTH,Consumer Discretionary,Homebuilding
 MTRN,Materials,Diversified Metals & Mining
-MTUS,Materials,Steel
 MTX,Materials,Specialty Chemicals
 MWA,Industrials,Industrial Machinery & Supplies & Components
 MXL,Information Technology,Semiconductors
@@ -1245,7 +1242,6 @@ PEB,Real Estate,Hotel & Resort REITs
 PECO,Real Estate,Retail REITs
 PENG,Information Technology,Semiconductors
 PENN,Consumer Discretionary,Casinos & Gaming
-PFBC,Financials,Regional Banks
 PFS,Financials,Regional Banks
 PGNY,Health Care,Health Care Services
 PHIN,Consumer Discretionary,Automotive Retail
@@ -1297,7 +1293,6 @@ RRR,Consumer Discretionary,Casinos & Gaming
 RSI,Consumer Discretionary,Casinos & Gaming
 RUSHA,Industrials,Construction Machinery & Heavy Transportation Equipment
 RXO,Industrials,Cargo Ground Transportation
-SAFE,Real Estate,Other Specialized REITs
 SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
@@ -1329,7 +1324,6 @@ SPNT,Financials,Reinsurance
 SPSC,Information Technology,Application Software
 SRPT,Health Care,Biotechnology
 STAA,Health Care,Health Care Equipment
-STBA,Financials,Regional Banks
 STC,Financials,Property & Casualty Insurance
 STEP,Financials,Asset Management & Custody Banks
 STRA,Consumer Discretionary,Education Services
@@ -1341,13 +1335,11 @@ TBBK,Financials,Regional Banks
 TDC,Information Technology,IT Consulting & Other Services
 TDS,Communication Services,Integrated Telecommunication Services
 TDW,Energy,Oil & Gas Equipment & Services
-TFIN,Financials,Regional Banks
 TFX,Health Care,Health Care Equipment
 TGTX,Health Care,Biotechnology
 THRM,Consumer Discretionary,Automotive Parts & Equipment
 TILE,Industrials,Office Services & Supplies
 TMDX,Health Care,Health Care Equipment
-TMP,Financials,Regional Banks
 TNC,Industrials,Industrial Machinery & Supplies & Components
 TNDM,Health Care,Health Care Equipment
 TPC,Industrials,Construction & Engineering
@@ -1363,7 +1355,6 @@ UFPT,Health Care,Health Care Equipment
 UNF,Industrials,Diversified Support Services
 UNFI,Consumer Staples,Food Retail
 UPBD,Consumer Discretionary,Computer & Electronics Retail
-UPWK,Industrials,Human Resource & Employment Services
 URBN,Consumer Discretionary,Apparel Retail
 USLM,Materials,Construction Materials
 USPH,Health Care,Health Care Facilities

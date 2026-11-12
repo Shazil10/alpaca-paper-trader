@@ -15,3 +15,5 @@ observed_date,effective_date,index,symbol,event,source
 2026-11-05,2026-11-05,SP400,OKTA,remove,wikipedia
 2026-11-07,2026-11-07,SP600,MSGK,add,wikipedia
 2026-11-07,2026-11-07,SP600,MSGS,remove,wikipedia
+2026-11-12,2026-11-12,SP400,JHX,add,wikipedia
+2026-11-12,2026-11-12,SP400,ROKU,remove,wikipedia
