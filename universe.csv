@@ -912,6 +912,7 @@ ACLS,Information Technology,Semiconductor Materials & Equipment
 ACMR,Information Technology,Semiconductor Materials & Equipment
 ACT,Financials,Commercial & Residential Mortgage Finance
 ADEA,Information Technology,IT Consulting & Other Services
+ADIG,Information Technology,Electronic Equipment & Instruments
 ADMA,Health Care,Biotechnology
 ADNT,Consumer Discretionary,Automotive Parts & Equipment
 ADUS,Health Care,Health Care Services
@@ -1030,7 +1031,6 @@ CZR,Consumer Discretionary,Casinos & Gaming
 DAN,Consumer Discretionary,Automotive Parts & Equipment
 DAVE,Financials,Consumer Finance
 DBD,Information Technology,Electronic Equipment & Instruments
-DCOM,Financials,Regional Banks
 DEI,Real Estate,Office REITs
 DFH,Consumer Discretionary,Homebuilding
 DFIN,Financials,Financial Exchanges & Data
@@ -1104,6 +1104,7 @@ HCC,Materials,Steel
 HCI,Financials,Property & Casualty Insurance
 HCSG,Industrials,Environmental & Facilities Services
 HIW,Real Estate,Office REITs
+HLIT,Information Technology,Communications Equipment
 HMN,Financials,Multi-line Insurance
 HNI,Industrials,Office Services & Supplies
 HOPE,Financials,Regional Banks
@@ -1124,7 +1125,6 @@ INDV,Health Care,Pharmaceuticals
 INSP,Health Care,Health Care Equipment
 INSW,Energy,Oil & Gas Storage & Transportation
 INVA,Health Care,Pharmaceuticals
-INVX,Energy,Oil & Gas Equipment & Services
 IOSP,Materials,Specialty Chemicals
 IPAR,Consumer Staples,Household Products
 IRDM,Communication Services,Alternative Carriers
@@ -1159,7 +1159,6 @@ LFST,Health Care,Health Care Services
 LGIH,Consumer Discretionary,Homebuilding
 LGND,Health Care,Biotechnology
 LIF,Information Technology,Application Software
-LKFN,Financials,Regional Banks
 LKQ,Consumer Discretionary,Distributors
 LMAT,Health Care,Health Care Equipment
 LNC,Financials,Multi-line Insurance
@@ -1297,6 +1296,7 @@ SAFT,Financials,Property & Casualty Insurance
 SAH,Consumer Discretionary,Automotive Retail
 SBCF,Financials,Regional Banks
 SBH,Consumer Discretionary,Other Specialty Retail
+SCHL,Consumer Discretionary,Publishing
 SCL,Materials,Specialty Chemicals
 SCSC,Information Technology,Technology Distributors
 SDGR,Health Care,Health Care Services
@@ -1335,6 +1335,7 @@ TBBK,Financials,Regional Banks
 TDC,Information Technology,IT Consulting & Other Services
 TDS,Communication Services,Integrated Telecommunication Services
 TDW,Energy,Oil & Gas Equipment & Services
+TFIN,Financials,Regional Banks
 TFX,Health Care,Health Care Equipment
 TGTX,Health Care,Biotechnology
 THRM,Consumer Discretionary,Automotive Parts & Equipment
@@ -1377,6 +1378,7 @@ VSTS,Industrials,Diversified Support Services
 VSXY,Consumer Discretionary,Apparel Retail
 VTOL,Energy,Oil & Gas Equipment & Services
 VVX,Industrials,Aerospace & Defense
+VYX,Information Technology,IT Consulting & Other Services
 WAFD,Financials,Regional Banks
 WAY,Health Care,Health Care Technology
 WD,Financials,Commercial & Residential Mortgage Finance
@@ -1389,8 +1391,6 @@ WKC,Energy,Oil & Gas Refining & Marketing
 WLY,Communication Services,Publishing
 WOR,Industrials,Building Products
 WRBY,Consumer Discretionary,"Apparel, Accessories & Luxury Goods"
-WRLD,Financials,Consumer Finance
-WS,Materials,Steel
 WSBC,Financials,Regional Banks
 WSC,Industrials,Office Services & Supplies
 WSFS,Financials,Regional Banks
