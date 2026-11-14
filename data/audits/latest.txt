@@ -14,14 +14,14 @@ DATA AUDIT
   median span (years)     10.86
 
   symbol first_date  last_date  bars  expected  pct
-     POM 2016-01-04 2026-11-12   333      2732 12.2
-     CAM 2016-01-04 2026-11-12   341      2732 12.5
-     PCL 2016-01-04 2026-11-12   357      2732 13.1
-    CSRA 2016-01-04 2026-11-12   632      2732 23.1
-    SPLS 2016-01-04 2026-11-12   635      2732 23.2
-     NFX 2016-01-04 2026-11-12   876      2732 32.1
-     APC 2016-01-04 2026-11-12  1096      2732 40.1
-      FB 2016-01-04 2026-11-12  1969      2732 72.1
+     POM 2016-01-04 2026-11-13   334      2733 12.2
+     CAM 2016-01-04 2026-11-13   342      2733 12.5
+     PCL 2016-01-04 2026-11-13   358      2733 13.1
+    CSRA 2016-01-04 2026-11-13   633      2733 23.2
+    SPLS 2016-01-04 2026-11-13   636      2733 23.3
+     NFX 2016-01-04 2026-11-13   877      2733 32.1
+     APC 2016-01-04 2026-11-13  1097      2733 40.1
+      FB 2016-01-04 2026-11-13  1970      2733 72.1
     BBBY 2016-01-04 2026-08-14  2086      2669 78.2
   note: Ragged symbols are usually halts or mid-delisting names where the vendor itself has no bar; see _schema.md Contract 5.
 
@@ -76,7 +76,7 @@ coverage ranges 0% (2008-06-30) to 100% (2020-03-31) on the probed dates
    SP500 2024-06-28      503     503          0     100%
   SP1500 2026-09-30     1504    1501          0     100%
   SP1500 2026-10-30     1503    1496          0     100%
-  SP1500 2026-11-12     1502    1492          0      99%
+  SP1500 2026-11-13     1502    1492          0      99%
 
 5. Membership date precision
 ----------------------------
@@ -137,14 +137,14 @@ partition providers: 2005-2015 yahoo; 2016-2026 alpaca
    2023   alpaca      sip 402658     1623 2023-01-03 2023-12-29
    2024   alpaca      sip 407379     1628 2024-01-02 2024-12-31
    2025   alpaca      sip 403941     1630 2025-01-02 2025-12-31
-   2026   alpaca      sip 347276     1626 2026-01-02 2026-11-12
+   2026   alpaca      sip 348842     1626 2026-01-02 2026-11-13
   note: Years on a cross-check provider (yahoo) carry Yahoo's semantics: close split-adjusted, not the raw print. See each partition's notes.
 
 8. Current constituent coverage (unfiltered)
 --------------------------------------------
-on 2026-11-12: SP500 100.0%; SP400 99.8%; SP600 98.5%; SP1500 99.3%
+on 2026-11-13: SP500 100.0%; SP400 99.8%; SP600 98.5%; SP1500 99.3%
 
-  latest lake session       2026-11-12
+  latest lake session       2026-11-13
   unpriced current members  10
 
    index  members  priced coverage                               missing_sample
@@ -157,8 +157,8 @@ on 2026-11-12: SP500 100.0%; SP400 99.8%; SP600 98.5%; SP1500 99.3%
 ---------------------------
 the lake holds the latest completed session
 
-  latest completed weekday (NY)            2026-11-12
-  lake frontier                            2026-11-12
+  latest completed weekday (NY)            2026-11-13
+  lake frontier                            2026-11-13
   weekdays behind (holidays not excluded)  0
 
 10. Missing symbol-sessions
@@ -228,10 +228,10 @@ Wrote data/audits/latest.json
 
 Gap classification (membership intervals vs the lake)
 -----------------------------------------------------
-  canonical window 2016-01-01 .. 2026-11-12
+  canonical window 2016-01-01 .. 2026-11-13
   lake providers: alpaca, yahoo (classes describe the lake as it stands, not the target)
   A covered                                    1713 intervals  96.71%
-  B covered via alias                            26 intervals   2.53%
+  B covered via alias                            26 intervals   2.52%
   C holes while a member                         23 intervals   0.67%
   D before canonical history                    508 intervals     n/a
   E not carried by the canonical provider         0 intervals   0.00%

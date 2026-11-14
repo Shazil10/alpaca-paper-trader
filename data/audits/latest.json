@@ -7,7 +7,7 @@
       "under 99% complete": 9,
       "1-2 bar stubs": 0,
       "span >= 15 years": 34,
-      "median span (years)": 10.855578370978781
+      "median span (years)": 10.858316221765914
     },
     "notes": [
       "Ragged symbols are usually halts or mid-delisting names where the vendor itself has no bar; see _schema.md Contract 5."
@@ -16,65 +16,65 @@
       {
         "symbol": "POM",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-11-12 00:00:00",
-        "bars": 333,
-        "expected": 2732,
+        "last_date": "2026-11-13 00:00:00",
+        "bars": 334,
+        "expected": 2733,
         "pct": 12.2
       },
       {
         "symbol": "CAM",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-11-12 00:00:00",
-        "bars": 341,
-        "expected": 2732,
+        "last_date": "2026-11-13 00:00:00",
+        "bars": 342,
+        "expected": 2733,
         "pct": 12.5
       },
       {
         "symbol": "PCL",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-11-12 00:00:00",
-        "bars": 357,
-        "expected": 2732,
+        "last_date": "2026-11-13 00:00:00",
+        "bars": 358,
+        "expected": 2733,
         "pct": 13.1
       },
       {
         "symbol": "CSRA",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-11-12 00:00:00",
-        "bars": 632,
-        "expected": 2732,
-        "pct": 23.1
+        "last_date": "2026-11-13 00:00:00",
+        "bars": 633,
+        "expected": 2733,
+        "pct": 23.2
       },
       {
         "symbol": "SPLS",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-11-12 00:00:00",
-        "bars": 635,
-        "expected": 2732,
-        "pct": 23.2
+        "last_date": "2026-11-13 00:00:00",
+        "bars": 636,
+        "expected": 2733,
+        "pct": 23.3
       },
       {
         "symbol": "NFX",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-11-12 00:00:00",
-        "bars": 876,
-        "expected": 2732,
+        "last_date": "2026-11-13 00:00:00",
+        "bars": 877,
+        "expected": 2733,
         "pct": 32.1
       },
       {
         "symbol": "APC",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-11-12 00:00:00",
-        "bars": 1096,
-        "expected": 2732,
+        "last_date": "2026-11-13 00:00:00",
+        "bars": 1097,
+        "expected": 2733,
         "pct": 40.1
       },
       {
         "symbol": "FB",
         "first_date": "2016-01-04 00:00:00",
-        "last_date": "2026-11-12 00:00:00",
-        "bars": 1969,
-        "expected": 2732,
+        "last_date": "2026-11-13 00:00:00",
+        "bars": 1970,
+        "expected": 2733,
         "pct": 72.1
       },
       {
@@ -225,7 +225,7 @@
       },
       {
         "index": "SP1500",
-        "date": "2026-11-12",
+        "date": "2026-11-13",
         "members": 1502,
         "priced": 1492,
         "via_alias": 0,
@@ -472,17 +472,17 @@
         "year": 2026,
         "provider": "alpaca",
         "feed": "sip",
-        "rows": 347276,
+        "rows": 348842,
         "symbols": 1626,
         "first": "2026-01-02",
-        "last": "2026-11-12"
+        "last": "2026-11-13"
       }
     ]
   },
   "8. Current constituent coverage (unfiltered)": {
-    "headline": "on 2026-11-12: SP500 100.0%; SP400 99.8%; SP600 98.5%; SP1500 99.3%",
+    "headline": "on 2026-11-13: SP500 100.0%; SP400 99.8%; SP600 98.5%; SP1500 99.3%",
     "numbers": {
-      "latest lake session": "2026-11-12",
+      "latest lake session": "2026-11-13",
       "unpriced current members": 10
     },
     "notes": [],
@@ -520,8 +520,8 @@
   "9. Latest completed session": {
     "headline": "the lake holds the latest completed session",
     "numbers": {
-      "latest completed weekday (NY)": "2026-11-12",
-      "lake frontier": "2026-11-12",
+      "latest completed weekday (NY)": "2026-11-13",
+      "lake frontier": "2026-11-13",
       "weekdays behind (holidays not excluded)": 0
     },
     "notes": [],
