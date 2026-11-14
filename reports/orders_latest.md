@@ -1,6 +1,6 @@
 # Orders report
 
-Generated: 2026-11-13 02:02:29Z (UTC)
+Generated: 2026-11-14 01:38:05Z (UTC)
 
 | Submitted At | Symbol | Side | Status | Notional ($) | Filled Qty | Filled Avg Price | Filled Value ($) | PnL ($) | Strategy Type | Strategy Name | Client Order ID |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
